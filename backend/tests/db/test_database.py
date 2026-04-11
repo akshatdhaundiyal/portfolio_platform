@@ -6,7 +6,7 @@
 # sys.path.append(parent_path)
 
 
-from src.db.database import get_db
+from backend.src.db.database import get_db
 
 def test_get_db():
     db = next(get_db())
