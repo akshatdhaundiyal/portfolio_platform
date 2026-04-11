@@ -18,9 +18,9 @@ app.include_router(authentication.router)
 @app.get("/")
 def root():
     """
-    Root endpoint for the social media application.
+    Root endpoint for the portfolio platform
     """
-    return {"message": "Welcome to the FastAPI social media application!"}
+    return {"message": "Welcome to the portfolio platform!"}
 
 models.Base.metadata.create_all(engine)
 
