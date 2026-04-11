@@ -22,3 +22,10 @@ dev = [
 
 [tool.pytest.ini_options]
 pythonpath = "."
+
+[tool.pyright]
+executionRoot = "."
+include = ["backend"]
+venvPath = "."
+venv = ".venv"
+extraPaths = ["."]
