@@ -5,3 +5,4 @@
 .vscode
 *.db
 test_notebook.ipynb
+frontend/node_modules

@@ -16,6 +16,7 @@ def create_user(db: Session, request: UserBase):
         password=Hash.bcrypt(request.password),
         fullname=request.fullname,
         bio=request.bio,
+        role=request.role,
         registration_date= datetime.datetime.now(tz=datetime.timezone.utc),
         last_login=datetime.datetime.now(tz=datetime.timezone.utc)
         )

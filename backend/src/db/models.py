@@ -1,80 +1,59 @@
 from typing import List
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Enum
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from backend.src.db.database import Base
+import enum
 import datetime
 
-def utc_now():
-    return datetime.datetime.now(tz=datetime.timezone.utc)
+class RoleEnum(str, enum.Enum):
+    admin = "admin"
+    client = "client"
+
+class ProjectStatus(str, enum.Enum):
+    pending = "pending"
+    in_progress = "in_progress"
+    review = "review"
+    completed = "completed"
 
 class DbUser(Base):
-    """
-    DbUser model for the database. This model represents users in the social media application.
-    """
     __tablename__ = "users"
     
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
-    fullname = Column(String,default=None)
-    bio = Column(String,default=None)
-    # profile_picture = Column(String,default=None)
-    registration_date = Column(DateTime
-                               , server_default=func.now()
-                               )
-    last_login = Column(DateTime
-                        , server_default=func.now()
-                        )
-    articles = relationship("DbArticle", back_populates="user")
+    fullname = Column(String, default=None)
+    bio = Column(String, default=None)
+    role = Column(String, default=RoleEnum.client.value)  # admin or client
+    registration_date = Column(DateTime, server_default=func.now())
+    last_login = Column(DateTime, server_default=func.now())
+    
+    projects = relationship("DbProject", back_populates="client")
+    communications = relationship("DbCommunication", back_populates="sender")
 
-class DbArticle(Base):
-    """
-    DbArticle model for the database. This  model represents articles
-    written by users in the social media application.
-    """
-    __tablename__ = "articles"
+class DbProject(Base):
+    __tablename__ = "projects"
     
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
-    content = Column(String)
-    author_id = Column(Integer,
-                       ForeignKey(
-                           "users.id",
-                           ondelete="CASCADE"
-                       ),nullable=False)  # Foreign key to DbUser
-    created_at = Column(DateTime
-                        , server_default=func.now()
-                        )
-    updated_at = Column(DateTime
-                        , server_default=func.now()
-                        )
-    tags= Column(String)  # Comma-separated tags
-    is_published = Column(Boolean, default=True)
-    image_url = Column(String, default=None)
-    category = Column(String, default=None)
-    user = relationship("DbUser", back_populates="articles")
+    description = Column(String)
+    status = Column(String, default=ProjectStatus.pending.value)
+    client_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    client = relationship("DbUser", back_populates="projects")
+    communications = relationship("DbCommunication", back_populates="project")
 
-class DbVote(Base):
-    """
-    DbVote model for the database. This model represents votes (likes/dislikes) on articles.
-    """
-    __tablename__ = "votes"
+class DbCommunication(Base):
+    __tablename__ = "communications"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer,
-                     ForeignKey(
-                           "users.id",
-                           ondelete="CASCADE"
-                       ),nullable=False)  # Foreign key to DbUser
-    article_id = Column(Integer,
-                        ForeignKey(
-                           "articles.id",
-                           ondelete="CASCADE"
-                       ),nullable=False)  # Foreign key to DbArticle
-    vote_type = Column(String)  # 'like/dislike' or 'rating'
-    vote_value = Column(String)  # 'like' or 'dislike' or rating value
-    voted_at = Column(DateTime
-                        , server_default=func.now()
-                        )
+    message = Column(String, nullable=False)
+    sender_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    
+    sender = relationship("DbUser", back_populates="communications")
+    project = relationship("DbProject", back_populates="communications")

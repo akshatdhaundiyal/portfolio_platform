@@ -1,4 +1,3 @@
-from operator import ge
 from typing import Optional
 from pydantic import BaseModel
 
@@ -10,11 +9,10 @@ class UserBase(BaseModel):
     password: str
     fullname: Optional[str] = None
     bio: Optional[str] = None
-    # profile_picture: Optional(str) = None
+    role: Optional[str] = "client"
     
     class ConfigDict:
         from_attributes = True
-
 
 class UserUpdate(generate_partial_model(UserBase, model_name="UserUpdate")):
     backup_username: str
@@ -22,11 +20,12 @@ class UserUpdate(generate_partial_model(UserBase, model_name="UserUpdate")):
     pass
 
 class UserDisplay(BaseModel):
+    id: int
     username: str
     email: str
     fullname: Optional[str] = None
     bio: Optional[str] = None
-    # profile_picture: Optional(str) = None
+    role: str
     
     class ConfigDict:
         from_attributes = True
