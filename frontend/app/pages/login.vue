@@ -1,3 +1,28 @@
+<script setup>
+definePageMeta({
+  layout: 'login'
+})
+
+const username = ref('')
+const password = ref('')
+const loading = ref(false)
+const router = useRouter()
+
+async function login() {
+  loading.value = true
+  // Mock login: route based on input
+  setTimeout(() => {
+    loading.value = false
+    if (username.value.includes('admin')) {
+      router.push('/admin')
+    } else {
+      router.push('/client')
+    }
+  }, 1000)
+}
+</script>
+
+
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
     <UCard class="w-full max-w-md">
@@ -22,22 +47,4 @@
   </div>
 </template>
 
-<script setup>
-const username = ref('')
-const password = ref('')
-const loading = ref(false)
-const router = useRouter()
 
-async function login() {
-  loading.value = true
-  // Mock login: route based on input
-  setTimeout(() => {
-    loading.value = false
-    if (username.value.includes('admin')) {
-      router.push('/admin')
-    } else {
-      router.push('/client')
-    }
-  }, 1000)
-}
-</script>
