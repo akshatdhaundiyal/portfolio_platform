@@ -25,6 +25,11 @@ const links = [
     to: '/admin/invoices'
   },
   {
+    label: 'Database',
+    icon: 'i-heroicons-circle-stack',
+    to: '/admin/database'
+  },
+  {
     label: 'Settings',
     icon: 'i-heroicons-cog-8-tooth',
     to: '/admin/settings'
