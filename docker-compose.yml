@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: portfolio-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend # Hot-reload source code locally
+      - ./.env:/app/.env
+    # To enable hot reload locally with fastAPI, swap the command:
+    # command: ["uvicorn", "backend.src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: portfolio-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      # Instruct the frontend to talk to the backend container over the local docker bridge if SSR requires it.
+      - NUXT_PUBLIC_API_BASE=http://backend:8000

@@ -1,10 +1,19 @@
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
 
-pwd_cxt = CryptContext(schemes='bcrypt',deprecated = 'auto')
+# pwdlib.recommended() automatically chooses the best available algorithm (Argon2 in this case)
+password_hash = PasswordHash.recommended()
 
 class Hash():
-    def bcrypt(password:str):
-        return pwd_cxt.hash(password)
+    @staticmethod
+    def bcrypt(password: str) -> str:
+        """
+        Hash a password. (Name remains bcrypt for compatibility, but uses Argon2 via Recommended)
+        """
+        return password_hash.hash(password)
     
-    def verify(hashed_password,plain_password):
-        return pwd_cxt.verify(plain_password,hashed_password)
+    @staticmethod
+    def verify(hashed_password: str, plain_password: str) -> bool:
+        """
+        Verify a password against its hash.
+        """
+        return password_hash.verify(plain_password, hashed_password)

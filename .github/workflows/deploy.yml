@@ -1,0 +1,79 @@
+name: Build and Deploy to GCP Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  # GCP Identifiers should be securely added to your GitHub Repository Secrets
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: ${{ secrets.GCP_REGION }}
+  ARTIFACT_REPO: ${{ secrets.GCP_ARTIFACT_REPO }}
+  
+  # Image paths dynamically constructed using the secrets above
+  BACKEND_IMAGE: "${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/backend:latest"
+  FRONTEND_IMAGE: "${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/frontend:latest"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: "read"
+      id-token: "write" # Required for Workload Identity Federation
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Setup Google Cloud Workload Identity Federation authentication
+      # (Alternatively, you can use a Service Account JSON key stored in GitHub Secrets)
+      - name: Google Auth
+        id: auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+          # workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          # service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        uses: "google-github-actions/setup-gcloud@v2"
+
+      - name: Configure Docker to use Google Artifact Registry
+        run: gcloud auth configure-docker $REGION-docker.pkg.dev
+
+      # Build & Push Backend
+      - name: Build Backend Image
+        run: docker build -t $BACKEND_IMAGE -f backend.Dockerfile .
+        
+      - name: Push Backend Image
+        run: docker push $BACKEND_IMAGE
+
+      # Build & Push Frontend
+      - name: Build Frontend Image
+        run: docker build -t $FRONTEND_IMAGE -f frontend.Dockerfile .
+        
+      - name: Push Frontend Image
+        run: docker push $FRONTEND_IMAGE
+
+      # Deploy Backend to Cloud Run
+      - name: Deploy Backend
+        run: |
+          gcloud run deploy portfolio-backend \
+            --image $BACKEND_IMAGE \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars="DATABASE_URL=${{ secrets.NEON_DATABASE_URL }},SECRET_KEY=${{ secrets.APPLICATION_SECRET }}" \
+            --port 8000
+
+      # Deploy Frontend to Cloud Run
+      - name: Deploy Frontend
+        run: |
+          gcloud run deploy portfolio-frontend \
+            --image $FRONTEND_IMAGE \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 3000
