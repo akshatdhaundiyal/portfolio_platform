@@ -41,6 +41,13 @@ jobs:
       - name: Set up Cloud SDK
         uses: "google-github-actions/setup-gcloud@v2"
 
+      - name: Debug Artifact Registry Path
+        run: |
+          echo "Destination Region: $REGION"
+          echo "Destination Project: $PROJECT_ID"
+          echo "Destination Repo: $ARTIFACT_REPO"
+          echo "Full Backend Path: $BACKEND_IMAGE"
+
       - name: Configure Docker to use Google Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev
 
