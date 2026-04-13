@@ -1,3 +1,34 @@
+<script setup>
+definePageMeta({ layout: 'client-default' })
+
+const route = useRoute()
+const router = useRouter()
+const newMessage = ref('')
+
+const project = ref({
+  id: route.params.id,
+  title: 'E-commerce Website',
+  description: 'Full stack e-commerce app with dynamic products and integrated stripe payments.',
+  status: 'in_progress'
+})
+
+const messages = ref([
+  { id: 1, text: 'Hello! I have started working on the main layout.', sender: 'admin', time: '10:00 AM' },
+  { id: 2, text: 'Awesome, can you make sure it matches the figma?', sender: 'client', time: '10:35 AM' },
+])
+
+function sendMessage() {
+  if(!newMessage.value) return
+  messages.value.push({
+    id: Date.now(),
+    text: newMessage.value,
+    sender: 'client',
+    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+  })
+  newMessage.value = ''
+}
+</script>
+
 <template>
   <div v-if="project">
     <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-16 flex items-center px-6 gap-4">
@@ -50,32 +81,3 @@
     </main>
   </div>
 </template>
-
-<script setup>
-const route = useRoute()
-const router = useRouter()
-const newMessage = ref('')
-
-const project = ref({
-  id: route.params.id,
-  title: 'E-commerce Website',
-  description: 'Full stack e-commerce app with dynamic products and integrated stripe payments.',
-  status: 'in_progress'
-})
-
-const messages = ref([
-  { id: 1, text: 'Hello! I have started working on the main layout.', sender: 'admin', time: '10:00 AM' },
-  { id: 2, text: 'Awesome, can you make sure it matches the figma?', sender: 'client', time: '10:35 AM' },
-])
-
-function sendMessage() {
-  if(!newMessage.value) return
-  messages.value.push({
-    id: Date.now(),
-    text: newMessage.value,
-    sender: 'client',
-    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-  })
-  newMessage.value = ''
-}
-</script>

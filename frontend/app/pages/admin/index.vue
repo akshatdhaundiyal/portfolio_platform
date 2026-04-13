@@ -1,3 +1,14 @@
+<script setup>
+definePageMeta({ layout: 'admin-default' })
+
+const router = useRouter()
+
+const tabs = [
+  { label: 'Projects', slot: 'projects', icon: 'i-heroicons-briefcase' },
+  { label: 'Clients', slot: 'clients', icon: 'i-heroicons-users' },
+]
+</script>
+
 <template>
   <div>
     <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-16 flex items-center px-6 gap-4">
@@ -51,12 +62,3 @@
     </main>
   </div>
 </template>
-
-<script setup>
-const router = useRouter()
-
-const tabs = [
-  { label: 'Projects', slot: 'projects', icon: 'i-heroicons-briefcase' },
-  { label: 'Clients', slot: 'clients', icon: 'i-heroicons-users' },
-]
-</script>

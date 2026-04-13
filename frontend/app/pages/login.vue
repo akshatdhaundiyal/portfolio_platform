@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  layout: 'login'
+  layout: 'default'
 })
 
 const username = ref('')

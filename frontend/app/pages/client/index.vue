@@ -1,3 +1,22 @@
+<script setup>
+definePageMeta({ layout: 'client-default' })
+
+const router = useRouter()
+
+const projects = ref([
+  { id: 1, title: 'E-commerce Website', description: 'Building the new online store with Vue and Nuxt.', status: 'in_progress' },
+  { id: 2, title: 'Marketing Dashboard', description: 'Dashboard for tracking ad metrics.', status: 'completed' },
+])
+
+function logout() {
+  router.push('/login')
+}
+
+function goToProject(id) {
+  router.push(`/client/${id}`)
+}
+</script>
+
 <template>
   <div>
     <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-16 flex items-center px-6 justify-between">
@@ -23,20 +42,3 @@
     </main>
   </div>
 </template>
-
-<script setup>
-const router = useRouter()
-
-const projects = ref([
-  { id: 1, title: 'E-commerce Website', description: 'Building the new online store with Vue and Nuxt.', status: 'in_progress' },
-  { id: 2, title: 'Marketing Dashboard', description: 'Dashboard for tracking ad metrics.', status: 'completed' },
-])
-
-function logout() {
-  router.push('/login')
-}
-
-function goToProject(id) {
-  router.push(`/client/${id}`)
-}
-</script>
