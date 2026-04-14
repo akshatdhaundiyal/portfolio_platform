@@ -22,11 +22,13 @@ Use these step-by-step guides to maintain project integrity during common develo
 4.  **Hydration Check**: Ensure any locale-sensitive text (dates, currency) is wrapped in `<ClientOnly>`.
 5.  **Aesthetic Polish**: Apply glassmorphism or gradients to match the "Premium Dark" theme.
 
-## 🚀 Recipe: Standard Release Workflow
-1.  **Merge to Main**: Complete feature work in `main`.
-2.  **Sync Production**: 
-    - Checkout `production`.
-    - Merge `main`.
-    - Push to origin.
-    - (Wait for Cloud Run automated deployment).
-3.  **Versioning**: Update the milestone documentation in `docs/design_docs/`.
+## 🚀 Recipe: Fast-Forward Release Workflow
+1.  **Sync Main**: Ensure your local `main` matches the remote: `git pull origin main`.
+2.  **GitHub PR**:
+    - Create a Pull Request on GitHub from `main` → `production`.
+    - Click **"Rebase and merge"** (ensure "Squash" is disabled in settings).
+3.  **Local Fast-Forward**:
+    - Switch to production: `git checkout production`.
+    - Sync without divergence: `git fetch origin && git merge origin/production --ff-only`.
+    - Switch back to development: `git checkout main`.
+4.  **Versioning**: Update the milestone documentation in `docs/design_docs/`.
