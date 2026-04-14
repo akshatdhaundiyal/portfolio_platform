@@ -17,7 +17,11 @@ def register_user(request: UserRegister, db: Session = Depends(get_db)):
     """
     Public registration endpoint. Requires a valid invite code or bootstrap secret.
     """
-    is_bootstrap = (settings.bootstrap_secret and request.invite_code == settings.bootstrap_secret)
+    # Normalize both for comparison (ignore accidental whitespace)
+    input_code = request.invite_code.strip()
+    config_secret = settings.bootstrap_secret.strip() if settings.bootstrap_secret else None
+    
+    is_bootstrap = (config_secret and input_code == config_secret)
     invite = None
     
     if is_bootstrap:
