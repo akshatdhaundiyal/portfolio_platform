@@ -69,7 +69,7 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --clear-secrets \
-            --set-env-vars="DATABASE_URL=${{ secrets.NEON_DATABASE_URL }},SECRET_KEY=${{ secrets.APPLICATION_SECRET }},BOOTSTRAP_SECRET=${{ secrets.BOOTSTRAP_SECRET }}"
+            --set-env-vars="DATABASE_URL=${{ secrets.NEON_DATABASE_URL }},SECRET_KEY=${{ secrets.APPLICATION_SECRET }}"
 
       # Deploy Frontend to Cloud Run
       - name: Deploy Frontend
