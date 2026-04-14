@@ -38,7 +38,7 @@ const currentLinks = computed(() => {
     {
       label: 'Projects',
       icon: 'i-heroicons-briefcase',
-      to: '/project',
+      to: '/projects',
       badge: '3 Active'
     },
     {
