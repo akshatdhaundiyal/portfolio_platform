@@ -19,30 +19,64 @@ const isDark = computed({
   }
 })
 
-const dropdownItems = computed(() => [
-  [{
+const dropdownItems = computed(() => {
+  const items = []
+  
+  // Account header
+  items.push([{
     label: user.value?.username || 'Profile',
     slot: 'account',
     disabled: true
-  }],
-  [{
-    label: 'Settings',
-    icon: 'i-heroicons-cog-8-tooth',
-    to: '/admin/settings' // Assuming they go to the same settings page for now
-  }],
-  [{
-    label: 'Sign Out',
-    icon: 'i-heroicons-log-out',
-    click: authLogout
-  }]
-])
+  }])
+
+  // Dashboard shortcuts
+  const dashboardItems = []
+  if (user.value?.role === 'admin') {
+    dashboardItems.push({
+      label: 'Admin Dashboard',
+      icon: 'i-heroicons-squares-2x2',
+      to: '/admin'
+    })
+  }
+  dashboardItems.push({
+    label: 'Client Portal',
+    icon: 'i-heroicons-briefcase',
+    to: '/client'
+  })
+  items.push(dashboardItems)
+
+  // Settings & Logout
+  items.push([
+    {
+      label: 'Settings',
+      icon: 'i-heroicons-cog-8-tooth',
+      to: '/admin/settings'
+    },
+    {
+      label: 'Sign Out',
+      icon: 'i-heroicons-log-out',
+      click: authLogout
+    }
+  ])
+
+  return items
+})
 
 // Navigation links array making it easy to add or remove links without editing HTML
-const links = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
-  { label: 'Client Portal', to: '/client' }
-]
+const links = computed(() => {
+  const list = [
+    { label: 'Home', to: '/' },
+    { label: 'About', to: '/about' }
+  ]
+
+  if (user.value?.role === 'admin') {
+    list.push({ label: 'Dashboard', to: '/admin', class: 'text-primary-600 font-bold' })
+  } else {
+    list.push({ label: 'Client Portal', to: '/client' })
+  }
+
+  return list
+})
 </script>
 <template>
   <header class="sticky top-0 z-50 backdrop-blur-md bg-white/75 dark:bg-gray-900/75 border-b border-gray-200 dark:border-gray-800 transition-colors">

@@ -7,6 +7,8 @@ const isPublicRoute = computed(() => {
   return route.path === '/' || route.path.startsWith('/about') || route.path.startsWith('/login')
 })
 
+const { logout, isLoggedIn } = useAuth()
+
 const currentLinks = computed(() => {
   if (isPublicRoute.value) {
     return [
@@ -58,16 +60,6 @@ const currentLinks = computed(() => {
     }
   ]
 })
-
-const { logout } = useAuth()
-
-function handleFooterAction() {
-  if (isPublicRoute.value) {
-    router.push('/login')
-  } else {
-    logout()
-  }
-}
 </script>
 
 <template>
@@ -90,26 +82,28 @@ function handleFooterAction() {
 
     <!-- Sidebar Footer -->
     <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+      <!-- Show Logout if logged in, regardless of route type -->
       <UButton 
-        v-if="isPublicRoute"
-        color="primary" 
-        variant="soft" 
-        block 
-        icon="i-heroicons-arrow-right-end-on-rectangle"
-        class="justify-start transition-colors"
-        @click="handleFooterAction">
-        Sign In
-      </UButton>
-      
-      <UButton 
-        v-else
+        v-if="isLoggedIn"
         color="gray" 
         variant="ghost" 
         block 
         icon="i-heroicons-arrow-right-start-on-rectangle"
         class="justify-start text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-        @click="handleFooterAction">
+        @click="logout">
         Sign Out
+      </UButton>
+      
+      <!-- Show Login only if guest and on public route -->
+      <UButton 
+        v-else-if="isPublicRoute"
+        color="primary" 
+        variant="soft" 
+        block 
+        icon="i-heroicons-arrow-right-end-on-rectangle"
+        class="justify-start transition-colors"
+        @click="router.push('/login')">
+        Sign In
       </UButton>
     </div>
 

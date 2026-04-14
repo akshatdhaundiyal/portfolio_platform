@@ -3,7 +3,7 @@ const router = useRouter()
 
 // Use default layout for home page
 definePageMeta({
-  layout: 'client-default'
+  layout: 'default'
 })
 
 const techStack = [
