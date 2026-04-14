@@ -25,7 +25,7 @@ The Projects Management suite provides administrators with a centralized hub for
 - **Location**: Navigate to `/admin/projects`.
 - **Experience**: The administrator can view the entire portfolio of work.
 - **Actions**:
-    - **Initialize**: Use the "Initialize New Project" modal to set up a title, assign a client, and link initial GitHub/Trello workspaces.
+    - **Initialize**: Use the "Initialize New Project" modal to set up a title, assign a client (via a robust `USelectMenu`), and link initial GitHub/Trello workspaces.
     - **Filter**: Narrow down the workload by status (e.g., "In Progress") or search for specific project titles.
 
 ### 2. Administrative Control View
@@ -46,7 +46,8 @@ The Projects Management suite provides administrators with a centralized hub for
 | **Status Override** | Change project from 'In Progress' to 'Review' | DB updated and reflected in UI (Passed) |
 | **Integration Fetch** | Verify GitHub commit logs load for public/tokenized repos | Verified (Passed) |
 | **Dynamic Sidebar** | Add a new project and check the sidebar badge count | Badge incremented (Passed) |
-| **Type Safety** | Access row details via `@select` with explicit `Project` typing | No lint errors (Passed) |
+| **Type Safety** | Access row details via `@select` with explicit Project typing | No lint errors (Passed) |
+| **Client Assignment**| Select a client in the initialization modal | Resolved (Upgraded to USelectMenu) |
 
 ---
 
