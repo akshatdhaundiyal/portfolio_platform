@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI
 from backend.src.db.database import engine,get_db
-from backend.src.routers import projects, communications, invoices
+from backend.src.routers import projects, communications, invoices, invites
 from backend.src.routers.users import user
 from backend.src.db import models
 from backend.src.utils.auth_service import authentication
@@ -34,6 +34,7 @@ app.include_router(projects.router)
 app.include_router(communications.router)
 app.include_router(user.router)
 app.include_router(authentication.router)
+app.include_router(invites.router)
 
 @app.get("/")
 def root():

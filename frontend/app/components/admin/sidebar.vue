@@ -37,6 +37,8 @@ const links = [
 ]
 
 function logout() {
+  const token = useCookie('auth_token')
+  token.value = null
   router.push('/login')
 }
 </script>

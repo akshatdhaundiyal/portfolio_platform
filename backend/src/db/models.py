@@ -47,6 +47,7 @@ class DbProject(Base):
     github_token = Column(String, nullable=True)
     wip_url = Column(String, nullable=True)
     start_date = Column(DateTime, nullable=True)
+    acceptance_criteria = Column(String, nullable=True)
     
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
@@ -55,6 +56,7 @@ class DbProject(Base):
     communications = relationship("DbCommunication", back_populates="project")
     invoices = relationship("DbInvoice", back_populates="project")
     files = relationship("DbProjectFile", back_populates="project")
+    criteria_history = relationship("DbCriteriaHistory", back_populates="project", cascade="all, delete-orphan")
 
 class DbCommunication(Base):
     __tablename__ = "communications"
@@ -90,3 +92,27 @@ class DbProjectFile(Base):
     uploaded_at = Column(DateTime, server_default=func.now())
     
     project = relationship("DbProject", back_populates="files")
+
+class DbInviteCode(Base):
+    __tablename__ = "invite_codes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String, unique=True, index=True, nullable=False)
+    is_used = Column(Boolean, default=False)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    used_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+
+    creator = relationship("DbUser", foreign_keys=[created_by])
+    user = relationship("DbUser", foreign_keys=[used_by])
+class DbCriteriaHistory(Base):
+    __tablename__ = "project_criteria_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    content = Column(String, nullable=False)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+
+    project = relationship("DbProject", back_populates="criteria_history")
+    author = relationship("DbUser", foreign_keys=[created_by])

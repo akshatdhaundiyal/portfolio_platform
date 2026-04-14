@@ -6,6 +6,7 @@ interface DashboardData {
   projects: any[]
   users: any[]
   invoices: any[]
+  invites: any[]
 }
 
 // Consolidated fetch to reduce IPC overhead with individual catchers
@@ -24,24 +25,27 @@ const { data: dashboardData, pending: isLoading, refresh } = await useAsyncData<
     }
   }
 
-  const [projects, users, invoices] = await Promise.all([
+  const [projects, users, invoices, invites] = await Promise.all([
     fetchSafe('/projects/'),
     fetchSafe('/users/'),
-    fetchSafe('/invoices/')
+    fetchSafe('/invoices/'),
+    fetchSafe('/invites/')
   ])
   
   return { 
     projects, 
     users, 
-    invoices 
+    invoices,
+    invites
   }
 }, {
-  default: () => ({ projects: [], users: [], invoices: [] })
+  default: () => ({ projects: [], users: [], invoices: [], invites: [] })
 })
 
 const projects = computed(() => dashboardData.value?.projects || [])
 const users = computed(() => dashboardData.value?.users || [])
 const invoices = computed(() => dashboardData.value?.invoices || [])
+const inviteCodes = computed(() => dashboardData.value?.invites || [])
 
 // CRUD State
 const isCreateModalOpen = ref(false)
@@ -121,7 +125,6 @@ async function handleCreateProject() {
       headers: { Authorization: `Bearer ${useCookie('auth_token').value}` }
     })
     
-    // Reset and Refresh
     projectForm.value = { 
       title: '', 
       description: '', 
@@ -135,20 +138,9 @@ async function handleCreateProject() {
     isCreateModalOpen.value = false
     await refresh()
     
-    toast.add({
-      title: 'Project Initialized',
-      description: 'The new project has been successfully added to your roster.',
-      icon: 'i-heroicons-check-circle',
-      color: 'primary'
-    })
+    toast.add({ title: 'Project Initialized', description: 'The new project has been successfully added.', icon: 'i-heroicons-check-circle', color: 'primary' })
   } catch (err: any) {
-    console.error('Failed to create project:', err)
-    toast.add({
-      title: 'Creation Failed',
-      description: err.data?.detail || 'Something went wrong while initializing the project.',
-      icon: 'i-heroicons-exclamation-circle',
-      color: 'red'
-    })
+    toast.add({ title: 'Creation Failed', description: err.data?.detail || 'Error initializing project.', color: 'red' })
   } finally {
     isSubmitting.value = false
   }
@@ -175,21 +167,9 @@ async function handleUpdateProject() {
     
     isEditModalOpen.value = false
     await refresh()
-    
-    toast.add({
-      title: 'Project Updated',
-      description: 'The changes have been saved successfully.',
-      icon: 'i-heroicons-check-circle',
-      color: 'primary'
-    })
+    toast.add({ title: 'Project Updated', description: 'Changes saved successfully.', icon: 'i-heroicons-check-circle', color: 'primary' })
   } catch (err: any) {
-    console.error('Failed to update project:', err)
-    toast.add({
-      title: 'Update Failed',
-      description: 'The system could not save your changes.',
-      icon: 'i-heroicons-exclamation-circle',
-      color: 'red'
-    })
+    toast.add({ title: 'Update Failed', description: 'Could not save changes.', color: 'red' })
   } finally {
     isSubmitting.value = false
   }
@@ -197,7 +177,6 @@ async function handleUpdateProject() {
 
 async function handleDeleteProject(id: number) {
   if (!confirm('Are you sure you want to delete this project?')) return
-  
   try {
     const { public: { apiBase } } = useRuntimeConfig()
     await $fetch(`${apiBase}/projects/${id}`, {
@@ -205,25 +184,34 @@ async function handleDeleteProject(id: number) {
       headers: { Authorization: `Bearer ${useCookie('auth_token').value}` }
     })
     await refresh()
-    
-    toast.add({
-      title: 'Project Removed',
-      description: 'The project record has been permanently deleted.',
-      icon: 'i-heroicons-trash',
-      color: 'emerald'
-    })
+    toast.add({ title: 'Project Removed', icon: 'i-heroicons-trash', color: 'emerald' })
   } catch (err) {
-    console.error('Failed to delete project:', err)
-    toast.add({
-      title: 'Deletion Failed',
-      description: 'The system could not remove this project at this time.',
-      icon: 'i-heroicons-exclamation-circle',
-      color: 'red'
-    })
+    toast.add({ title: 'Deletion Failed', color: 'red' })
   }
 }
 
-// Compute reactive stats based on fetched data
+async function handleGenerateInvite() {
+  isSubmitting.value = true
+  try {
+    const { public: { apiBase } } = useRuntimeConfig()
+    await $fetch(`${apiBase}/invites/`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${useCookie('auth_token').value}` }
+    })
+    await refresh()
+    toast.add({ title: 'Invite Generated', description: 'New code added.', icon: 'i-heroicons-ticket', color: 'primary' })
+  } catch (err: any) {
+    toast.add({ title: 'Generation Failed', description: err.data?.detail || 'Error generating code.', color: 'red' })
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text)
+  toast.add({ title: 'Copied!', icon: 'i-heroicons-clipboard-document-check', color: 'emerald' })
+}
+
 const stats = computed(() => {
   const clientsCount = users.value.filter((u: any) => u.role === 'client').length
   const projectsCount = projects.value.length
@@ -240,6 +228,7 @@ const clients = computed(() => users.value.filter((u: any) => u.role === 'client
 
 const tabs = [
   { label: 'Projects', slot: 'projects', icon: 'i-heroicons-briefcase' },
+  { label: 'Invites', slot: 'invites', icon: 'i-heroicons-ticket' },
   { label: 'Clients', slot: 'clients', icon: 'i-heroicons-users' },
 ]
 </script>
@@ -257,60 +246,35 @@ const tabs = [
         <p class="text-gray-500 dark:text-gray-400 mt-1">Manage your professional portfolio and client relations.</p>
       </div>
       <div class="flex gap-2">
+        <UButton color="primary" variant="soft" icon="i-heroicons-ticket" @click="handleGenerateInvite" :loading="isSubmitting">Generate Invite</UButton>
         <UButton color="primary" icon="i-heroicons-plus" class="shadow-sm hover:shadow-primary-500/20 transition-all" @click="isCreateModalOpen = true">New Project</UButton>
       </div>
     </div>
 
-    <!-- Create Project Modal -->
+    <!-- Modals -->
     <UModal v-model="isCreateModalOpen" :ui="{ width: 'sm:max-w-xl' }">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-              Initialize New Project
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" class="-my-1" @click="isCreateModalOpen = false" />
+            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Initialize New Project</h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="isCreateModalOpen = false" />
           </div>
         </template>
-
         <UForm :state="projectForm" class="space-y-4" @submit="handleCreateProject">
-          <UFormGroup label="Project Title" name="title" required>
-            <UInput v-model="projectForm.title" placeholder="e.g. Modern E-commerce Platform" />
-          </UFormGroup>
-
-          <UFormGroup label="Description" name="description">
-            <UTextarea v-model="projectForm.description" placeholder="Brief overview of the project scope..." />
-          </UFormGroup>
-
+          <UFormGroup label="Project Title" name="title" required><UInput v-model="projectForm.title" /></UFormGroup>
+          <UFormGroup label="Description" name="description"><UTextarea v-model="projectForm.description" /></UFormGroup>
           <div class="grid grid-cols-2 gap-4">
-            <UFormGroup label="Assign Client" name="client_id" required>
-              <USelect v-model="projectForm.client_id" :options="clientOptions" placeholder="Select a client" />
-            </UFormGroup>
-            <UFormGroup label="Start Date" name="start_date">
-              <UInput v-model="projectForm.start_date" type="date" />
-            </UFormGroup>
+            <UFormGroup label="Assign Client" name="client_id" required><USelect v-model="projectForm.client_id" :options="clientOptions" /></UFormGroup>
+            <UFormGroup label="Start Date" name="start_date"><UInput v-model="projectForm.start_date" type="date" /></UFormGroup>
           </div>
-
-          <div class="border-t dark:border-gray-800 pt-4 mt-4">
-            <h4 class="text-sm font-semibold mb-3 text-gray-500 flex items-center gap-2">
-              <UIcon name="i-heroicons-globe-alt" /> Integrations & External Links
-            </h4>
+          <div class="border-t dark:border-gray-800 pt-4"><h4 class="text-sm font-semibold mb-3 text-gray-500">Integrations</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <UFormGroup label="GitHub Repo URL" name="github_url">
-                <UInput v-model="projectForm.github_url" placeholder="https://github.com/user/repo" />
-              </UFormGroup>
-              <UFormGroup label="GitHub Token (Optional)" name="github_token" help="Required for private repositories">
-                <UInput v-model="projectForm.github_token" type="password" placeholder="ghp_xxxxxxxx" />
-              </UFormGroup>
-              <UFormGroup label="Trello Board URL" name="trello_url">
-                <UInput v-model="projectForm.trello_url" placeholder="https://trello.com/b/board" />
-              </UFormGroup>
-              <UFormGroup label="WIP/Preview URL" name="wip_url">
-                <UInput v-model="projectForm.wip_url" placeholder="https://staging.site.com" />
-              </UFormGroup>
+              <UFormGroup label="GitHub URL"><UInput v-model="projectForm.github_url" /></UFormGroup>
+              <UFormGroup label="GitHub Token"><UInput v-model="projectForm.github_token" type="password" /></UFormGroup>
+              <UFormGroup label="Trello URL"><UInput v-model="projectForm.trello_url" /></UFormGroup>
+              <UFormGroup label="WIP URL"><UInput v-model="projectForm.wip_url" /></UFormGroup>
             </div>
           </div>
-
           <div class="flex justify-end gap-3 pt-4">
             <UButton color="gray" variant="ghost" @click="isCreateModalOpen = false">Cancel</UButton>
             <UButton type="submit" color="primary" :loading="isSubmitting">Create Project</UButton>
@@ -319,56 +283,21 @@ const tabs = [
       </UCard>
     </UModal>
 
-    <!-- Edit Project Modal -->
     <UModal v-model="isEditModalOpen" :ui="{ width: 'sm:max-w-xl' }">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-              Update Project Details
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" class="-my-1" @click="isEditModalOpen = false" />
+            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Update Project</h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="isEditModalOpen = false" />
           </div>
         </template>
-
         <UForm :state="editForm" class="space-y-4" @submit="handleUpdateProject">
-          <UFormGroup label="Project Title" name="title" required>
-            <UInput v-model="editForm.title" />
-          </UFormGroup>
-
-          <UFormGroup label="Description" name="description">
-            <UTextarea v-model="editForm.description" />
-          </UFormGroup>
-
+          <UFormGroup label="Project Title" required><UInput v-model="editForm.title" /></UFormGroup>
+          <UFormGroup label="Description"><UTextarea v-model="editForm.description" /></UFormGroup>
           <div class="grid grid-cols-2 gap-4">
-            <UFormGroup label="Workflow Status" name="status" required>
-              <USelect v-model="editForm.status" :options="statusOptions" />
-            </UFormGroup>
-            <UFormGroup label="Start Date" name="start_date">
-              <UInput v-model="editForm.start_date" type="date" />
-            </UFormGroup>
+            <UFormGroup label="Status" required><USelect v-model="editForm.status" :options="statusOptions" /></UFormGroup>
+            <UFormGroup label="Start Date"><UInput v-model="editForm.start_date" type="date" /></UFormGroup>
           </div>
-
-          <div class="border-t dark:border-gray-800 pt-4 mt-4">
-            <h4 class="text-sm font-semibold mb-3 text-gray-500 flex items-center gap-2">
-              <UIcon name="i-heroicons-globe-alt" /> Integrations & External Links
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <UFormGroup label="GitHub Repo URL" name="github_url">
-                <UInput v-model="editForm.github_url" />
-              </UFormGroup>
-              <UFormGroup label="GitHub Token" name="github_token" help="Required for private repositories">
-                <UInput v-model="editForm.github_token" type="password" />
-              </UFormGroup>
-              <UFormGroup label="Trello Board URL" name="trello_url">
-                <UInput v-model="editForm.trello_url" />
-              </UFormGroup>
-              <UFormGroup label="WIP/Preview URL" name="wip_url">
-                <UInput v-model="editForm.wip_url" />
-              </UFormGroup>
-            </div>
-          </div>
-
           <div class="flex justify-end gap-3 pt-4">
             <UButton color="gray" variant="ghost" @click="isEditModalOpen = false">Discard</UButton>
             <UButton type="submit" color="primary" :loading="isSubmitting">Save Changes</UButton>
@@ -385,7 +314,7 @@ const tabs = [
       <UCard v-else v-for="stat in stats" :key="stat.label" class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border-gray-100/50 dark:border-gray-700/50 hover:scale-[1.02] transition-transform">
         <div class="flex items-center gap-4">
           <div :class="`p-3 rounded-lg bg-${stat.color}-100 dark:bg-${stat.color}-900/40`">
-            <UIcon :name="stat.icon" :class="`w-6 h-6 text-${stat.color}-600 dark:text-${stat.color}-400`" />
+            <UIcon :name="stat.icon" :class="`w-6 h-10 text-${stat.color}-600 dark:text-${stat.color}-400`" />
           </div>
           <div>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ stat.label }}</p>
@@ -418,27 +347,50 @@ const tabs = [
                   </div>
                   <div>
                     <h4 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors">{{ project.title }}</h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                      <UIcon name="i-heroicons-user" class="w-4 h-4" /> {{ project.status }}
-                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">{{ project.status }}</p>
                   </div>
                 </div>
                 <div class="flex gap-2">
                   <UBadge :color="project.status === 'completed' ? 'emerald' : 'primary'" variant="soft" size="xs">{{ project.status }}</UBadge>
-                  <UButton color="gray" variant="ghost" icon="i-heroicons-pencil-square" size="sm" class="rounded-full" @click="openEditModal(project)" />
-                  <UButton color="red" variant="ghost" icon="i-heroicons-trash" size="sm" class="rounded-full opacity-0 group-hover:opacity-100 transition-opacity" @click="handleDeleteProject(project.id)" />
-                  <UButton color="gray" variant="ghost" icon="i-heroicons-chevron-right" size="sm" class="rounded-full" :to="`/client/${project.id}`" />
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-pencil-square" size="sm" @click="openEditModal(project)" />
+                  <UButton color="red" variant="ghost" icon="i-heroicons-trash" size="sm" class="opacity-0 group-hover:opacity-100 transition-opacity" @click="handleDeleteProject(project.id)" />
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-chevron-right" size="sm" :to="`/client/${project.id}`" />
                 </div>
               </div>
             </div>
           </UCard>
         </template>
+
+        <template #invites="{ item }">
+          <UCard class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border-gray-100/50 dark:border-gray-700/50 shadow-sm">
+            <template #header>
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Workspace Invitations</h3>
+                <UButton color="primary" variant="soft" size="sm" icon="i-heroicons-plus" @click="handleGenerateInvite" :loading="isSubmitting">New Code</UButton>
+              </div>
+            </template>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div v-if="isLoading" class="col-span-full py-10 text-center text-gray-500">Retrieving security codes...</div>
+              <div v-else-if="inviteCodes.length === 0" class="col-span-full py-10 text-center text-gray-500">No invitation codes found.</div>
+              <div v-else v-for="invite in inviteCodes" :key="invite.id" class="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-white/40 dark:bg-gray-900/40 hover:border-primary-500/50 transition-all flex flex-col gap-3 group">
+                <div class="flex justify-between items-start">
+                  <div class="font-mono text-lg font-bold text-primary-600 tracking-wider">{{ invite.code }}</div>
+                  <UBadge :color="invite.is_used ? 'gray' : 'emerald'" variant="soft" size="xs">{{ invite.is_used ? 'Used' : 'Available' }}</UBadge>
+                </div>
+                <div class="flex items-center justify-between mt-1">
+                  <span class="text-xs text-gray-400">Created {{ new Date(invite.created_at).toLocaleDateString() }}</span>
+                  <UButton v-if="!invite.is_used" color="gray" variant="ghost" icon="i-heroicons-clipboard" size="xs" @click="copyToClipboard(invite.code)">Copy</UButton>
+                </div>
+              </div>
+            </div>
+          </UCard>
+        </template>
+
         <template #clients="{ item }">
           <UCard class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border-gray-100/50 dark:border-gray-700/50 shadow-sm">
             <template #header>
               <div class="flex justify-between items-center">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">Client Accounts</h3>
-                <UButton color="primary" variant="soft" icon="i-heroicons-user-plus" size="sm">Add Client</UButton>
               </div>
             </template>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -461,24 +413,9 @@ const tabs = [
 </template>
 
 <style scoped>
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out;
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-@keyframes blob {
-  0% { transform: scale(1); }
-  33% { transform: scale(1.1) translate(10px, -10px); }
-  66% { transform: scale(0.9) translate(-10px, 10px); }
-  100% { transform: scale(1); }
-}
+.animate-fade-in-up { animation: fadeInUp 0.8s ease-out; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-blob { animation: blob 7s infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+@keyframes blob { 0% { transform: scale(1); } 33% { transform: scale(1.1) translate(10px, -10px); } 66% { transform: scale(0.9) translate(-10px, 10px); } 100% { transform: scale(1); } }
 </style>

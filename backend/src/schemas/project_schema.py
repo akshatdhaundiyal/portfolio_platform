@@ -13,6 +13,7 @@ class ProjectBase(BaseModel):
     github_token: Optional[str] = None
     wip_url: Optional[str] = None
     start_date: Optional[datetime] = None
+    acceptance_criteria: Optional[str] = None
     
     class ConfigDict:
         from_attributes = True
@@ -26,6 +27,7 @@ class ProjectCreate(BaseModel):
     github_token: Optional[str] = None
     wip_url: Optional[str] = None
     start_date: Optional[datetime] = None
+    acceptance_criteria: Optional[str] = None
 
 class ProjectUpdate(generate_partial_model(ProjectBase, model_name="ProjectUpdate")):
     pass
@@ -41,8 +43,20 @@ class ProjectDisplay(BaseModel):
     github_token: Optional[str] = None
     wip_url: Optional[str] = None
     start_date: Optional[datetime] = None
+    acceptance_criteria: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     
+    class ConfigDict:
+        from_attributes = True
+
+class CriteriaHistoryDisplay(BaseModel):
+    id: int
+    project_id: int
+    content: str
+    created_by: Optional[int]
+    created_at: datetime
+    author_name: Optional[str] = None
+
     class ConfigDict:
         from_attributes = True

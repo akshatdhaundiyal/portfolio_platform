@@ -64,6 +64,8 @@ function handleFooterAction() {
     router.push('/login')
   } else {
     // Perform logout then redirect
+    const token = useCookie('auth_token')
+    token.value = null
     router.push('/login')
   }
 }
