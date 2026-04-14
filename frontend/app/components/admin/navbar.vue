@@ -16,7 +16,7 @@ const isDark = computed({
 const links = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
-  { label: 'Projects', to: '/project' },
+  { label: 'Projects', to: '/projects' },
   { label: 'Admin Dashboard', to: '/admin' }
 ]
 </script>

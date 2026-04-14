@@ -26,10 +26,10 @@ const { data: dashboardData, pending: isLoading, refresh } = await useAsyncData<
   }
 
   const [projects, users, invoices, invites] = await Promise.all([
-    fetchSafe('/projects/'),
-    fetchSafe('/users/'),
-    fetchSafe('/invoices/'),
-    fetchSafe('/invites/')
+    fetchSafe('/projects'),
+    fetchSafe('/users'),
+    fetchSafe('/invoices'),
+    fetchSafe('/invites')
   ])
   
   return { 
@@ -116,7 +116,7 @@ async function handleCreateProject() {
   isSubmitting.value = true
   try {
     const { public: { apiBase } } = useRuntimeConfig()
-    await $fetch(`${apiBase}/projects/`, {
+    await $fetch(`${apiBase}/projects`, {
       method: 'POST',
       body: {
         ...projectForm.value,
@@ -194,7 +194,7 @@ async function handleGenerateInvite() {
   isSubmitting.value = true
   try {
     const { public: { apiBase } } = useRuntimeConfig()
-    await $fetch(`${apiBase}/invites/`, {
+    await $fetch(`${apiBase}/invites`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${useCookie('auth_token').value}` }
     })
@@ -378,7 +378,11 @@ const tabs = [
                   <UBadge :color="invite.is_used ? 'gray' : 'emerald'" variant="soft" size="xs">{{ invite.is_used ? 'Used' : 'Available' }}</UBadge>
                 </div>
                 <div class="flex items-center justify-between mt-1">
-                  <span class="text-xs text-gray-400">Created {{ new Date(invite.created_at).toLocaleDateString() }}</span>
+                  <span class="text-xs text-gray-400">
+                    <ClientOnly>
+                      Created {{ new Date(invite.created_at).toLocaleDateString() }}
+                    </ClientOnly>
+                  </span>
                   <UButton v-if="!invite.is_used" color="gray" variant="ghost" icon="i-heroicons-clipboard" size="xs" @click="copyToClipboard(invite.code)">Copy</UButton>
                 </div>
               </div>
