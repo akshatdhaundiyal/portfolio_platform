@@ -47,11 +47,7 @@ const links = computed(() => [
   }
 ])
 
-function logout() {
-  const token = useCookie('auth_token')
-  token.value = null
-  router.push('/login')
-}
+const { logout } = useAuth()
 </script>
 
 

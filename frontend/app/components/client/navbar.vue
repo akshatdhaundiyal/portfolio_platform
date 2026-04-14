@@ -1,6 +1,13 @@
 <script setup>
 const router = useRouter()
 const colorMode = useColorMode()
+const { user, isLoggedIn, fetchUser, logout: authLogout } = useAuth()
+
+onMounted(() => {
+  if (isLoggedIn.value && !user.value) {
+    fetchUser()
+  }
+})
 
 // Computed property to seamlessly toggle dark mode using Nuxt UI's built-in composable
 const isDark = computed({
@@ -11,6 +18,24 @@ const isDark = computed({
     colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
   }
 })
+
+const dropdownItems = computed(() => [
+  [{
+    label: user.value?.username || 'Profile',
+    slot: 'account',
+    disabled: true
+  }],
+  [{
+    label: 'Settings',
+    icon: 'i-heroicons-cog-8-tooth',
+    to: '/admin/settings' // Assuming they go to the same settings page for now
+  }],
+  [{
+    label: 'Sign Out',
+    icon: 'i-heroicons-log-out',
+    click: authLogout
+  }]
+])
 
 // Navigation links array making it easy to add or remove links without editing HTML
 const links = [
@@ -68,8 +93,40 @@ const links = [
 
           <div class="hidden sm:block h-6 w-px bg-gray-200 dark:bg-gray-800" /> <!-- Divider -->
 
+          <!-- Dynamic Auth Section -->
+          <div v-if="isLoggedIn && user" class="hidden sm:flex items-center">
+            <UDropdown :items="dropdownItems" :popper="{ placement: 'bottom-end' }">
+              <UButton
+                color="gray"
+                variant="ghost"
+                class="font-semibold gap-2 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center"
+              >
+                <UAvatar
+                  src=""
+                  :alt="user.username"
+                  size="xs"
+                  class="ring-1 ring-gray-200 dark:ring-gray-800"
+                />
+                <span class="max-w-[100px] truncate">{{ user.fullname || user.username }}</span>
+                <UIcon name="i-heroicons-chevron-down-20-solid" class="w-4 h-4 text-gray-400" />
+              </UButton>
+
+              <template #account="{ item }">
+                <div class="text-left">
+                  <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider px-2 py-1">
+                    Signed in as
+                  </p>
+                  <p class="truncate font-bold text-gray-900 dark:text-white px-2 pb-1">
+                    {{ user.username }}
+                  </p>
+                </div>
+              </template>
+            </UDropdown>
+          </div>
+
           <!-- Login CTA (Hidden on mobile to save space) -->
           <UButton 
+            v-else
             color="primary" 
             variant="solid" 
             to="/login" 

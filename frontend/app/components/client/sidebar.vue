@@ -59,14 +59,13 @@ const currentLinks = computed(() => {
   ]
 })
 
+const { logout } = useAuth()
+
 function handleFooterAction() {
   if (isPublicRoute.value) {
     router.push('/login')
   } else {
-    // Perform logout then redirect
-    const token = useCookie('auth_token')
-    token.value = null
-    router.push('/login')
+    logout()
   }
 }
 </script>
