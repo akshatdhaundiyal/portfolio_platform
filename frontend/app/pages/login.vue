@@ -23,7 +23,7 @@ async function login() {
     formData.append('username', username.value)
     formData.append('password', password.value)
 
-    const data = await $fetch(`${apiBase}/token`, {
+    const data = await $fetch<{ access_token: string, username: string }>(`${apiBase}/token`, {
       method: 'POST',
       body: formData.toString(),
       headers: {
@@ -33,6 +33,11 @@ async function login() {
 
     if (data?.access_token) {
       token.value = data.access_token
+      
+      // Update global auth state
+      const { fetchUser } = useAuth()
+      await fetchUser()
+
       if (data.username?.includes('admin')) {
         router.push('/admin')
       } else {
@@ -52,7 +57,7 @@ async function register() {
   error.value = ''
 
   try {
-    const data = await $fetch(`${apiBase}/users/register`, {
+    const data = await $fetch<{ id: number }>(`${apiBase}/users/register`, {
       method: 'POST',
       body: {
         username: username.value,

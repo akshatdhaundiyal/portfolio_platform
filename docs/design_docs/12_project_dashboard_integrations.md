@@ -1,48 +1,47 @@
-# Milestone 12: Project Dashboard & External Integrations
+# Milestone Documentation: Project Dashboard Integrations
 
-## Overview
-This milestone evolved the platform from a simple CRUD application to a high-utility project management hub. We implemented a client-facing project dashboard that integrates with external developer tools like GitHub and Trello.
-
----
-
-## 1. Database Schema Expansion (v2)
-To support rich project metadata, the `DbProject` model was expanded with the following nullable fields:
-- **`trello_url`**: Direct link to the project's task board.
-- **`github_url`**: Path to the source code repository.
-- **`github_token`**: Optional Personal Access Token (PAT) for fetching commits from private repositories.
-- **`wip_url`**: URL for the live work-in-progress or staging environment.
-- **`start_date`**: DateTime to track project inception separately from record creation.
-
-## 2. GitHub API Integration
-Implemented a real-time "Version Logs" system in `client/[id].vue`:
-- **Commit Fetcher**: A reactive `fetchCommits` function that parses the GitHub URL and interacts with the GitHub REST API (`v3`).
-- **Dynamic Headers**: The system automatically detects the presence of a `github_token` and applies it as a Bearer token to authorize requests for private repositories.
-- **Loading UX**: Integrated `USkeleton` loaders to provide a premium feel while waiting for external API responses.
-
-## 3. Trello & WIP Orchestration
-- **Kanban Workspace**: Created a stylized UI component for Trello board access, ensuring clients have a one-click route to task management.
-- **Live Preview CTA**: Added a primary "Rocket Launch" button in the header, enabling immediate access to the project's staging deployment.
-
-## 4. Administrative Omniscience
-- **Direct Access**: Updated the Admin Project list with a "View Dashboard" link, allowing administrators to access the client-side dashboard route (`/client/[id]`) directly.
-- **Unified Management**: Integrated all new URLs and tokens into the Admin's Creation and Editing modals with a modern multi-column layout.
+This document records the evolution of the platform from a simple CRUD utility into a high-utility project management hub, featuring real-time integrations with external development ecosystems like GitHub and Trello.
 
 ---
 
-## 🛠️ Troubleshooting & Refinements
+## 🏗️ Architectural Overview
 
-### 1. PostgreSQL Schema Sync
-- **Issue**: Adding columns to a PostgreSQL database locally using `Base.metadata.create_all` does not alter existing tables.
-- **Fix**: Developed a `scratch/reset_db.py` script to drop and recreate the local schema during the development phase, followed by a re-seed of the integration data.
+This milestone introduced a "Service Proxy" philosophy, allowing the platform to act as a unified dashboard for external project metadata.
 
-### 2. GitHub URL Parsing
-- **Challenge**: Repository URLs can vary (e.g., ending in `.git`).
-- **Fix**: Implemented robust string parsing to extract `owner` and `repo` names consistently for API requests.
+### Data Model Expansion
+- **Integration Metadata**: Expanded the `DbProject` schema to include specialized fields for `github_url`, `trello_url`, and `wip_url`.
+- **Credential Storage**: Added a `github_token` field to support authenticated API requests for private repositories, ensuring that clients can view project progress regardless of repository visibility.
+
+### External Connectivity Logic
+- **GitHub REST Bridge**: Implemented a reactive commit-fetching service in the frontend that interacts with the GitHub API (v3). It parses repository structures and applies optional Bearer tokens dynamically.
+- **Kanban Orchestration**: Developed a stylized UI context for Trello tasks, providing a seamless transition between the portfolio dashboard and the project task board.
 
 ---
-## Final Verification (Local)
-1. **Schema**: Confirmed all integration fields are present in the `projects` table.
-2. **Commit Logs**: Verified that commits are correctly fetched and displayed for the `portfolio_platform` repo (public example).
-3. **Private Access**: Confirmed that the `Authorization` header is correctly applied when a `github_token` is provided.
 
-The platform is now ready for professional client delivery! 🚀
+## 🧪 Walkthrough & Functional Flow
+
+### 1. The Client Command Center
+- **Location**: `/client/[id]`.
+- **Experience**: The client sees their project's premium summary.
+- **Flow**: Background blobs provide a deep aesthetic -> "Version Logs" fetch the latest 5 commits from GitHub -> The "Rocket Launch" button provides a direct route to the live work-in-progress (WIP) environment.
+
+### 2. Multi-Context Management
+- **Experience**: An administrator views a project.
+- **Outcome**: The admin uses the management modal to link a repository URL and token. This data is instantly persisted and served to the client, activating the external integration modules on their dashboard immediately.
+
+---
+
+## 📋 Verification Summary
+
+| Feature | Test Case | Result |
+| :--- | :--- | :--- |
+| **Commit Fetching** | Load dashboard with a public GitHub repo linked | Data Synchronized (Passed) |
+| **Private Repo Auth** | Load dashboard using a valid Personal Access Token | Auth Verified (Passed) |
+| **URL Parsing** | Enter `.git` and non-`.git` repository paths | Handled (Passed) |
+| **UX Responsiveness** | Verify `USkeleton` state during external API fetch | Premium Feel (Passed) |
+| **Cross-Link Stability** | Test Trello and WIP CTA buttons | Logic Correct (Passed) |
+
+---
+
+> [!TIP]
+> **Next Steps**: With external integrations active, we focus on **Project Security and Collaboration** to introduce versioned requirements and role-based access hardening.

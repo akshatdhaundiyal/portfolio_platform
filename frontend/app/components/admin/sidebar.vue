@@ -1,8 +1,19 @@
-<script setup>
+<script setup lang="ts">
 const router = useRouter()
 
+const { public: { apiBase } } = useRuntimeConfig()
+const token = useCookie('auth_token').value
+
+const { data: projectsCount } = await useAsyncData('projects-count', async () => {
+  if (!token) return 0
+  const projects = await $fetch(`${apiBase}/projects`, {
+    headers: { Authorization: `Bearer ${token}` }
+  }) as any[]
+  return projects.filter(p => p.status !== 'completed').length
+}, { default: () => 0 })
+
 // Defines the vertical navigation links and their icons.
-const links = [
+const links = computed(() => [
   {
     label: 'Dashboard',
     icon: 'i-heroicons-home',
@@ -12,7 +23,7 @@ const links = [
     label: 'Projects',
     icon: 'i-heroicons-briefcase',
     to: '/admin/projects',
-    badge: '3 Active'
+    badge: projectsCount.value ? `${projectsCount.value} Active` : undefined
   },
   {
     label: 'Clients',
@@ -34,13 +45,9 @@ const links = [
     icon: 'i-heroicons-cog-8-tooth',
     to: '/admin/settings'
   }
-]
+])
 
-function logout() {
-  const token = useCookie('auth_token')
-  token.value = null
-  router.push('/login')
-}
+const { logout } = useAuth()
 </script>
 
 

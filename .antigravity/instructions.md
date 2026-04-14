@@ -19,8 +19,11 @@ Before concluding any task, you MUST verify:
 
 ## 📚 Documentation & Milestone Standards
 - **Technical Knowledge Base**: Every bug fix and technical hurdle MUST be documented in `docs/knowledge_base/`. Explain the "why" and constraints (e.g., CORS, hydration).
-- **Milestone Logging**: Every new feature or major architectural milestone MUST be recorded in `docs/design_docs/00_milestone_summary.md`. Update the "Last Technical Audit" date.
-- **Audit**: Before finishing, verify both the knowledge log and milestone summary are updated.
+- **Milestone Documentation**: Every major feature or milestone MUST have:
+    1.  An entry in the `00_milestone_summary.md`.
+    2.  A dedicated design document in `docs/design_docs/` (e.g., `15_clients_dashboard.md`).
+    3.  The design document MUST contain a **Walkthrough** section describing the functional flow and a **Verification** table with test results.
+- **Audit**: Before finishing, verify that the knowledge log, milestone summary, and individual design docs are updated/created.
 
 ## 🛠️ Specialized Constraints
 - **Database**: We are currently in a pre-Alembic phase. Schema changes require manual table drops or re-syncing scripts.

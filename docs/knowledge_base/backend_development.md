@@ -56,3 +56,22 @@ Generic 500 errors in Cloud Run were invisible to the frontend due to CORS polic
 ### The Knowledge
 - **Auto-Genesis**: Use `models.Base.metadata.create_all(engine)` at the bottom of `main.py` rather than at the top. 
 - **The "Why"**: Placing it at the end ensures that all routers and models have been imported and registered with the SQLAlchemy `Base` class. If called too early, SQLAlchemy will only create a subset of the tables, leading to "Table not found" errors during runtime.
+
+---
+
+## 👥 6. Specialized Role-Based Filtering
+
+### The Knowledge
+- **Efficiency**: Instead of fetching all users and filtering in the frontend, implement specialized server-side methods (e.g., `get_all_clients`) to reduce payload size and enforcement overhead.
+- **RBAC Enforcement**: Use explicit role checks (`current_user.role != "admin"`) for admin-only management endpoints. Even if the data is filtered by role, the caller's authorization must be verified first to prevent horizontal privilege escalation.
+ 
+ ---
+ 
+ ## 💰 7. Financial Data Isolation & Relational Filtering
+ 
+ ### The Knowledge
+ - **Inverse Relational Filtering**: To fetch client-specific invoices, the backend should not rely on an `invoice.client_id` field (which can be redundant). Instead, use a **Join Filter** through the `Project` table.
+     - **Mechanism**: `db.query(DbInvoice).join(DbProject).filter(DbProject.client_id == current_user.id)`. 
+     - **Benefit**: This ensures that even if an invoice table was compromised, a client can ONLY see records programmatically linked to their verified projects.
+ - **Professional Numbering**: Implement a standard numbering scheme (e.g., `INV-XXXX-YYMM`) within the `create_invoice` logic to ensure financial persistence and unique index lookup efficiency.
+ - **Role-Based Mutation**: Ensure that any `PATCH` or `DELETE` on financial records is strictly gated by a hard `admin` role check. Clients should NEVER have write-access to their own billables.

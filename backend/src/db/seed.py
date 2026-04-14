@@ -105,8 +105,11 @@ def seed_db():
             db.add(comm)
             
             # 4. Create Sample Invoices
+            invoice_num = f"INV-{project.id:04d}-{datetime.now().strftime('%y%m')}"
             invoice = DbInvoice(
+                invoice_number=invoice_num,
                 amount=500,
+                description=f"Initial deposit for {project.title}",
                 status="paid" if project.status == ProjectStatus.completed.value else "unpaid",
                 due_date=datetime.now() + timedelta(days=14),
                 project_id=project.id

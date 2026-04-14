@@ -72,5 +72,57 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 - **Admin Mobility:** Enabled administrators to view and manage these dashboards directly from the project list.
 - **Database Reset:** Successfully performed a local schema migration to include integration fields and re-seeded the environment with high-fidelity test data.
 
+## 👥 15: Admin Clients Dashboard & Relationship Mapping
+**Goal:** Empower administrators with a centralized hub for managing client relationships and monitoring project distribution.
+- **Backend Infrastructure:** Implemented a high-efficiency `get_all_clients` endpoint with mandatory RBAC filters to minimize payload overhead.
+- **Relationship Mapping:** Built a cross-referenced profile view that automatically aggregates projects, communications, and engagement stats for individual clients.
+- **UI UX:** Created a premium, glassmorphic management interface with real-time search, stat grids, and deep-link navigation between client profiles and project dashboards.
+
+## 📊 16: Admin Projects Management Suite
+**Goal:** Establish a dedicated control center for professional project lifecycles.
+- **Project List:** Created a high-fidelity indexing page (`/admin/projects`) with dynamic filtering and status summaries.
+- **Admin Control View:** Built an administrative project dashboard that mirrors the client's view but adds management tools for status overrides and integration link maintenance.
+- **Dynamic Awareness:** Refactored the sidebar to use real-time project counts for its notification badges.
+
+## ⚙️ 17: Workspace Settings Suite
+**Goal:** Empower administrators with localized control over their identity and workspace appearance.
+- **Profile Localization:** Built a premium settings dashboard allowing admins to update bio, fullname, and professional avatars.
+- **Account Security:** Implemented a secure authentication management tab for username, email, and Argon2-hashed password updates.
+- **Performance:** Added a specialized `/users/me` endpoint to efficiently fetch synchronized profile data without repeatedly querying the full user list.
+
+## 📚 18: Documentation & Walkthrough Enrichment
+**Goal:** Formalize the project's knowledge base and create a sustainable documentation culture.
+- **Standards:** Updated `.antigravity/instructions.md` to mandate walkthrough-enriched design documents for every milestone.
+- **Retroactive Enrichment:** Refactored all previous design documents (01-14) to include narrative walkthroughs, architectural overviews, and verification summaries.
+- **Documentation:** Created high-fidelity records for Milestones 15, 16, and 17, ensuring 100% parity between the codebase and the technical docs.
+
+## 🌉 19: Dynamic Navbar & Authentication Bridge
+**Goal:** Harmonize the application's visual entry points and establish a global authentication state.
+- **State Management:** Produced the `useAuth` composable, centralizing user identity, profile fetching, and unified logout logic across the entire frontend.
+- **Dynamic UI:** Transformed the static navbars into intelligent components that show user dropdowns (Settings, Sign Out) when authenticated and standard CTAs for guests.
+- **Sync Logic:** Updated the login flow to trigger an immediate profile hydration, ensuring the transition from guest to authenticated user is seamless and artifact-free.
+
+## 💰 20: Invoicing Module & Financial Portal
+**Goal:** Establish a professional billing infrastructure for project-based milestones.
+- [x] **Backend: Database & Schemas**
+    - [x] Add `invoice_number` and `description` to `DbInvoice` in `models.py`
+    - [x] Create `backend/src/schemas/invoice_schema.py`
+- [x] **Backend: Logic & CRUD**
+    - [x] Create `backend/src/db/db_invoice.py`
+    - [x] Expand `backend/src/routers/invoices.py` with full CRUD endpoints
+- [x] **Data Seeding**
+    - [x] Update `backend/src/db/seed.py` with descriptive invoices
+- [x] **Frontend: Admin Invoicing Suite**
+    - [x] Create `frontend/app/pages/admin/invoices/index.vue`
+    - [x] Implement Stats Cards (Outstanding, Paid, Overdue)
+    - [x] Implement Invoice Table with search/filter
+    - [x] Implement "Create Invoice" Modal
+- [x] **Frontend: Client Financial Portal**
+    - [x] Create `frontend/app/pages/client/invoices.vue`
+    - [x] Implement Invoice List and Status Badges
+- [x] **Verification & Cleanup**
+    - [x] Verify Admin-to-Client invoice lifecycle
+    - [x] Update documentation and milestone summary
+
 ---
-*Last Technical Audit: 2026-04-14 (Integrated Project CRUD, Cloud Run Stabilization & Schema Auto-Initialization)*
+*Last Technical Audit: 2026-04-14 (Invoicing Module & Financial Portal)*
