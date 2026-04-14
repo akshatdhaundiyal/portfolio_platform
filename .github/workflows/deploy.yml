@@ -79,4 +79,5 @@ jobs:
             --region $REGION \
             --project $PROJECT_ID \
             --platform managed \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --set-env-vars="NUXT_PUBLIC_API_BASE=${{ secrets.NUXT_PUBLIC_API_BASE }}"
