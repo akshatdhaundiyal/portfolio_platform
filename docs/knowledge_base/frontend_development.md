@@ -70,3 +70,15 @@ Browser security policies often blocked the storage of JWT tokens sent from the 
 - **Generics**: Always provide a generic type parameter to `useAsyncData<T>` and associated fetchers. This allows the compiler to provide auto-completion and type-checking within the UI templates, preventing "unknown property" errors during production builds.
 - **Interface Centralization**: Define `interface` structures for core entities (like `Client` or `Project`) to ensure consistency between the API payload and the UI representation.
 - **Defensive Defaults**: When working with collections, provide a default empty list in the `useAsyncData` options (`{ default: () => [] }`) and use the null-coalescing pattern `(data.value || [])` to ensure the UI remains stable during initial load or fetch failures.
+
+---
+
+## 🔔 8. Dynamic Sidebar & Real-time UI Badges
+
+### The Knowledge
+- **Avoid Hardcoding**: Early versions used hardcoded strings (e.g., `badge: '3 Active'`) in the sidebar navigation. This leads to user distrust if the data doesn't match the current dashboard state.
+- **The Pattern (Computed Links)**:
+    - Instead of a static `links` array, use a `computed(() => [...])` property.
+    - Fetch counts/stats globally in the component using `useAsyncData`.
+    - This ensures that as the user navigates or performs actions (like creating a project), the sidebar updates automatically to reflect the actual database state.
+- **SSG/SSR Considerations**: When using `useAsyncData` in shared layouts (like the sidebar), always check for the existence of authentication tokens before fetching to avoid unnecessary 401 errors during the initial public rendering phase.
