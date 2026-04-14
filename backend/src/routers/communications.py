@@ -5,7 +5,7 @@ from backend.src.db.database import get_db
 from backend.src.schemas.communication_schema import CommunicationCreate, CommunicationDisplay
 from backend.src.db import db_communication
 from backend.src.schemas.user_schema import UserDisplay
-from backend.src.utils.auth_service.oauth2 import get_current_user
+from backend.src.utils.auth_service.oauth2_util import get_current_user
 
 router = APIRouter(prefix="/communications", tags=["communications"])
 
