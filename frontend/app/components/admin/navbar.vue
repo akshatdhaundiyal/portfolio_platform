@@ -44,6 +44,11 @@ const links = [
   { label: 'Projects', to: '/projects' },
   { label: 'Admin Dashboard', to: '/admin' }
 ]
+// Close drawer on navigation
+const isDrawerOpen = ref(false)
+watch(() => router.currentRoute.value.fullPath, () => {
+  isDrawerOpen.value = false
+})
 </script>
 <template>
   <header class="sticky top-0 z-50 backdrop-blur-md bg-white/75 dark:bg-gray-900/75 border-b border-gray-200 dark:border-gray-800 transition-colors">
@@ -143,10 +148,50 @@ const links = [
             color="gray" 
             variant="ghost" 
             class="md:hidden" 
+            @click="isDrawerOpen = true"
           />
         </div>
       </div>
     </div>
+
+    <!-- Mobile Drawer -->
+    <USlideover v-model="isDrawerOpen">
+      <UCard class="flex flex-col flex-1" :ui="{ body: { base: 'flex-1 overflow-y-auto' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-sparkles" class="w-6 h-6 text-primary-500" />
+              <span class="font-bold text-lg">Admin Navigation</span>
+            </div>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isDrawerOpen = false" />
+          </div>
+        </template>
+
+        <div class="py-4 px-2">
+          <!-- Add icons to admin links manually for the vertical nav -->
+          <UVerticalNavigation 
+            :links="links.map(l => ({ ...l, icon: l.label === 'Home' ? 'i-heroicons-home' : l.label === 'About' ? 'i-heroicons-user' : l.label === 'Projects' ? 'i-heroicons-briefcase' : 'i-heroicons-squares-2x2' }))" 
+            :ui="{ base: 'py-3' }" 
+          />
+        </div>
+
+        <template #footer>
+          <div v-if="isLoggedIn && user" class="space-y-4">
+            <div class="flex items-center gap-3 px-2 py-2">
+              <UAvatar size="md" :alt="user.username" />
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold truncate text-gray-900 dark:text-white">{{ user.fullname || user.username }}</p>
+                <p class="text-xs text-gray-500 truncate">{{ user.email }}</p>
+              </div>
+            </div>
+            <UButton color="red" variant="soft" block icon="i-heroicons-log-out" @click="authLogout">Sign Out</UButton>
+          </div>
+          <div v-else class="px-2 pb-4">
+            <UButton color="primary" block to="/login" icon="i-heroicons-log-in">Sign In</UButton>
+          </div>
+        </template>
+      </UCard>
+    </USlideover>
   </header>
 </template>
 
