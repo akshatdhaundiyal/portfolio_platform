@@ -59,23 +59,23 @@ jobs:
         run: docker push $FRONTEND_IMAGE
 
       # Deploy Backend to Cloud Run
-      name: Deploy Backend
-      run: |
-        gcloud run deploy portfolio-backend \
-          --image $BACKEND_IMAGE \
-          --region $REGION \
-          --project $PROJECT_ID \
-          --platform managed \
-          --allow-unauthenticated \
-          --clear-secrets \
-          --set-env-vars="DATABASE_URL=${{ secrets.NEON_DATABASE_URL }},SECRET_KEY=${{ secrets.APPLICATION_SECRET }}"
+      - name: Deploy Backend
+        run: |
+          gcloud run deploy portfolio-backend \
+            --image $BACKEND_IMAGE \
+            --region $REGION \
+            --project $PROJECT_ID \
+            --platform managed \
+            --allow-unauthenticated \
+            --clear-secrets \
+            --set-env-vars="DATABASE_URL=${{ secrets.NEON_DATABASE_URL }},SECRET_KEY=${{ secrets.APPLICATION_SECRET }}"
 
-    # Deploy Frontend to Cloud Run
-    - name: Deploy Frontend
-      run: |
-        gcloud run deploy portfolio-frontend \
-          --image $FRONTEND_IMAGE \
-          --region $REGION \
-          --project $PROJECT_ID \
-          --platform managed \
-          --allow-unauthenticated
+      # Deploy Frontend to Cloud Run
+      - name: Deploy Frontend
+        run: |
+          gcloud run deploy portfolio-frontend \
+            --image $FRONTEND_IMAGE \
+            --region $REGION \
+            --project $PROJECT_ID \
+            --platform managed \
+            --allow-unauthenticated
