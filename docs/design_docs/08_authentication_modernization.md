@@ -21,12 +21,24 @@ Goal: Replace the unmaintained `passlib` library with a modern, compatible, and 
     - **Password**: `admin12321` (Hashed via Argon2)
     - **Role**: `admin`
 
-## Execution Walkthrough
-The authentication layer is now hardened and ready for production.
+#### 3. UX Integration
+- **`UAlert` Feedback**: Added a reactive alert system to the login modal that provides immediate feedback for invalid credentials or server errors.
+- **Loading States**: Implemented button loading states during authentication to prevent duplicate requests and improve the premium feel.
 
-### Key Deliverables:
-1. **Modern Hashing**: Verified `Hash.verify()` returns `True` for correctly hashed strings using the new `pwdlib` engine.
-2. **Database Integrity**: Confirmed the `admin` user was successfully inserted into the `users` table via the `add_admin.py` initialization script.
-3. **Future Proofing**: By moving to `pwdlib`, we have cleared the maintenance debt associated with `passlib`, ensuring the project remains compatible with upcoming Python versions and security standards.
+### 4. JWT Resilience & Troubleshooting
+During the integration phase, we refined the security layer to handle real-world edge cases:
+- **X-Ray Logging**: Refactored `oauth2_util.py` to capture and log raw `JWTError` exceptions to the server console. This allows developers to distinguish between "Expired Tokens," "Invalid Signatures," and "Malformed Headers" instantly.
+- **Cookie Synchronization Protocol**: Documented the "Stale Cookie" phenomenon where browsers retain tokens from different development micro-sessions. Established a protocol for clearing browser security cookies after breaking backend changes.
+- **Route Protection Fixes**: Corrected a parameter mismatch in the `get_user_by_id` and `get_all_users` endpoints to ensure the database session is consistently passed during token validation.
+
+---
+
+## Verification
+1. **Payload Inspection**: Verified that the JWT payload correctly contains the `sub` (User ID).
+2. **Persistence**: Confirmed that `useCookie` correctly stores the `auth_token` and persists it across dashboard refreshes.
+3. **Role Validation**: Verified that the backend successfully extracts and validates the `admin` role from the decoded token before serving sensitive data.
+4. **Modern Hashing**: Verified `Hash.verify()` returns `True` for correctly hashed strings using the new `pwdlib` engine.
+5. **Database Integrity**: Confirmed the `admin` user was successfully inserted into the `users` table via the `add_admin.py` initialization script.
+6. **Future Proofing**: By moving to `pwdlib`, we have cleared the maintenance debt associated with `passlib`, ensuring the project remains compatible with upcoming Python versions and security standards.
 
 You can now log in at the portal with the credentials provided above.

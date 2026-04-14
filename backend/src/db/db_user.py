@@ -58,6 +58,12 @@ def get_user_by_username(db: Session, username: str):
     """
     return db.query(DbUser).filter(DbUser.username == username).first()
 
+def get_all_users(db: Session):
+    """
+    Retrieve all users in the database.
+    """
+    return db.query(DbUser).all()
+
 def update_last_login(db: Session, user_id: int):
     """
     Update the last login time for a user.

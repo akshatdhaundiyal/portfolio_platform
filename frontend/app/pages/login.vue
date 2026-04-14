@@ -1,24 +1,55 @@
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   layout: 'client-default'
 })
 
+const { public: { apiBase } } = useRuntimeConfig()
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
+const error = ref('')
 const router = useRouter()
+const token = useCookie('auth_token', { maxAge: 60 * 60 * 24 * 7 }) // 1 week
 
 async function login() {
   loading.value = true
-  // Mock login: route based on input
-  setTimeout(() => {
-    loading.value = false
-    if (username.value.includes('admin')) {
-      router.push('/admin')
-    } else {
-      router.push('/client')
+  error.value = ''
+  
+  // Debug: Log the API Base and intended request
+  console.log('Attempting login to:', `${apiBase}/token`)
+  
+  try {
+    // FastAPI /token expects application/x-www-form-urlencoded
+    const formData = new URLSearchParams()
+    formData.append('username', username.value)
+    formData.append('password', password.value)
+
+    console.log('Request body:', formData.toString())
+
+    const data = await $fetch(`${apiBase}/token`, {
+      method: 'POST',
+      body: formData.toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+
+    if (data?.access_token) {
+      console.log('Login successful! Storing token...')
+      token.value = data.access_token
+      
+      if (username.value.includes('admin')) {
+        router.push('/admin')
+      } else {
+        router.push('/client')
+      }
     }
-  }, 1000)
+  } catch (err: any) {
+    console.error('Login Error:', err)
+    error.value = err.data?.detail || 'Authentication failed. Please check your credentials.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -29,6 +60,15 @@ async function login() {
       <template #header>
         <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white">Portal Login</h2>
       </template>
+      
+      <UAlert
+        v-if="error"
+        icon="i-heroicons-exclamation-triangle"
+        color="red"
+        variant="soft"
+        :title="error"
+        class="mb-4"
+      />
       
       <form @submit.prevent="login" class="space-y-4">
         <UFormGroup label="Email / Username" name="username">

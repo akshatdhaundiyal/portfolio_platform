@@ -37,11 +37,11 @@ def get_current_user(token: str = Depends(oauth2_scheme),db: Session = Depends(g
                    detail="Couldnt validate cretentials due to missing user ID",
                            headers={"WWW-Authenticate": "Bearer"}
                                    )
-    except jwt.JWTError:
-      # raise jwt.JWTError
+    except jwt.JWTError as e:
+      print(f"DEBUG: JWT Decode Error: {str(e)}")
       raise HTTPException(
            status_code=status.HTTP_401_UNAUTHORIZED,
-                   detail="Couldnt validate cretentials because of JWT decode error",
+                   detail=f"Couldnt validate credentials because of JWT decode error: {str(e)}",
                            headers={"WWW-Authenticate": "Bearer"}
                                    )
     user = db.query(DbUser).filter(DbUser.id == user_id).first()

@@ -59,5 +59,11 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 - **Force Synchronization:** Successfully reconciled a major directory structure divergence (`src/` vs `backend/src/`) by force-resetting the `production` branch to match the modern `main` source.
 - **Git Hygiene:** Performed a global cache flush to ensure absolute enforcement of the `.gitignore` rules, preventing build artifacts like `.nuxt` from ever entering the repository.
 
+## 🌉 11: Frontend-Backend Integration & Seeding
+**Goal:** Replace mock interactions with real API connectivity and populate the database for local testing.
+- **Schema Expansion:** Added `invoices` and `project_files` tables to support complex freelance workflows.
+- **CORS & Cookies:** Enabled secure cross-origin communication and implemented JWT storage via `useCookie`.
+- **Mock Seeding:** Developed a `seed.py` utility that populates the database with test users, projects, and communications in a single command.
+
 ---
 *Last Technical Audit: 2026-04-14*

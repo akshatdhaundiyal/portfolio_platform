@@ -45,6 +45,8 @@ class DbProject(Base):
     
     client = relationship("DbUser", back_populates="projects")
     communications = relationship("DbCommunication", back_populates="project")
+    invoices = relationship("DbInvoice", back_populates="project")
+    files = relationship("DbProjectFile", back_populates="project")
 
 class DbCommunication(Base):
     __tablename__ = "communications"
@@ -57,3 +59,26 @@ class DbCommunication(Base):
     
     sender = relationship("DbUser", back_populates="communications")
     project = relationship("DbProject", back_populates="communications")
+
+class DbInvoice(Base):
+    __tablename__ = "invoices"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    amount = Column(Integer, nullable=False)
+    status = Column(String, default="unpaid") # paid, unpaid, overdue
+    due_date = Column(DateTime, nullable=True)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    
+    project = relationship("DbProject", back_populates="invoices")
+
+class DbProjectFile(Base):
+    __tablename__ = "project_files"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    file_name = Column(String, nullable=False)
+    file_path = Column(String, nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    uploaded_at = Column(DateTime, server_default=func.now())
+    
+    project = relationship("DbProject", back_populates="files")

@@ -19,12 +19,20 @@ Goal: Bring the Admin Dashboard into alignment with the premium, glassmorphic ae
 - **`AdminSidebar.vue`**: Added a new "Database" entry pointing to `/admin/database`.
 - **`admin/database.vue`**: Created a high-fidelity placeholder page that explains the upcoming CRUD capabilities and provides a link to the FastAPI Swagger UI (`/docs`).
 
+#### 4. Technical CRUD Architecture
+The dashboard was evolved from a static view to an interactive management engine:
+- **Resilient Data Fetching**: Implemented a `fetchSafe` utility within `useAsyncData` to perform parallel fetches for Projects, Users, and Invoices. This pattern prevents a single API failure (e.g., an unauthorized Invoices request) from blocking the entire dashboard render.
+- **Unified State Management**: Established reactive refs (`projectForm`, `editForm`) to manage the lifecycle of project operations.
+- **Action Triggers**:
+    - **Creation**: Validates title and client assignment before performing a `POST` request.
+    - **Modification**: Prefills the `editForm` via an `openEditModal` trigger, allowing for status transitions and detail updates.
+    - **Deletion**: Implements a guarded deletion flow with immediate `refresh()` of the application state.
+
 ## Execution Walkthrough
-I have successfully overhauled the Admin interface to be 100% consistent with the premium design language of the platform.
+I have successfully transitioned the Admin interface from a design mockup to a fully functional CRUD control center.
 
 ### Key Deliverables:
-1. **Application Shell**: The Admin dashboard now has a persistent, intelligent sidebar and navbar.
-2. **Design Consistency**: Every card and tab now uses the same glassmorphism tokens and animations as the public-facing pages.
-3. **Internal Tools Scaffolding**: The Database CRUD placeholder is ready for future integration of raw data management tools.
-
-You can now navigate from Home -> Login -> Admin and experience a fluid, premium software journey.
+1. **Application Shell**: Permanent, intelligent sidebar and navbar integration.
+2. **Functional Project CRUD**: 100% operational Create, Read, Update, and Delete capabilities for projects.
+3. **Reactive Ecosystem**: Stats cards and project lists now update dynamically via Nuxt's `useAsyncData` refresh mechanism.
+4. **Toast Feedback**: Integrated `UNotifications` to provide premium, non-blocking success/error feedback for all database actions.

@@ -5,10 +5,12 @@ from backend.src.config import settings
 # Constructing the database URL
 DATABASE_URL = settings.database_url
 
-# For PostgreSQL (e.g. Neon), ensure sslmode=require is appended if not present
+# For PostgreSQL (e.g. Neon), ensure sslmode=require is appended for remote connections
 if DATABASE_URL.startswith("postgresql") and "sslmode=" not in DATABASE_URL:
-    separator = "&" if "?" in DATABASE_URL else "?"
-    DATABASE_URL += f"{separator}sslmode=require"
+    is_local = "localhost" in DATABASE_URL or "127.0.0.1" in DATABASE_URL
+    if not is_local:
+        separator = "&" if "?" in DATABASE_URL else "?"
+        DATABASE_URL += f"{separator}sslmode=require"
 
 # Creating the SQLAlchemy engine
 # If the URL is sqlite (local), we need specific threading arguments. If postgres (Neon), we don't.
