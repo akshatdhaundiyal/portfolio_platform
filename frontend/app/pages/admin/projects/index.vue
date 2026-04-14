@@ -72,7 +72,7 @@ const isSubmitting = ref(false)
 const projectForm = ref({
   title: '',
   description: '',
-  client_id: '',
+  client_id: undefined as number | undefined,
   github_url: '',
   github_token: '',
   trello_url: '',
@@ -81,9 +81,9 @@ const projectForm = ref({
 })
 
 const clientOptions = computed(() => {
-  return clients.value.map(c => ({ 
-    label: c.fullname || c.username, 
-    value: String(c.id) 
+  return clients.value.map(c => ({
+    id: c.id,
+    label: c.fullname || c.username
   }))
 })
 
@@ -99,7 +99,7 @@ async function handleCreateProject() {
       method: 'POST',
       body: {
         ...projectForm.value,
-        client_id: parseInt(projectForm.value.client_id)
+        client_id: projectForm.value.client_id
       },
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -107,7 +107,7 @@ async function handleCreateProject() {
     projectForm.value = { 
       title: '', 
       description: '', 
-      client_id: '',
+      client_id: undefined,
       github_url: '',
       github_token: '',
       trello_url: '',
@@ -234,7 +234,14 @@ function formatDate(dateString: string) {
           <UFormGroup label="Project Title" name="title" required><UInput v-model="projectForm.title" /></UFormGroup>
           <UFormGroup label="Description" name="description"><UTextarea v-model="projectForm.description" /></UFormGroup>
           <div class="grid grid-cols-2 gap-4">
-            <UFormGroup label="Assign Client" name="client_id" required><USelect v-model="projectForm.client_id" :options="clientOptions" /></UFormGroup>
+            <UFormGroup label="Assign Client" name="client_id" required>
+              <USelectMenu 
+                v-model="projectForm.client_id" 
+                :options="clientOptions" 
+                value-attribute="id"
+                placeholder="Select a client"
+              />
+            </UFormGroup>
             <UFormGroup label="Start Date" name="start_date"><UInput v-model="projectForm.start_date" type="date" /></UFormGroup>
           </div>
           <div class="border-t dark:border-gray-800 pt-4"><h4 class="text-sm font-semibold mb-3 text-gray-500 uppercase tracking-widest">Integrations</h4>
