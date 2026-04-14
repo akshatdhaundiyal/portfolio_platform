@@ -64,6 +64,12 @@ def get_all_users(db: Session):
     """
     return db.query(DbUser).all()
 
+def get_all_clients(db: Session):
+    """
+    Retrieve all users with the 'client' role.
+    """
+    return db.query(DbUser).filter(DbUser.role == "client").all()
+
 def update_last_login(db: Session, user_id: int):
     """
     Update the last login time for a user.

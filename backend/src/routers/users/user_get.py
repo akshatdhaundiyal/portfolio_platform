@@ -25,6 +25,23 @@ def get_all_users(
     print(f"DEBUG: Found {len(users)} users for admin request")
     return users
 
+@router.get("/clients", response_model=List[UserDisplay])
+def get_all_clients(
+    db: Session = Depends(get_db),
+    current_user: UserDisplay = Depends(get_current_user)
+):
+    """
+    Endpoint to retrieve all clients. Only accessible by admins.
+    """
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only administrators can access the client list"
+        )
+    clients = db_user.get_all_clients(db)
+    print(f"DEBUG: Found {len(clients)} clients for admin request")
+    return clients
+
 @router.get("/{id}",response_model=UserDisplay)
 def get_user_by_id(id: int,db: Session = Depends(get_db)):
     """
