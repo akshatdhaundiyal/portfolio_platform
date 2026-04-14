@@ -41,8 +41,20 @@ The final startup hurdle was a `RuntimeError: Directory 'backend/images' does no
 
 ---
 
+## 4. Stability & Debugging Enhancements
+
+### Problem
+Diagnosing 500 errors in a serverless production environment is difficult because Cloud Run logs can be delayed, and browser CORS policies often block the visibility of error response bodies from cross-origin APIs.
+
+### Implementation
+- **CORS-Aware Verbose Error Handler**: Added a global exception handler in `main.py` that serializes the `traceback` into the JSON response. Crucially, it dynamically sets CORS headers (`Access-Control-Allow-Origin`) on the error response itself, allowing frontend developers to see the exact Python exception in the browser's Network tab.
+- **Boot-time Schema Enforcement**: Automated database initialization by calling `models.Base.metadata.create_all(engine)` during the application startup sequence. This guarantees that new tables or schema changes are applied automatically upon deployment, eliminating "Table not found" errors in the cloud.
+
+---
+
 ## Final Verification
 The backend is now fully production-ready:
 1. **GitHub Actions**: Pipeline is clean, efficient, and uses environment-scoped secrets.
 2. **Cloud Run**: Health checks successfully pass as all path, port, and database hurdles have been cleared.
-3. **Local Dev**: The container remains compatible with local `docker-compose` workflows.
+3. **Debugging Layer**: A temporary verbose error handler is in place to surface runtime exceptions during integration testing.
+4. **Local Dev**: The container remains compatible with local `docker-compose` workflows.

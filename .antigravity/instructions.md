@@ -15,8 +15,18 @@ Before concluding any task, you MUST verify:
 - [ ] **Casing**: Backend (Python) uses `snake_case`. Frontend (Vue/TS) uses `camelCase`.
 - [ ] **UI Polish**: New features use Nuxt UI components and follow the "Premium Dark" theme.
 - [ ] **Error Handling**: 401/403/404/500 errors are returned as structured JSON, not raw crashes.
+- [ ] **Documentation & Logging**: Updated `docs/knowledge_base` and `docs/design_docs/00_milestone_summary.md` for any code changes.
+
+## 📚 Documentation & Milestone Standards
+- **Technical Knowledge Base**: Every bug fix and technical hurdle MUST be documented in `docs/knowledge_base/`. Explain the "why" and constraints (e.g., CORS, hydration).
+- **Milestone Logging**: Every new feature or major architectural milestone MUST be recorded in `docs/design_docs/00_milestone_summary.md`. Update the "Last Technical Audit" date.
+- **Audit**: Before finishing, verify both the knowledge log and milestone summary are updated.
 
 ## 🛠️ Specialized Constraints
 - **Database**: We are currently in a pre-Alembic phase. Schema changes require manual table drops or re-syncing scripts.
 - **Branching**: Do NOT push directly to `production`. Work in `main` and advise the user on "Squash and Merge" for production syncs.
 - **Hydration**: Nuxt 3 dates MUST be handled via `<ClientOnly>` or fixed ISO strings to prevent server/client mismatches.
+
+## 🗣️ Communication & Planning
+- **Thought Process Visibility**: When creating an `implementation_plan.md` or proposing a major change, you MUST explicitly state your thought process and engineering rationale for the user in the accompanying response.
+- **Conciseness**: Keep summaries brief but ensure the "Why" behind proposed architectural decisions is clear and transparent.

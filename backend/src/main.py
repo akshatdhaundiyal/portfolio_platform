@@ -48,12 +48,18 @@ from fastapi import Request
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
+    # Determine the origin to allow browser to read the debug error
+    origin = request.headers.get("origin")
     return JSONResponse(
         status_code=500,
         content={
             "detail": str(exc),
             "traceback": traceback.format_exc(),
             "path": request.url.path
+        },
+        headers={
+            "Access-Control-Allow-Origin": origin if origin else "*",
+            "Access-Control-Allow-Credentials": "true"
         }
     )
 # ---------------------------------------------------------
