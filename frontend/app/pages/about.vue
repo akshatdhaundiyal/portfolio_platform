@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  layout: 'client-default'
+  layout: 'default'
 })
 
 const experience = [
