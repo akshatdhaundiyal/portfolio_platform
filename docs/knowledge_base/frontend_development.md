@@ -82,3 +82,16 @@ Browser security policies often blocked the storage of JWT tokens sent from the 
     - Fetch counts/stats globally in the component using `useAsyncData`.
     - This ensures that as the user navigates or performs actions (like creating a project), the sidebar updates automatically to reflect the actual database state.
 - **SSG/SSR Considerations**: When using `useAsyncData` in shared layouts (like the sidebar), always check for the existence of authentication tokens before fetching to avoid unnecessary 401 errors during the initial public rendering phase.
+ 
+ ---
+ 
+ ## 📊 10. FinOps UI & Typed Data Ledgers
+ 
+ ### The Knowledge
+ - **Stats Grid Pattern**: For financial dashboards, use a "Header Stats" pattern with `UCard` and `UIcon`. This provide immediate cognitive feedback on the application's state (Outstanding vs. Collected).
+ - **Type-Safe Collections**: 
+     - When using `UTable`, the `:rows` attribute can sometimes fail type-inference during SSR if the initial Ref value is `null`. 
+     - **The Fix**: Use explicit template-level casting `:rows="(data as any[]) || []"` to ensure the compiler recognizes the property as a collection, preventing "Missing properties from type TableRow[]" errors.
+ - **Dynamic Forms (USelectMenu)**:
+     - For forms requiring relationship selections (e.g., picking a project for an invoice), initialize the `v-model` with `undefined` rather than `null` to ensure compatibility with strict TypeScript component props.
+     - Always use `:options="(options as any[]) || []"` to provide a stable fallback during the "Pending" fetch state.

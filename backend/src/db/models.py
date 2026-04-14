@@ -74,7 +74,9 @@ class DbInvoice(Base):
     __tablename__ = "invoices"
     
     id = Column(Integer, primary_key=True, index=True)
+    invoice_number = Column(String, unique=True, index=True, nullable=False)
     amount = Column(Integer, nullable=False)
+    description = Column(String, nullable=True)
     status = Column(String, default="unpaid") # paid, unpaid, overdue
     due_date = Column(DateTime, nullable=True)
     project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)

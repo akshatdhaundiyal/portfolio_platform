@@ -102,5 +102,27 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 - **Dynamic UI:** Transformed the static navbars into intelligent components that show user dropdowns (Settings, Sign Out) when authenticated and standard CTAs for guests.
 - **Sync Logic:** Updated the login flow to trigger an immediate profile hydration, ensuring the transition from guest to authenticated user is seamless and artifact-free.
 
+## 💰 20: Invoicing Module & Financial Portal
+**Goal:** Establish a professional billing infrastructure for project-based milestones.
+- [x] **Backend: Database & Schemas**
+    - [x] Add `invoice_number` and `description` to `DbInvoice` in `models.py`
+    - [x] Create `backend/src/schemas/invoice_schema.py`
+- [x] **Backend: Logic & CRUD**
+    - [x] Create `backend/src/db/db_invoice.py`
+    - [x] Expand `backend/src/routers/invoices.py` with full CRUD endpoints
+- [x] **Data Seeding**
+    - [x] Update `backend/src/db/seed.py` with descriptive invoices
+- [x] **Frontend: Admin Invoicing Suite**
+    - [x] Create `frontend/app/pages/admin/invoices/index.vue`
+    - [x] Implement Stats Cards (Outstanding, Paid, Overdue)
+    - [x] Implement Invoice Table with search/filter
+    - [x] Implement "Create Invoice" Modal
+- [x] **Frontend: Client Financial Portal**
+    - [x] Create `frontend/app/pages/client/invoices.vue`
+    - [x] Implement Invoice List and Status Badges
+- [x] **Verification & Cleanup**
+    - [x] Verify Admin-to-Client invoice lifecycle
+    - [x] Update documentation and milestone summary
+
 ---
-*Last Technical Audit: 2026-04-14 (Dynamic Navbar & Authentication Bridge)*
+*Last Technical Audit: 2026-04-14 (Invoicing Module & Financial Portal)*

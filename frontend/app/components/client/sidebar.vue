@@ -44,17 +44,17 @@ const currentLinks = computed(() => {
     {
       label: 'Monitoring',
       icon: 'i-heroicons-users',
-      to: '/project/client'
+      to: '/client'
     },
     {
       label: 'Invoices',
       icon: 'i-heroicons-document-text',
-      to: '/project/invoices'
+      to: '/client/invoices'
     },
     {
       label: 'Settings',
       icon: 'i-heroicons-cog-8-tooth',
-      to: '/account/settings'
+      to: '/admin/settings'
     }
   ]
 })

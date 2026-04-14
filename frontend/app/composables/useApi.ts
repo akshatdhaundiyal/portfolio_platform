@@ -1,4 +1,4 @@
-export const useApi = (url: string, options: any = {}) => {
+export const useApi = <T>(url: string, options: any = {}) => {
   const { public: { apiBase } } = useRuntimeConfig()
   const token = useCookie('auth_token')
 
@@ -11,5 +11,5 @@ export const useApi = (url: string, options: any = {}) => {
   }
 
   // Merge options with defaults
-  return useFetch(url, { ...defaults, ...options })
+  return useFetch<T>(url, { ...defaults, ...options })
 }
