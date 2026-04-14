@@ -39,6 +39,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ---------------------------------------------------------
+# DEBUG: Verbose Error Handler (Remove before production)
+# ---------------------------------------------------------
+import traceback
+from fastapi.responses import JSONResponse
+from fastapi import Request
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": str(exc),
+            "traceback": traceback.format_exc(),
+            "path": request.url.path
+        }
+    )
+# ---------------------------------------------------------
+
 app.include_router(projects.router)
 app.include_router(communications.router)
 app.include_router(user.router)
@@ -50,12 +69,16 @@ def root():
     """
     Root endpoint for the portfolio platform
     """
-    return {"message": "Welcome to the portfolio platform!"}
+    return {
+        "message": "Welcome to the portfolio platform!",
+        "database_connected": True if settings.database_url else False
+    }
 
-models.Base.metadata.create_all(engine)
-
+# Initialization logic moved to the bottom to ensure all models are discovered
 import os
-
-# Ensure the images directory exists to prevent Starlette/FastAPI startup errors
 os.makedirs("backend/images", exist_ok=True)
 app.mount("/images", StaticFiles(directory="backend/images"), name="images")
+
+print("Initializing database schema...")
+models.Base.metadata.create_all(engine)
+print("Database schema initialized.")
