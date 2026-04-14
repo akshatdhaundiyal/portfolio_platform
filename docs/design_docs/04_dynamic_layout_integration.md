@@ -8,13 +8,13 @@ This document records the technical transition of the Portfolio Platform into a 
 
 The platform previously suffered from a visual disconnect between its public identity and its private utilities. This milestone unified the environment using a "morphing" layout strategy.
 
-### Contextual Sidebar Architecture
-- **Computed Routing**: Refactored the `sidebar.vue` to use computed properties that evaluate the current `$route.path`.
-- **Portal Separation**:
-    - **Public Context**: Uses the `default` layout (header-only, no sidebar). Filters navbar links to show Home, About, and Client Portal.
-    - **Private Context**: Uses `client-default` or `admin-default` layouts (with sidebars). Dynamically injects Projects, Monitoring, and Invoices links.
-- **Multi-Role Navbar**: The `ClientNavbar` was promoted to a "Global Navbar" that intelligently detects user roles. Admins on public pages see an "Admin Dashboard" escape hatch, while clients see "Client Portal".
-- **Layout Selection Logic**: Refactored the core public pages (`/`, `/about`) to use the `default` layout, standardizing the portfolio experience away from the persistent sidebar to reduce cognitive load for guest users.
+- **Contextual Sidebar Architecture**:
+    - **Computed Routing**: Refactored the `sidebar.vue` to use computed properties that evaluate the current `$route.path`.
+    - **Portal Separation**:
+        - **Public Context**: Uses the `default` layout (header-only, no sidebar).
+        - **Private Context**: Uses `client-default` or `admin-default` with responsive sidebars.
+- **Mobile Drawer (USlideover)**: Implemented a responsive navigation drawer for both `ClientNavbar` and `AdminNavbar`. This resolves the "missing sidebar" issue on mobile by providing a unified navigation ledger accessible via a hamburger menu.
+- **Auto-Dismissal logic**: Integrated navigation watchers that programmatically close the mobile drawer upon route change, ensuring a smooth transition.
 
 ---
 
@@ -39,6 +39,8 @@ The platform previously suffered from a visual disconnect between its public ide
 | **Footer Adaption** | Logout button visibility on portal routes | Verified (Passed) |
 | **Role Awareness** | Admin access to dashboard from /about | Success (Fixed: Dynamic Navbar) |
 | **Layout Cleanliness**| Sidebar removal from public Home/About | Success (Passed) |
+| **Mobile Access** | Open slideover menu on mobile viewport | Success (Passed) |
+| **Responsive Sync** | Navbar links visible in mobile drawer | Verified (Passed) |
 
 ---
 
