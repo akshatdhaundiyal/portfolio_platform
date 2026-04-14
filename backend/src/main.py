@@ -12,6 +12,15 @@ app = FastAPI(
     dependencies=[Depends(get_db)]
 )
 
+# Standard middleware for handling Cloud Run / Proxy SSL termination
+@app.middleware("http")
+async def add_process_time_header(request, call_next):
+    # Ensure all responses are perceived as HTTPS by the browser if the proxy says so
+    if request.headers.get("x-forwarded-proto") == "https":
+        request.scope["scheme"] = "https"
+    response = await call_next(request)
+    return response
+
 from backend.src.config import settings
 print(f"API starting up... Connected to: {settings.database_url}")
 
