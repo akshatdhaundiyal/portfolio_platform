@@ -53,5 +53,11 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 - **Self-Healing Filesystem:** Added defensive code to both the Dockerfile and Python startup to ensure the `backend/images` directory exists, preventing Starlette mounting crashes.
 - **Database Hardening:** Enforced `sslmode=require` for Neon PostgreSQL to prevent connection drops during cold starts.
 
+## 🐙 10: Git Workflow & Release Strategy
+**Goal:** Establish a disciplined release process and resolve branch divergence.
+- **Trigger Logic:** Updated `deploy.yml` to trigger exclusively on the `production` branch, allowing `main` to serve as a development staging area.
+- **Force Synchronization:** Successfully reconciled a major directory structure divergence (`src/` vs `backend/src/`) by force-resetting the `production` branch to match the modern `main` source.
+- **Git Hygiene:** Performed a global cache flush to ensure absolute enforcement of the `.gitignore` rules, preventing build artifacts like `.nuxt` from ever entering the repository.
+
 ---
 *Last Technical Audit: 2026-04-14*
