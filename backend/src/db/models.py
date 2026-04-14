@@ -40,6 +40,14 @@ class DbProject(Base):
     description = Column(String)
     status = Column(String, default=ProjectStatus.pending.value)
     client_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    
+    # New Integration Fields
+    trello_url = Column(String, nullable=True)
+    github_url = Column(String, nullable=True)
+    github_token = Column(String, nullable=True)
+    wip_url = Column(String, nullable=True)
+    start_date = Column(DateTime, nullable=True)
+    
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     

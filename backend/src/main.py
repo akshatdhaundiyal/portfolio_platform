@@ -13,7 +13,7 @@ app = FastAPI(
 )
 
 from backend.src.config import settings
-print(f"🚀 API starting up... Connected to: {settings.database_url}")
+print(f"API starting up... Connected to: {settings.database_url}")
 
 # Configure CORS for local development and production
 origins = [

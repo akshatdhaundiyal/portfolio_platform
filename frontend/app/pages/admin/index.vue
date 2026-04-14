@@ -52,14 +52,24 @@ const toast = useToast()
 const projectForm = ref({
   title: '',
   description: '',
-  client_id: ''
+  client_id: '',
+  github_url: '',
+  github_token: '',
+  trello_url: '',
+  wip_url: '',
+  start_date: new Date().toISOString().split('T')[0]
 })
 
 const editForm = ref({
   id: 0,
   title: '',
   description: '',
-  status: ''
+  status: '',
+  github_url: '',
+  github_token: '',
+  trello_url: '',
+  wip_url: '',
+  start_date: ''
 })
 
 const clientOptions = computed(() => {
@@ -83,7 +93,12 @@ function openEditModal(project: any) {
     id: project.id,
     title: project.title,
     description: project.description,
-    status: project.status
+    status: project.status,
+    github_url: project.github_url || '',
+    github_token: project.github_token || '',
+    trello_url: project.trello_url || '',
+    wip_url: project.wip_url || '',
+    start_date: project.start_date ? new Date(project.start_date).toISOString().split('T')[0] : ''
   }
   isEditModalOpen.value = true
 }
@@ -100,15 +115,23 @@ async function handleCreateProject() {
     await $fetch(`${apiBase}/projects/`, {
       method: 'POST',
       body: {
-        title: projectForm.value.title,
-        description: projectForm.value.description,
+        ...projectForm.value,
         client_id: parseInt(projectForm.value.client_id)
       },
       headers: { Authorization: `Bearer ${useCookie('auth_token').value}` }
     })
     
     // Reset and Refresh
-    projectForm.value = { title: '', description: '', client_id: '' }
+    projectForm.value = { 
+      title: '', 
+      description: '', 
+      client_id: '',
+      github_url: '',
+      github_token: '',
+      trello_url: '',
+      wip_url: '',
+      start_date: new Date().toISOString().split('T')[0]
+    }
     isCreateModalOpen.value = false
     await refresh()
     
@@ -140,7 +163,12 @@ async function handleUpdateProject() {
       body: {
         title: editForm.value.title,
         description: editForm.value.description,
-        status: editForm.value.status
+        status: editForm.value.status,
+        github_url: editForm.value.github_url,
+        github_token: editForm.value.github_token,
+        trello_url: editForm.value.trello_url,
+        wip_url: editForm.value.wip_url,
+        start_date: editForm.value.start_date
       },
       headers: { Authorization: `Bearer ${useCookie('auth_token').value}` }
     })
@@ -234,7 +262,7 @@ const tabs = [
     </div>
 
     <!-- Create Project Modal -->
-    <UModal v-model="isCreateModalOpen">
+    <UModal v-model="isCreateModalOpen" :ui="{ width: 'sm:max-w-xl' }">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
@@ -254,13 +282,34 @@ const tabs = [
             <UTextarea v-model="projectForm.description" placeholder="Brief overview of the project scope..." />
           </UFormGroup>
 
-          <UFormGroup label="Assign Client" name="client_id" required>
-            <USelect 
-              v-model="projectForm.client_id" 
-              :options="clientOptions" 
-              placeholder="Select a client" 
-            />
-          </UFormGroup>
+          <div class="grid grid-cols-2 gap-4">
+            <UFormGroup label="Assign Client" name="client_id" required>
+              <USelect v-model="projectForm.client_id" :options="clientOptions" placeholder="Select a client" />
+            </UFormGroup>
+            <UFormGroup label="Start Date" name="start_date">
+              <UInput v-model="projectForm.start_date" type="date" />
+            </UFormGroup>
+          </div>
+
+          <div class="border-t dark:border-gray-800 pt-4 mt-4">
+            <h4 class="text-sm font-semibold mb-3 text-gray-500 flex items-center gap-2">
+              <UIcon name="i-heroicons-globe-alt" /> Integrations & External Links
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <UFormGroup label="GitHub Repo URL" name="github_url">
+                <UInput v-model="projectForm.github_url" placeholder="https://github.com/user/repo" />
+              </UFormGroup>
+              <UFormGroup label="GitHub Token (Optional)" name="github_token" help="Required for private repositories">
+                <UInput v-model="projectForm.github_token" type="password" placeholder="ghp_xxxxxxxx" />
+              </UFormGroup>
+              <UFormGroup label="Trello Board URL" name="trello_url">
+                <UInput v-model="projectForm.trello_url" placeholder="https://trello.com/b/board" />
+              </UFormGroup>
+              <UFormGroup label="WIP/Preview URL" name="wip_url">
+                <UInput v-model="projectForm.wip_url" placeholder="https://staging.site.com" />
+              </UFormGroup>
+            </div>
+          </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <UButton color="gray" variant="ghost" @click="isCreateModalOpen = false">Cancel</UButton>
@@ -271,7 +320,7 @@ const tabs = [
     </UModal>
 
     <!-- Edit Project Modal -->
-    <UModal v-model="isEditModalOpen">
+    <UModal v-model="isEditModalOpen" :ui="{ width: 'sm:max-w-xl' }">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
@@ -291,12 +340,34 @@ const tabs = [
             <UTextarea v-model="editForm.description" />
           </UFormGroup>
 
-          <UFormGroup label="Workflow Status" name="status" required>
-            <USelect 
-              v-model="editForm.status" 
-              :options="statusOptions" 
-            />
-          </UFormGroup>
+          <div class="grid grid-cols-2 gap-4">
+            <UFormGroup label="Workflow Status" name="status" required>
+              <USelect v-model="editForm.status" :options="statusOptions" />
+            </UFormGroup>
+            <UFormGroup label="Start Date" name="start_date">
+              <UInput v-model="editForm.start_date" type="date" />
+            </UFormGroup>
+          </div>
+
+          <div class="border-t dark:border-gray-800 pt-4 mt-4">
+            <h4 class="text-sm font-semibold mb-3 text-gray-500 flex items-center gap-2">
+              <UIcon name="i-heroicons-globe-alt" /> Integrations & External Links
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <UFormGroup label="GitHub Repo URL" name="github_url">
+                <UInput v-model="editForm.github_url" />
+              </UFormGroup>
+              <UFormGroup label="GitHub Token" name="github_token" help="Required for private repositories">
+                <UInput v-model="editForm.github_token" type="password" />
+              </UFormGroup>
+              <UFormGroup label="Trello Board URL" name="trello_url">
+                <UInput v-model="editForm.trello_url" />
+              </UFormGroup>
+              <UFormGroup label="WIP/Preview URL" name="wip_url">
+                <UInput v-model="editForm.wip_url" />
+              </UFormGroup>
+            </div>
+          </div>
 
           <div class="flex justify-end gap-3 pt-4">
             <UButton color="gray" variant="ghost" @click="isEditModalOpen = false">Discard</UButton>
@@ -356,7 +427,7 @@ const tabs = [
                   <UBadge :color="project.status === 'completed' ? 'emerald' : 'primary'" variant="soft" size="xs">{{ project.status }}</UBadge>
                   <UButton color="gray" variant="ghost" icon="i-heroicons-pencil-square" size="sm" class="rounded-full" @click="openEditModal(project)" />
                   <UButton color="red" variant="ghost" icon="i-heroicons-trash" size="sm" class="rounded-full opacity-0 group-hover:opacity-100 transition-opacity" @click="handleDeleteProject(project.id)" />
-                  <UButton color="gray" variant="ghost" icon="i-heroicons-chevron-right" size="sm" class="rounded-full" />
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-chevron-right" size="sm" class="rounded-full" :to="`/client/${project.id}`" />
                 </div>
               </div>
             </div>

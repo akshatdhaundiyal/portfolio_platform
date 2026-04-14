@@ -70,12 +70,27 @@ During local integration, we resolved several critical connectivity "gotchas":
 - **Issue**: Ambiguity between local database state and API response values during troubleshooting.
 - **Solution**: Developed a standalone diagnostic script (`scratch/check_db.py`) that uses the same `Settings` class as the main application. This allows developers to verify DB content independently of the API layer, effectively isolating data-presence issues from serialization/auth issues.
 
+### 8. Multi-Identifier Login (Username/Email)
+- **Issue**: Users frequently attempted to log in with their email address, which the initial backend implementation did not support, leading to confusing `404 Not Found` errors.
+- **Fix**: Updated the `authentication.py` router to use a logical OR query (`admin` | `admin@example.com`). This ensures a seamless entry experience regardless of the user's preferred identity handle.
+
+### 9. Database Seeding & Transaction Integrity
+- **Issue**: After schema resets, some accounts (like `admin`) appeared to be missing despite running the seed script.
+- **Cause**: The seeding script previously only committed transactions if new projects were added. If the script was re-run on a database that already contained the test client structure, the `admin` user addition was never committed to the database.
+- **Fix**: Implemented explicit `db.commit()` calls immediately after every user creation step in `seed.py`.
+
+### 10. Admin-to-Dashboard Navigation
+- **Refinement**: Added a direct `:to` link in the Admin Dashboard project list. This allows the administrator to jump directly from the management view to the high-fidelity client dashboard (`/client/[id]`) for validation and monitoring.
+
 ---
 ## Final Verification (Local)
-1. **Seeding**: Successfully ran `python -m backend.src.db.seed`.
+1. **Seeding**: Successfully ran `python -m backend.src.db.seed` with confirmed commits for all users.
 2. **CORS**: Verified that the backend allows requests from both `localhost` and `127.0.0.1`.
-3. **Login**: The frontend retrieves a real JWT via `$fetch` and stores it in cookies.
-4. **CRUD Integrity**: Verified that projects can be created, edited (status/title/desc), and deleted with immediate database persistence and UI reactivity.
-5. **Stability**: Confirmed zero IPC crashes during a 30-minute stress test of the development environment.
+3. **Login**: Verified multi-identifier support (Login works with either `admin` or `admin@example.com`).
+4. **Dashboard Integrity**: Confirmed GitHub version logs fetch correctly for both public repos and private repos (using tokens).
+5. **Stability**: Confirmed zero IPC crashes after enforcing `lang="ts"` across all new components.
 
 The bridge is now built, hardened, and documented for scale! 🌉🚀
+
+---
+*Last Updated: 2026-04-14*

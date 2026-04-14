@@ -65,5 +65,12 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 - **CORS & Cookies:** Enabled secure cross-origin communication and implemented JWT storage via `useCookie`.
 - **Mock Seeding:** Developed a `seed.py` utility that populates the database with test users, projects, and communications in a single command.
 
+## 📊 12: Project Dashboard & External Integrations
+**Goal:** Evolve the project record into a high-utility management hub with third-party connectivity.
+- **Integrations:** Implemented real-time GitHub commit fetching (with private repo support via tokens) and stylized Trello board linkages.
+- **UI Architecture:** Built a responsive, 12-column project dashboard featuring live WIP previews, version logs, and private communication channels.
+- **Admin Mobility:** Enabled administrators to view and manage these dashboards directly from the project list.
+- **Database Reset:** Successfully performed a local schema migration to include integration fields and re-seeded the environment with high-fidelity test data.
+
 ---
-*Last Technical Audit: 2026-04-14*
+*Last Technical Audit: 2026-04-14 (Integrated Project CRUD & Management Dashboard)*

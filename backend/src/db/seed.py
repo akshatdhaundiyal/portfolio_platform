@@ -12,6 +12,21 @@ def seed_db():
     
     print("Seeding database...")
     
+    # 0. Create Admin User (Needed for Dashboard access)
+    admin_name = "admin"
+    existing_admin = db.query(DbUser).filter(DbUser.username == admin_name).first()
+    if not existing_admin:
+        admin = DbUser(
+            username=admin_name,
+            email="admin@example.com",
+            password=Hash.bcrypt("admin12321"),
+            fullname="Primary Admin",
+            role=RoleEnum.admin.value
+        )
+        db.add(admin)
+        db.commit()
+        print("Created admin user.")
+    
     # 1. Create a Test Client User
     client_name = "john_client"
     existing_client = db.query(DbUser).filter(DbUser.username == client_name).first()
@@ -36,18 +51,30 @@ def seed_db():
     projects_data = [
         {
             "title": "E-Commerce Rebrand",
-            "description": "Redesigning the entire look and feel of the main shopping portal.",
-            "status": ProjectStatus.in_progress.value
+            "description": "Complete overhaul of the existing e-commerce platform with a focus on mobile responsive design and improved checkout conversion.",
+            "status": ProjectStatus.in_progress.value,
+            "trello_url": "https://trello.com/b/8nZ3x2z1/ecommerce-rebrand",
+            "github_url": "https://github.com/akshatdhaundiyal/portfolio_platform",
+            "wip_url": "https://ecommerce-preview.example.com",
+            "start_date": datetime.now() - timedelta(days=15)
         },
         {
             "title": "Next.js Portfolio Site",
-            "description": "Building a high-performance portfolio using Nuxt 4 and FastAPI.",
-            "status": ProjectStatus.completed.value
+            "description": "A minimalist portfolio site using Next.js 14 and Sanity CMS for high performance and easy content management.",
+            "status": ProjectStatus.completed.value,
+            "trello_url": "https://trello.com/b/9mK2y7x5/portfolio-site",
+            "github_url": "https://github.com/akshatdhaundiyal/portfolio_platform",
+            "wip_url": "https://portfolio-live.example.com",
+            "start_date": datetime.now() - timedelta(days=45)
         },
         {
             "title": "Mobile App UI",
-            "description": "Drafting initial mockups for the new fitness tracking application.",
-            "status": ProjectStatus.pending.value
+            "description": "Designing a clean, intuitive UI for a new fitness tracking mobile application.",
+            "status": ProjectStatus.pending.value,
+            "trello_url": "https://trello.com/b/4jL1v9p0/fitness-app-ui",
+            "github_url": "https://github.com/akshatdhaundiyal/portfolio_platform",
+            "wip_url": None,
+            "start_date": datetime.now() - timedelta(days=2)
         }
     ]
 
@@ -58,7 +85,11 @@ def seed_db():
                 title=p_data["title"],
                 description=p_data["description"],
                 status=p_data["status"],
-                client_id=client.id
+                client_id=client.id,
+                trello_url=p_data.get("trello_url"),
+                github_url=p_data.get("github_url"),
+                wip_url=p_data.get("wip_url"),
+                start_date=p_data.get("start_date")
             )
             db.add(project)
             db.commit()

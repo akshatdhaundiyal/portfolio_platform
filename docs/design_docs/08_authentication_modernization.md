@@ -25,11 +25,49 @@ Goal: Replace the unmaintained `passlib` library with a modern, compatible, and 
 - **`UAlert` Feedback**: Added a reactive alert system to the login modal that provides immediate feedback for invalid credentials or server errors.
 - **Loading States**: Implemented button loading states during authentication to prevent duplicate requests and improve the premium feel.
 
+# Milestone 8: Authentication Modernization & Admin Initialization
+
+## Implementation Plan Overview
+Goal: Replace the unmaintained `passlib` library with a modern, compatible, and widely used authentication engine (`pwdlib`) and initialize the system's admin account in the PostgreSQL database.
+
+### Proposed Changes
+
+#### 1. Dependency Migration
+- **Uninstalled**: `passlib` and the legacy `bcrypt` library.
+- **Installed**: `pwdlib[argon2]`. Shifting to **Argon2** provides superior security over the older bcrypt standard and full compatibility with modern Python environments.
+
+#### 2. Authentication Reflow
+- **`backend/src/utils/auth_service/hash.py`**: Refactored to utilize `pwdlib.PasswordHash.recommended()`. This ensures the backend always uses the most secure hashing algorithm available while maintaining a clean, simple API for the rest of the application.
+- **`Hash` Utility**: The method names (`bcrypt`, `verify`) were preserved to prevent breaking changes in the `authentication.py` router, but the underlying engine now correctly utilizes Argon2.
+
+#### 3. User Data Initialization
+- **SQLite Removal**: Permanently deleted the legacy `backend/fastapi_instagram.db` SQLite file.
+- **Admin Account**: Created the primary administrative user in local PostgreSQL:
+    - **Username**: `admin`
+    - **Email**: `admin@example.com`
+    - **Password**: `admin12321` (Hashed via Argon2)
+    - **Role**: `admin`
+
+#### 3. UX Integration
+- **`UAlert` Feedback**: Added a reactive alert system to the login modal that provides immediate feedback for invalid credentials or server errors.
+- **Loading States**: Implemented button loading states during authentication to prevent duplicate requests and improve the premium feel.
+
 ### 4. JWT Resilience & Troubleshooting
 During the integration phase, we refined the security layer to handle real-world edge cases:
 - **X-Ray Logging**: Refactored `oauth2_util.py` to capture and log raw `JWTError` exceptions to the server console. This allows developers to distinguish between "Expired Tokens," "Invalid Signatures," and "Malformed Headers" instantly.
 - **Cookie Synchronization Protocol**: Documented the "Stale Cookie" phenomenon where browsers retain tokens from different development micro-sessions. Established a protocol for clearing browser security cookies after breaking backend changes.
 - **Route Protection Fixes**: Corrected a parameter mismatch in the `get_user_by_id` and `get_all_users` endpoints to ensure the database session is consistently passed during token validation.
+
+## Refinements (Milestone 12)
+During the Project Dashboard implementation, we refined the authentication layer for better UX and reliability:
+
+### 1. Multi-Identifier Login
+- **Update**: The `/token` endpoint was updated to support both **Username** and **Email** handles.
+- **Logic**: The backend now queries the database using a logical OR, comparing the submitted identifier against both the `username` and `email` columns. This prevents common login failures where users unknowingly provide their email instead of an ID handle.
+
+### 2. Seeding Integrity & Commits
+- **Update**: Resolved an issue where the `admin` user was not being persisted after a database reset.
+- **Fix**: Hardened the `seed.py` logic to perform immediate `db.commit()` calls after every user addition, ensuring that basic access accounts are always available even if secondary data seeding (like projects) is skipped.
 
 ---
 
@@ -42,3 +80,5 @@ During the integration phase, we refined the security layer to handle real-world
 6. **Future Proofing**: By moving to `pwdlib`, we have cleared the maintenance debt associated with `passlib`, ensuring the project remains compatible with upcoming Python versions and security standards.
 
 You can now log in at the portal with the credentials provided above.
+
+*Last Updated: 2026-04-14 (Integrated Multi-Identifier Auth)*
