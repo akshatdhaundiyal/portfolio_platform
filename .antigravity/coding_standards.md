@@ -28,3 +28,9 @@ Adherence to these standards is mandatory for all contributions to this reposito
 ## 💾 Database
 - **Schema Management**: Post-Alembic setup, all changes must be via migration files. Prior to that, provide explicit scripts to drop/recreate tables if columns are added/modified.
 - **Relationships**: Always define `relationship()` on both sides of a foreign key for easy ORM navigation.
+
+## 📚 Documentation & Milestone Standards
+- **Technical Knowledge Base**: Every bug fix and technical hurdle MUST be documented in `docs/knowledge_base/`. Explain the "why" and the specific technical constraints (e.g., CORS, hydration).
+- **Milestone Logging**: Every new feature or major architectural milestone MUST be recorded in `docs/design_docs/00_milestone_summary.md`. Update the "Last Technical Audit" date and provide a concise summary of the achievement.
+- **Design Docs**: Create or update specific milestone files in `docs/design_docs/` for granular feature documentation.
+- **Audit**: Before marking a task as complete, verify that both the knowledge log and milestone summary have been updated to prevent "knowledge debt".
