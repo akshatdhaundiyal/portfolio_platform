@@ -13,23 +13,31 @@ router = APIRouter(
     dependencies=[Depends(get_db)]
 )
 
+from sqlalchemy import or_, func
+
 @router.post("/token")
 def get_token(request: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_db)):
     """
     Endpoint to retrieve an authentication token.
     """
-    # Logic to authenticate user and return token (support username or email)
+    # Logic to authenticate user and return token (support username or email, case-insensitive)
     user = db.query(DbUser).filter(
         or_(
-            DbUser.username == request.username,
-            DbUser.email == request.username
+            func.lower(DbUser.username) == func.lower(request.username),
+            func.lower(DbUser.email) == func.lower(request.username)
         )
     ).first()
     
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password"
+        )
     if not Hash.verify(user.password, request.password):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password"
+        )
     
     access_token = oauth2_util.create_access_token(data={"sub": str(user.id)})
 

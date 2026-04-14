@@ -14,6 +14,13 @@ class UserBase(BaseModel):
     class ConfigDict:
         from_attributes = True
 
+class UserRegister(BaseModel):
+    username: str
+    email: str
+    password: str
+    fullname: Optional[str] = None
+    invite_code: str
+
 class UserUpdate(generate_partial_model(UserBase, model_name="UserUpdate")):
     backup_username: str
     id: Optional[int] = None
