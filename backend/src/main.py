@@ -19,7 +19,7 @@ print(f"API starting up... Connected to: {settings.database_url}")
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://*cloud.run",
+    "https://portfolio-frontend-501015394738.us-east1.run.app",
 ]
 
 app.add_middleware(
