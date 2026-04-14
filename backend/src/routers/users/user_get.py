@@ -8,6 +8,13 @@ from backend.src.utils.auth_service.oauth2_util import get_current_user
 
 router = APIRouter()
 
+@router.get("/me", response_model=UserDisplay)
+def get_me(current_user: UserDisplay = Depends(get_current_user)):
+    """
+    Returns the currently authenticated user's profile.
+    """
+    return current_user
+
 @router.get("/", response_model=List[UserDisplay])
 def get_all_users(
     db: Session = Depends(get_db),

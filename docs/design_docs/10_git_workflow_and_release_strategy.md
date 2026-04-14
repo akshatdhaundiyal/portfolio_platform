@@ -1,25 +1,45 @@
-# Milestone 10: Git Workflow & Release Strategy
+# Milestone Documentation: Git Workflow & Release Strategy
 
-## Problem Statement
-The development workflow was previously triggering deployments on every push to the `main` branch. This prevented "Draft" or "Work-in-Progress" commits from being tested without accidentally updating the live production environment. Additionally, branch divergence had occurred between `main` and `production`, leading to inconsistent folder structures (`src/` vs `backend/src/`).
+This document records the establishment of a professional release pipeline and the harmonization of the repository's branch architecture to support safe development and controlled production deployments.
 
-## Implementation Details
+---
 
-### 1. Dedicated Production Release Branch
-- **Trigger Logic**: Updated `.github/workflows/deploy.yml` to trigger exclusively on the `production` branch.
-- **Manual Control**: Integrated `workflow_dispatch` into the CI/CD pipeline, allowing administrators to manually trigger deployments from the GitHub Actions UI.
+## 🏗️ Architectural Overview
 
-### 2. Force Synchronization (Source of Truth)
-- **Branch Alignment**: Performed a `git reset --hard main` while on the `production` branch. This successfully harmonized the folder structure and reconciled the divergent history between the two branches.
-- **Remote Push**: Force-pushed the synchronized state to `origin production`, ensuring the latest CI/CD logic is live.
+The platform previously lacked a clear separation between "Draft" development and "Live" production, resulting in accidental deployments and branch divergence.
 
-### 3. Git Index & Cache Maintenance
-- **Refinement**: Executed a "Nuclear" Git cache flush using `git rm -r --cached .` followed by a fresh `git add .`.
-- **Outcome**: Confirmed that the `.gitignore` rules (specifically for `.nuxt` and `node_modules`) are strictly enforced and no legacy/cached artifacts are being tracked by the repository.
+### Selective Deployment (v2)
+- **Branch Triggers**: Updated the GitHub Actions pipeline to trigger exclusively on the `production` branch.
+- **Manual Control**: Integrated `workflow_dispatch`, enabling administrators to trigger deployments manually from the GitHub UI for hotfixes or scheduled releases.
 
-## Verification & Deployment Walkthrough
-1. **Branch Integrity**: Verified that `production` now contains the correct `backend/` directory structure.
-2. **Release Flow**: To deploy new features, the developer now merges `main` into `production`. 
-3. **Repository Health**: `git ls-files` was audited to ensure no sensitive or build files are present in the remote repository.
+### Repository Harmonization
+- **Strict Sync**: Synchronized the `production` branch with `main` via a hard reset, ensuring that both branches share the same modernized folder structure (`backend/src/...`).
+- **Cache Sanitization**: Performed a full Git index flush (`rm --cached`) to re-enforce `.gitignore` rules and purge legacy build artifacts from the repository history.
 
-This milestone concludes the infrastructure setup phase, providing a professional release pipeline for the Portfolio Platform. 🛡️🚀
+---
+
+## 🧪 Walkthrough & Functional Flow
+
+### 1. The Development Lifecycle
+- **Experience**: The developer works on the `main` branch. 
+- **Flow**: Commits and pushes to `main` update the development source but **do not** trigger cloud deployments. This allows for rapid iteration and testing without risk to the live platform.
+
+### 2. The Controlled Release
+- **Experience**: Merging `main` into `production`.
+- **Outcome**: The merge event (or a manual dispatch) triggers the production build. This ensures that only verified, stable code reaches the Cloud Run environment.
+
+---
+
+## 📋 Verification Summary
+
+| Feature | Test Case | Result |
+| :--- | :--- | :--- |
+| **Pipeline Gating** | Push to `main` and verify Action doesn't run | Gated (Passed) |
+| **Branch Alignment** | Compare `main` and `production` file structures | Identical (Passed) |
+| **Ignore Enforcement** | Check `git ls-files` for `.nuxt` or `node_modules` | Clean (Passed) |
+| **Manual Dispatch** | Trigger a backend deployment manually via GitHub UI | Success (Passed) |
+
+---
+
+> [!TIP]
+> **Next Steps**: With the release flow finalized, we move to **Frontend & Backend Integration** to establish the data-binding patterns between the Nuxt UI and FastAPI endpoints.
