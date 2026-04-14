@@ -56,3 +56,11 @@ Generic 500 errors in Cloud Run were invisible to the frontend due to CORS polic
 ### The Knowledge
 - **Auto-Genesis**: Use `models.Base.metadata.create_all(engine)` at the bottom of `main.py` rather than at the top. 
 - **The "Why"**: Placing it at the end ensures that all routers and models have been imported and registered with the SQLAlchemy `Base` class. If called too early, SQLAlchemy will only create a subset of the tables, leading to "Table not found" errors during runtime.
+
+---
+
+## 👥 6. Specialized Role-Based Filtering
+
+### The Knowledge
+- **Efficiency**: Instead of fetching all users and filtering in the frontend, implement specialized server-side methods (e.g., `get_all_clients`) to reduce payload size and enforcement overhead.
+- **RBAC Enforcement**: Use explicit role checks (`current_user.role != "admin"`) for admin-only management endpoints. Even if the data is filtered by role, the caller's authorization must be verified first to prevent horizontal privilege escalation.

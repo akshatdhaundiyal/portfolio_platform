@@ -60,6 +60,13 @@ Browser security policies often blocked the storage of JWT tokens sent from the 
 ## 🧭 6. Dynamic Sidebar & Layout Adaptation
 
 ### The Knowledge
-- **The Concept**: The application uses a "morphing" sidebar that adapts based on the user's route.
-- **Implementation**: The `sidebar.vue` logic relies on the current route prefix (e.g., `/admin`, `/client`) to switch between Public, Private Admin, and Private Client navigation links.
 - **The Pitfall**: Avoid hardcoding visibility toggles in the sidebar. Instead, use a centralized `links` configuration that is filtered dynamically by the application's authentication state and current active domain.
+
+---
+
+## 🏷️ 7. TypeScript Integration & Data Fetching Generics
+
+### The Knowledge
+- **Generics**: Always provide a generic type parameter to `useAsyncData<T>` and associated fetchers. This allows the compiler to provide auto-completion and type-checking within the UI templates, preventing "unknown property" errors during production builds.
+- **Interface Centralization**: Define `interface` structures for core entities (like `Client` or `Project`) to ensure consistency between the API payload and the UI representation.
+- **Defensive Defaults**: When working with collections, provide a default empty list in the `useAsyncData` options (`{ default: () => [] }`) and use the null-coalescing pattern `(data.value || [])` to ensure the UI remains stable during initial load or fetch failures.
