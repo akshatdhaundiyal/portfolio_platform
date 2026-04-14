@@ -22,6 +22,9 @@ RUN uv pip install --system -r pyproject.toml
 # Copy the actual backend code
 COPY backend ./backend
 
+# Create images directory (Git doesn't track empty folders)
+RUN mkdir -p backend/images
+
 # Expose backend port
 EXPOSE 8000
 

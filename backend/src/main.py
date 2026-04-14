@@ -24,4 +24,8 @@ def root():
 
 models.Base.metadata.create_all(engine)
 
+import os
+
+# Ensure the images directory exists to prevent Starlette/FastAPI startup errors
+os.makedirs("backend/images", exist_ok=True)
 app.mount("/images", StaticFiles(directory="backend/images"), name="images")
