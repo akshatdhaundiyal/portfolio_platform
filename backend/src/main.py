@@ -1,9 +1,10 @@
 from fastapi import Depends, FastAPI
-from backend.src.db.database import engine,get_db
-from backend.src.routers import projects, communications, invoices, invites
-from backend.src.routers.users import user
-from backend.src.db import models
-from backend.src.utils.auth_service import authentication
+from src.db.database import engine,get_db
+from src.routers import projects, communications, invoices, invites
+from src.routers.users import user
+from src.db import models
+from src.utils.auth_service import authentication
+
 from fastapi.staticfiles import StaticFiles
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,7 +22,7 @@ async def add_process_time_header(request, call_next):
     response = await call_next(request)
     return response
 
-from backend.src.config import settings
+from src.config import settings
 print(f"API starting up... Connected to: {settings.database_url}")
 
 # Configure CORS for local development and production
@@ -82,9 +83,13 @@ def root():
 
 # Initialization logic moved to the bottom to ensure all models are discovered
 import os
-os.makedirs("backend/images", exist_ok=True)
-app.mount("/images", StaticFiles(directory="backend/images"), name="images")
+os.makedirs("images", exist_ok=True)
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 print("Initializing database schema...")
 models.Base.metadata.create_all(engine)
 print("Database schema initialized.")
+
+def dev():
+    import uvicorn
+    uvicorn.run("backend.src.main:app", host="0.0.0.0", port=8000, reload=True)

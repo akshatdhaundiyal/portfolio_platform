@@ -14,9 +14,11 @@ The primary challenge of this milestone was moving beyond "local machine" stabil
 - **Dependency Hardening**: Integrated `psycopg2-binary` and `uv`-optimized dependency locking for reliable container builds.
 
 ### Containerization Strategy (Docker)
-- **Backend Optimization**: Built a specialized `backend.Dockerfile` using Python 3.12-slim and `uv` for minimal image size and ultra-fast installation.
-- **Frontend Multi-Stage Build**: Created a `frontend.Dockerfile` that compiles the Nuxt SSR application into a lightweight Node 20 production runner.
-- **Orchestration**: Established a `docker-compose.yml` to allow for single-command full-stack boots with local volume mounting for hot-reloading.
+- **Modular Service Context**: Relocated `Dockerfile`s into their respective `/backend` and `/frontend` directories. This allows each service to be built from its own context, improving modularity and build reliability.
+- **Backend Optimization**: Built using Python 3.12-slim and `uv`. The container root is optimized to run the localized `src` package, with an anonymous volume "shield" for `.venv` to prevent OS conflicts.
+- **Frontend Multi-Stage Build**: Created a specialized Dockerfile with `development` (hot-reload) and `production` (slim node runner) targets. Includes an anonymous volume for `node_modules` to support cross-OS development.
+- **Orchestration**: Updated `docker-compose.yml` to enable full stack hot-reloading with intelligent networking (SSR vs CSR resolution).
+
 
 ### Automation (GitHub Actions)
 - **Zero-Trust Deployment**: Authored a `.github/workflows/deploy.yml` pipeline that relies entirely on GitHub Secrets (`GCP_PROJECT_ID`, `NEON_DATABASE_URL`), ensuring no production credentials reside in the repository.
@@ -27,7 +29,8 @@ The primary challenge of this milestone was moving beyond "local machine" stabil
 
 ### 1. Local Development Containerization
 - **Experience**: The developer runs `docker-compose up`.
-- **Flow**: Docker boots the frontend and backend containers simultaneously -> Backend automatically detects the local PostgreSQL container and initializes the schema -> Frontend hot-reloading is preserved through volume mounts.
+- **Flow**: Docker boots the frontend and backend containers simultaneously -> Backend automatically detects the local PostgreSQL container and initializes the schema -> **Hot-Reloading** is active for both services through shielded volumes, allowing instant UI and API updates.
+
 
 ### 2. The Cloud Deployment Pipeline
 - **Experience**: A "Commit & Push" to the `main` branch.

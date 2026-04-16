@@ -43,8 +43,13 @@ The browser console frequently showed "Hydration mismatch" warnings, specificall
 Browser security policies often blocked the storage of JWT tokens sent from the backend.
 
 ### The Knowledge
-- **Credentialed Requests**: To store cookies across different subdomains or ports (Localhost 3000 vs 8000), the frontend `useFetch` calls must explicitly set `credentials: 'include'`.
-- **Nuxt `useCookie` Utility**: Use the native `useCookie` composable to manage session tokens. This ensures the cookie is accessible both during SSR and Client execution, preventing "Invisible 401" errors where the first server-load thinks the user is logged out while the second client-load thinks they are logged in.
+- **Dual-API Networking (The SSR Problem)**: Nuxt SSR executes on the server-side inside the Docker network. It cannot use `localhost` to reach the backend.
+- **The Solution**: Use separate environment variables:
+    - `NUXT_PUBLIC_API_BASE=http://localhost:8000`: Used by the browser (Client-Side).
+    - `NUXT_API_BASE=http://backend:8080`: Used by the Nuxt server (Server-Side) for direct container-to-container communication.
+- **Credentialed Requests**: To store cookies across different subdomains or ports (Localhost 3000 vs 8000), set `credentials: 'include'`.
+- **Nuxt `useCookie` Utility**: Ensures token access during both SSR and Hydration, preventing "Invisible 401" errors.
+
 
 ---
 
@@ -95,3 +100,9 @@ Browser security policies often blocked the storage of JWT tokens sent from the 
  - **Dynamic Forms (USelectMenu)**:
      - For forms requiring relationship selections (e.g., picking a project for an invoice), initialize the `v-model` with `undefined` rather than `null` to ensure compatibility with strict TypeScript component props.
      - Always use `:options="(options as any[]) || []"` to provide a stable fallback during the "Pending" fetch state.
+  ## ⚡ 11. Local Hot-Reload (HMR) in Docker
+ 
+ ### The Knowledge
+ - **HMR Triggering**: To enable Hot Module Replacement inside a container, the source code must be mounted as a volume (`./frontend:/app`).
+ - **Library Protection (Shadowing)**: To prevent Windows `node_modules` from overwriting the container's Linux-specific internal packages, use an **Anonymous Volume** (`- /app/node_modules`). This prioritizes the container's dependencies while allowing source code mirroring.
+ - **Service Target**: Set the Docker build target to `development` in `docker-compose.yml`. This ensures all `devDependencies` (like `nuxt` and `vite`) are available, as they are excluded from the `production` runner stage.

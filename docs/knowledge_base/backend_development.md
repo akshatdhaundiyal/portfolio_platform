@@ -28,15 +28,17 @@ Initial implementations lacked clear separation between Admin and Client operati
 
 ---
 
-## 🐍 3. Module Resolution & Absolute Imports
+## 🐍 3. Module Resolution & Localized Imports
 
 ### The Problem
-The project suffered from frequent `ModuleNotFoundError` because of the nested `backend/src/` structure.
+The project suffered from frequent `ModuleNotFoundError` because of the nested `backend/src/` structure interfering with relative path resolution.
 
 ### The Knowledge
-- **Standardization**: Enforce absolute imports starting from the root-level package (e.g., `backend.src.routers.projects`).
-- **Path Awareness**: In Docker environments, ensure the `PYTHONPATH` is explicitly set or the working directory is configured such that the `backend` package is discoverable.
-- **Trailing Slashes**: FastAPI is strict about trailing slashes in route prefixes. Using `@router.get("")` with a `prefix="/projects"` is more resilient than `@router.get("/")` as it handles both `/projects` and `/projects/` depending on the caller.
+- **Standardization**: Enforce localized imports starting from the `src.` package (e.g., `from src.routers.projects`).
+- **Service Isolation**: By moving `pyproject.toml` and Dockerfiles into the `backend/` folder, the backend becomes a standalone module where `src/` is the primary package root.
+- **Docker Working Directory**: Set the container `WORKDIR` to `/app` and copy the backend contents directly. This aligns the internal Python paths with the filesystem, making module discovery instantaneous.
+- **Trailing Slashes**: FastAPI is strict about trailing slashes. Using `@router.get("")` with a `prefix="/projects"` is more resilient than `@router.get("/")` as it naturally handles both `/projects` and `/projects/`.
+
 
 ---
 

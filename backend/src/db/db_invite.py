@@ -1,7 +1,7 @@
 import secrets
 import string
 from sqlalchemy.orm import Session
-from backend.src.db.models import DbInviteCode
+from src.db.models import DbInviteCode
 from fastapi import HTTPException, status
 
 def generate_random_code(length=12):

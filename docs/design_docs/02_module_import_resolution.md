@@ -10,7 +10,9 @@ The Portfolio Platform uses a nested directory structure (`backend/src/...`). Ea
 
 ### Configuration Adjustments
 - **Project Structure**: Removed the redundant root `__init__.py` to ensure the project directory is treated as a simple container rather than a package.
-- **Pyright Hardening**: Updated the `pyproject.toml` configuration to explicitly define the execution root and extra paths, ensuring that the IDE resolves imports starting with `backend.src` relative to the project root.
+- **Absolute to Localized Imports**: Refactored the entire backend to use `src.` as the root package instead of `backend.src.`. This allows the backend to be a self-contained module that can be built from its own directory in Docker.
+- **Configuration Maintenance**: Moved `pyproject.toml` into the `backend/` directory to ensure IDEs correctly resolve the new localized paths within the service context.
+
 
 ---
 
@@ -21,7 +23,8 @@ The Portfolio Platform uses a nested directory structure (`backend/src/...`). Ea
 - **The Fix**: Removing the root `__init__.py` allows the Python interpreter and language servers to correctly identify the current working directory as the primary search path for package resolution.
 
 ### 2. Runtime Integrity
-- **Flow**: When starting the FastAPI server, the interpreter now correctly maps `backend` as the primary entry point, allowing all sub-modules (db, schemas, routers) to communicate without path-injection hacks.
+- **Flow**: When starting the FastAPI server inside its container, the working directory is `/app`. By using `src.` imports, the interpreter instantly finds the code without needing complex `PYTHONPATH` manipulation or absolute package names.
+
 
 ---
 
@@ -30,8 +33,9 @@ The Portfolio Platform uses a nested directory structure (`backend/src/...`). Ea
 | Feature | Test Case | Result |
 | :--- | :--- | :--- |
 | **Logic Integrity** | Delete root `__init__.py` and check package discovery | Discovery Fixed (Passed) |
-| **Runtime Check** | Run `import backend.src.db.database` from project root | Success (Passed) |
-| **IDE Stabilization** | Verify Pyright configuration overrides | Errors Resolved (Passed) |
+| **Runtime Check** | Run `import src.db.database` from backend root | Success (Passed) |
+| **Docker Build** | Verify `src.` imports resolve inside container | Resolved (Passed) |
+
 
 ---
 

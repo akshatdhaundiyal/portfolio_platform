@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.src.db.models import DbCommunication
-from backend.src.schemas.communication_schema import CommunicationCreate
+from src.db.models import DbCommunication
+from src.schemas.communication_schema import CommunicationCreate
 from fastapi import HTTPException, status
 
 def create_communication(db: Session, request: CommunicationCreate, sender_id: int):

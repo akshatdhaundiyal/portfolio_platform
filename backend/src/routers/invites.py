@@ -1,12 +1,12 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.src.db.database import get_db
-from backend.src.schemas.invite_schema import InviteCodeDisplay, InviteCodeCreate
-from backend.src.db import db_invite
-from backend.src.utils.auth_service.oauth2_util import get_current_user
-from backend.src.schemas.user_schema import UserDisplay
-from backend.src.db.models import RoleEnum
+from src.db.database import get_db
+from src.schemas.invite_schema import InviteCodeDisplay, InviteCodeCreate
+from src.db import db_invite
+from src.utils.auth_service.oauth2_util import get_current_user
+from src.schemas.user_schema import UserDisplay
+from src.db.models import RoleEnum
 
 router = APIRouter(
     prefix="/invites",

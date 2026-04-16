@@ -12,8 +12,8 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 
 ## 🐍 02: Module Import Resolution
 **Goal:** Solve the "ModuleNotFoundError" plague caused by complex directory nesting.
-- **Refactor:** Adjusted `PYTHONPATH` and relative import statements across `backend/src/main.py` and its sub-modules.
-- **Discovery:** Standardized on `backend.src...` absolute imports to ensure consistency across both local development and Docker environments.
+- **Refactor:** Adjusted `PYTHONPATH` and relative import statements across the backend.
+- **Optimization:** Transitioned from absolute `backend.src...` imports to localized `src...` imports for Docker compatibility.
 
 ## 🖼️ 03: Home & About Features
 **Goal:** Build the "Face" of the portfolio with premium aesthetics.
@@ -37,9 +37,9 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 
 ## 🐳 07: CI/CD & Containerization
 **Goal:** Escape "Local Only" development and prepare for serverless scaling.
-- **Dockerization:** Created multi-stage `Dockerfile` and `backend.Dockerfile` using `uv` for 10x faster builds.
-- **Pipeline:** Built a GitHub Actions workflow (`deploy.yml`) using Workload Identity Federation for secure GCP deployments.
-- **Architectural Shift:** Formally moved away from ephemeral SQLite to persistent PostgreSQL (Neon Tech) for the production environment.
+- **Modular Dockerization:** Relocated Dockerfiles into service directories.
+- **Build Strategy:** Implemented multi-stage builds for hot-reloading and optimized production runners.
+- **Architectural Shift:** Formally moved away from ephemeral SQLite to persistent PostgreSQL (Neon Tech) for the environment.
 
 ## 🛡️ 08: Authentication Modernization
 **Goal:** Implement enterprise-grade security and modernize the auth engine.
@@ -61,8 +61,8 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
 
 ## 🌉 11: Frontend-Backend Integration & Seeding
 **Goal:** Replace mock interactions with real API connectivity and populate the database for local testing.
+- **Networking:** Implemented a Dual-API strategy (localhost:8000 for public, backend:8080 for internal SSR).
 - **Schema Expansion:** Added `invoices` and `project_files` tables to support complex freelance workflows.
-- **CORS & Cookies:** Enabled secure cross-origin communication and implemented JWT storage via `useCookie`.
 - **Mock Seeding:** Developed a `seed.py` utility that populates the database with test users, projects, and communications in a single command.
 
 ## 📊 12: Project Dashboard & External Integrations
@@ -125,4 +125,12 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
     - [x] Update documentation and milestone summary
 
 ---
-*Last Technical Audit: 2026-04-14 (Invoicing Module & Financial Portal)*
+## 🏗️ 21: Environment & Architecture Overhaul
+**Goal:** Decouple services and optimize the local development workflow for maximum velocity.
+- [x] **Modularization**: Moved `pyproject.toml`, `uv.lock`, and Dockerfiles into service directories.
+- [x] **Hot-Reload**: Enabled full stack hot-reloading with anonymous volume shielding.
+- [x] **Import Refactor**: Performed a global search-and-replace to migrate 20+ files to localized `src.` imports.
+- [x] **Documentation Sync**: Synchronized all design docs and knowledge base entries.
+
+---
+*Last Technical Audit: 2026-04-16 (Environment & Architecture Overhaul)*

@@ -1,6 +1,6 @@
-from backend.src.db.database import engine, Base
-from backend.src.db.models import DbUser, DbProject, DbCommunication, DbInvoice, DbProjectFile, DbInviteCode, DbCriteriaHistory
-from backend.src.db.seed import seed_db
+from src.db.database import engine, Base
+from src.db.models import DbUser, DbProject, DbCommunication, DbInvoice, DbProjectFile, DbInviteCode, DbCriteriaHistory
+from src.db.seed import seed_db
 
 def reset_and_seed():
     print("Dropping all tables...")

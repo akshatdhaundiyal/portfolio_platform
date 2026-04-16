@@ -10,7 +10,10 @@ This milestone transitioned the platform from a static mockup into a functional 
 
 ### API Connectivity & Security
 - **CORS Hardening**: Configured the FastAPI `CORSMiddleware` with `allow_credentials=True` and explicit origin white-listing (`localhost:3000`, `127.0.0.1:3000`) to enable secure, authenticated cross-origin communication.
-- **Dynamic Endpoints**: Integrated `runtimeConfig` into the frontend to dynamically resolve the `API_BASE` URL, ensuring seamless transitions between local development and production cloud environments.
+- **Dual-API Networking**: Implemented a two-tier API Base URL strategy in Docker Compose to resolve "Connection Refused" errors during SSR:
+  - `NUXT_PUBLIC_API_BASE=http://localhost:8000`: Used by the browser for client-side fetching.
+  - `NUXT_API_BASE=http://backend:8080`: Used by the Nuxt server for internal container-to-container calls.
+
 
 ### Authentication Persistence
 - **Nuxt Cookie Strategy**: Replaced mock authentication with a secure `useCookie('auth_token')` implementation.

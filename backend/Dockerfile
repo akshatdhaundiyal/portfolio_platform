@@ -1,31 +1,34 @@
-# Use a lightweight official Python image as the base
-FROM python:3.11-slim
+# Use official Python 3.12 slim image
+FROM python:3.12-slim
 
-ENV PYTHONUNBUFFERED=1
+# Install system dependencies required for compilation (e.g. psycopg2)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /uvx /bin/
+# Install uv (blazing fast python package manager)
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-ENV UV_COMPILE_BYTE=1
+# Set working directory
+WORKDIR /app
 
-ENV UV_LINK_MODE=copy
+# Copy pyproject.toml and uv.lock first to leverage Docker cache
+COPY pyproject.toml uv.lock ./
 
-# Change the working directory to the `app` directory
-WORKDIR /backend
+# Install dependencies into the system environment to avoid virtualenv overhead in Docker
+RUN uv pip install --system -r pyproject.toml
 
-ENV PATH="/backend/.venv/bin:$PATH"
+# Copy the actual backend code
+COPY . .
 
-COPY ./pyproject.toml ./uv.lock ./.python-version /backend/
+# Create images directory (Git doesn't track empty folders)
+RUN mkdir -p images
 
-# Install dependencies
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project --no-dev
+# Expose backend port
+EXPOSE 8000
 
-# Copy the project into the image
-COPY ./app /backend/app
-# Sync the project
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+# Start FastAPI via uvicorn
+# We use shell form to allow $PORT substitution, defaulting to 8000 for local docker-compose
+CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}
 
-CMD ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0"]
