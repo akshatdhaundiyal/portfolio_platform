@@ -32,8 +32,9 @@ We use **Docker Mirroring** for instant feedback:
 
 ### CI/CD Deployment
 The [deploy.yml](../.github/workflows/deploy.yml) is synchronized to use the modular build contexts:
-- **Backend Build**: Context `./backend`, uses `backend/Dockerfile`.
-- **Frontend Build**: Context `./frontend`, uses `frontend/Dockerfile` with `--target production` to ensure a slim runtime.
+- **Backend Build**: Context `./backend`, uses `backend/Dockerfile` with `--target runtime` (Hardened).
+- **Frontend Build**: Context `./frontend`, uses `frontend/Dockerfile` with `--target production` (Slim).
+
 
 
 ---
