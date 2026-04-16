@@ -11,6 +11,8 @@ This document captures the infrastructure logic and deployment hurdles of the Po
 - **Performance**: The project uses `uv` for Python package management. This reduced build times by ~85% compared to standard `pip`.
 - **Hot-Reload Architecture**: Local development uses `volumes` in `docker-compose.yml` mapped to the service `WORKDIR`. 
 - **Anonymous Volume Shielding**: To prevent "Operating System Clashes" (e.g., Windows `.venv` overwriting Linux `.venv`), the project uses anonymous volumes (e.g., `- /app/.venv`) to prioritize the container's specialized dependencies.
+- **Explicit Build Targeting**: When using multi-stage Dockerfiles (like the frontend), always use the `--target production` flag in the CI/CD pipeline. This ensures that only the final, slim runtime image is pushed to the cloud, preventing accidental deployment of development tools.
+
 
 
 ---
