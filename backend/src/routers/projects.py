@@ -1,12 +1,12 @@
 from typing import List
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
-from backend.src.db.database import get_db
-from backend.src.schemas.project_schema import ProjectBase, ProjectCreate, ProjectDisplay, ProjectUpdate, CriteriaHistoryDisplay
-from backend.src.db import db_project
-from backend.src.schemas.user_schema import UserDisplay
-from backend.src.utils.auth_service.oauth2_util import get_current_user
-from backend.src.db.models import RoleEnum
+from src.db.database import get_db
+from src.schemas.project_schema import ProjectBase, ProjectCreate, ProjectDisplay, ProjectUpdate, CriteriaHistoryDisplay
+from src.db import db_project
+from src.schemas.user_schema import UserDisplay
+from src.utils.auth_service.oauth2_util import get_current_user
+from src.db.models import RoleEnum
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 

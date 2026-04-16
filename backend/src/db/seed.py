@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-from backend.src.db.database import SessionLocal, engine
-from backend.src.db.models import DbUser, DbProject, DbCommunication, DbInvoice, RoleEnum, ProjectStatus, Base
-from backend.src.utils.auth_service.hash import Hash
+from src.db.database import SessionLocal, engine
+from src.db.models import DbUser, DbProject, DbCommunication, DbInvoice, RoleEnum, ProjectStatus, Base
+from src.utils.auth_service.hash import Hash
 
 def seed_db():
     db: Session = SessionLocal()

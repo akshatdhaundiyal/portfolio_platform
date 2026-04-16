@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from backend.src.utils.pydantic.generate_partial_model import generate_partial_model
+from src.utils.pydantic.generate_partial_model import generate_partial_model
 
 class UserBase(BaseModel):
     username: str

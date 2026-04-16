@@ -1,7 +1,7 @@
 from typing import Optional, List
 from pydantic import BaseModel
 from datetime import datetime
-from backend.src.utils.pydantic.generate_partial_model import generate_partial_model
+from src.utils.pydantic.generate_partial_model import generate_partial_model
 
 class ProjectBase(BaseModel):
     title: str

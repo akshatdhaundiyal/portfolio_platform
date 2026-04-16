@@ -1,30 +1,75 @@
-version: '3.8'
-
 services:
+  db:
+    image: postgres:17
+    container_name: portfolio-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=edw_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/edw_platform.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+
+
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d edw_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
-      context: .
-      dockerfile: backend.Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: portfolio-backend
+
     ports:
-      - "8000:8000"
+      - "8000:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:admin@db:5432/edw_platform
     env_file:
       - .env
     volumes:
-      - ./backend:/app/backend # Hot-reload source code locally
+      - ./backend:/app # Map localized backend folder
       - ./.env:/app/.env
-    # To enable hot reload locally with fastAPI, swap the command:
-    # command: ["uvicorn", "backend.src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+      - /app/.venv # Protect container from host-side Windows venv
+    # Enable hot-reload by overriding the default Dockerfile CMD
+    command: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+
+
 
   frontend:
     build:
-      context: .
-      dockerfile: frontend.Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
     container_name: portfolio-frontend
     ports:
       - "3000:3000"
     depends_on:
       - backend
     environment:
-      # Instruct the frontend to talk to the backend container over the local docker bridge if SSR requires it.
-      - NUXT_PUBLIC_API_BASE=http://backend:8000
+      # The browser needs to reach the backend via localhost:8000
+      - NUXT_PUBLIC_API_BASE=http://localhost:8000
+      # Internal SSR requests need to reach the backend via the Docker service name
+      - NUXT_API_BASE=http://backend:8080
+
+
+    # Hot-reload configuration for Frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # Anonymous volume to protect container-built packages
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+
+
+
+
+volumes:
+  postgres_data:

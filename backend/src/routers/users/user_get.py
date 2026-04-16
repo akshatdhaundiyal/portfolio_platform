@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.src.db.database import get_db
-from backend.src.schemas.user_schema import UserDisplay
-from backend.src.db import db_user
-from backend.src.utils.auth_service.oauth2_util import get_current_user
+from src.db.database import get_db
+from src.schemas.user_schema import UserDisplay
+from src.db import db_user
+from src.utils.auth_service.oauth2_util import get_current_user
 
 router = APIRouter()
 
@@ -54,4 +54,4 @@ def get_user_by_id(id: int,db: Session = Depends(get_db)):
     """
     Endpoint to get a specific user by ID.
     """
-    return db_user.get_user_by_id(id=id)
+    return db_user.get_user_by_id(db=db, user_id=id)

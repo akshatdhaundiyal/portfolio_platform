@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.src.db.models import DbProject, DbCriteriaHistory, DbUser
-from backend.src.schemas.project_schema import ProjectCreate, ProjectUpdate
+from src.db.models import DbProject, DbCriteriaHistory, DbUser
+from src.schemas.project_schema import ProjectCreate, ProjectUpdate
 from fastapi import HTTPException, status
 
 def create_project(db: Session, request: ProjectCreate):

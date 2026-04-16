@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.src.db.models import DbInvoice, DbProject
-from backend.src.schemas.invoice_schema import InvoiceCreate, InvoiceUpdate
+from src.db.models import DbInvoice, DbProject
+from src.schemas.invoice_schema import InvoiceCreate, InvoiceUpdate
 from fastapi import HTTPException, status
 import datetime
 

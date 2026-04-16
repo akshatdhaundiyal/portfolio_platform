@@ -1,11 +1,11 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.src.db.database import get_db
-from backend.src.db import db_invoice
-from backend.src.schemas.invoice_schema import InvoiceCreate, InvoiceUpdate, InvoiceDisplay
-from backend.src.utils.auth_service.oauth2_util import get_current_user
-from backend.src.schemas.user_schema import UserDisplay
+from src.db.database import get_db
+from src.db import db_invoice
+from src.schemas.invoice_schema import InvoiceCreate, InvoiceUpdate, InvoiceDisplay
+from src.utils.auth_service.oauth2_util import get_current_user
+from src.schemas.user_schema import UserDisplay
 
 router = APIRouter(prefix="/invoices", tags=["invoices"])
 

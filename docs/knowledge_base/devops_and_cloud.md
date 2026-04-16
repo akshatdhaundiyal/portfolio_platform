@@ -7,8 +7,11 @@ This document captures the infrastructure logic and deployment hurdles of the Po
 ## 🏗️ 1. Containerization with `uv`
 
 ### The Knowledge
-- **Performance**: The project uses `uv` for Python package management within Docker. This reduced build times by ~85% compared to standard `pip`.
-- **Layer Optimization**: Always copy `pyproject.toml` and `uv.lock` first to cache the virtual environment layer. Only copy the application source code in the final stages.
+- **Modular Build Context**: Each service (`/backend`, `/frontend`) now maintains its own Dockerfile within its directory. This simplifies complexity by allowing the Docker context to be set precisely to the service's root.
+- **Performance**: The project uses `uv` for Python package management. This reduced build times by ~85% compared to standard `pip`.
+- **Hot-Reload Architecture**: Local development uses `volumes` in `docker-compose.yml` mapped to the service `WORKDIR`. 
+- **Anonymous Volume Shielding**: To prevent "Operating System Clashes" (e.g., Windows `.venv` overwriting Linux `.venv`), the project uses anonymous volumes (e.g., `- /app/.venv`) to prioritize the container's specialized dependencies.
+
 
 ---
 
@@ -32,10 +35,11 @@ The first deployment attempts failed due to **Secret Manager Conflicts** and **P
 The backend crashed on startup because the `backend/images` directory (used for file uploads) was missing from the container image.
 
 ### The Knowledge
-- **The Cause**: Git do not track empty directories.
+- **The Cause**: Git doesn't track empty directories.
 - **The Global Fix**:
-    - Add `RUN mkdir -p backend/images` to the `Dockerfile`.
+    - Add `RUN mkdir -p images` (formerly `backend/images`) to the service Dockerfile.
     - Implement a "Self-Healing" check in `main.py` using `os.makedirs(path, exist_ok=True)` during the startup sequence.
+
 
 ---
 
