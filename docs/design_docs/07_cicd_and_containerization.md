@@ -15,7 +15,7 @@ The primary challenge of this milestone was moving beyond "local machine" stabil
 
 ### Containerization Strategy (Docker)
 - **Modular Service Context**: Relocated `Dockerfile`s into their respective `/backend` and `/frontend` directories. This allows each service to be built from its own context, improving modularity and build reliability.
-- **Backend Optimization**: Built using Python 3.12-slim and `uv`. The container root is optimized to run the localized `src` package, with an anonymous volume "shield" for `.venv` to prevent OS conflicts.
+- **Backend Architecture**: Upgraded to a multi-stage **Hardened Build**. Compiles dependencies in a `builder` stage and extracts only the virtual environment into a clean `runtime` stage. This removes compilers (`build-essential`) and the `uv` tool from the final production image.
 - **Frontend Multi-Stage Build**: Created a specialized Dockerfile with `development` (hot-reload) and `production` (slim node runner) targets. Includes an anonymous volume for `node_modules` to support cross-OS development.
 - **Orchestration**: Updated `docker-compose.yml` to enable full stack hot-reloading with intelligent networking (SSR vs CSR resolution).
 
@@ -23,7 +23,7 @@ The primary challenge of this milestone was moving beyond "local machine" stabil
 ### Automation (GitHub Actions)
 - **Zero-Trust Deployment**: Authored a `.github/workflows/deploy.yml` pipeline that relies entirely on GitHub Secrets (`GCP_PROJECT_ID`, `NEON_DATABASE_URL`), ensuring no production credentials reside in the repository.
 - **Synchronized Build Contexts**: Re-engineered the CI/CD build steps to use modular contexts (`./backend` and `./frontend`). 
-- **Production Targeting**: Implemented the `--target production` multi-stage build flag in the deployment pipeline to ensure only the slim, optimized runtime is pushed to GCP Cloud Run, excluding development tools.
+- **Hardened Targeting**: Implemented explicit `--target` flags (`production` for frontend, `runtime` for backend) across the entire CI/CD pipeline to fulfill enterprise-grade security standards.
 
 
 ---

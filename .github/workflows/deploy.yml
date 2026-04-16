@@ -47,7 +47,8 @@ jobs:
 
       # Build & Push Backend
       - name: Build Backend Image
-        run: docker build -t $BACKEND_IMAGE -f backend/Dockerfile ./backend
+        run: docker build --target runtime -t $BACKEND_IMAGE -f backend/Dockerfile ./backend
+
 
         
       - name: Push Backend Image
