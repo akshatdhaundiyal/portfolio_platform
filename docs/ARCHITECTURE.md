@@ -22,12 +22,19 @@ We use **Docker Mirroring** for instant feedback:
 - **Code Sync**: Local folders are mounted directly into containers.
 - **Dependency Shielding**: We use anonymous Docker volumes to prevent your host machine (Windows/Mac) from corrupting the container's environment.
 
-## 🔌 API Resolution Map
+## 🔌 API & CI/CD Resolution Map
 
+### Networking
 | Request Type | Target URL | Context |
 | :--- | :--- | :--- |
 | **Client-Side (Browser)** | `localhost:8000` | Fetching data from your laptop. |
 | **Server-Side (Nuxt SSR)** | `backend:8080` | Internal container-to-container calls. |
+
+### CI/CD Deployment
+The [deploy.yml](../.github/workflows/deploy.yml) is synchronized to use the modular build contexts:
+- **Backend Build**: Context `./backend`, uses `backend/Dockerfile`.
+- **Frontend Build**: Context `./frontend`, uses `frontend/Dockerfile` with `--target production` to ensure a slim runtime.
+
 
 ---
 **References:**

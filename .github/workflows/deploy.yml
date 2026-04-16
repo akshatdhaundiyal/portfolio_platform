@@ -47,14 +47,16 @@ jobs:
 
       # Build & Push Backend
       - name: Build Backend Image
-        run: docker build -t $BACKEND_IMAGE -f backend.Dockerfile .
+        run: docker build -t $BACKEND_IMAGE -f backend/Dockerfile ./backend
+
         
       - name: Push Backend Image
         run: docker push $BACKEND_IMAGE
 
       # Build & Push Frontend
       - name: Build Frontend Image
-        run: docker build -t $FRONTEND_IMAGE -f frontend.Dockerfile .
+        run: docker build --target production -t $FRONTEND_IMAGE -f frontend/Dockerfile ./frontend
+
         
       - name: Push Frontend Image
         run: docker push $FRONTEND_IMAGE

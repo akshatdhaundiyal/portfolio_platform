@@ -22,6 +22,9 @@ The primary challenge of this milestone was moving beyond "local machine" stabil
 
 ### Automation (GitHub Actions)
 - **Zero-Trust Deployment**: Authored a `.github/workflows/deploy.yml` pipeline that relies entirely on GitHub Secrets (`GCP_PROJECT_ID`, `NEON_DATABASE_URL`), ensuring no production credentials reside in the repository.
+- **Synchronized Build Contexts**: Re-engineered the CI/CD build steps to use modular contexts (`./backend` and `./frontend`). 
+- **Production Targeting**: Implemented the `--target production` multi-stage build flag in the deployment pipeline to ensure only the slim, optimized runtime is pushed to GCP Cloud Run, excluding development tools.
+
 
 ---
 
