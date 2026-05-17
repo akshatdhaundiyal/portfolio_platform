@@ -66,6 +66,9 @@ Browser security policies often blocked the storage of JWT tokens sent from the 
 
 ### The Knowledge
 - **The Pitfall**: Avoid hardcoding visibility toggles in the sidebar. Instead, use a centralized `links` configuration that is filtered dynamically by the application's authentication state and current active domain.
+- **Routing Boundary Segregation (The Layout Switching Pitfall)**: 
+    - **Issue**: Navigating an admin user to a client-facing route (e.g. `/client/:id`) causes Nuxt to switch layout context to the `client-default` layout, which destroys the administrative sidebar and shell.
+    - **Prevention**: Keep client routes (`/client/...`) and admin routes (`/admin/...`) strictly segregated. Ensure any action buttons or links inside the admin panel pointing to resource details (like projects) resolve to administrative pages (e.g. `/admin/projects/:id`) that preserve the `admin-default` layout.
 
 ---
 

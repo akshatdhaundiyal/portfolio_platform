@@ -125,12 +125,19 @@ This document tracks the evolution of the Portfolio Platform from its initial sc
     - [x] Update documentation and milestone summary
 
 ---
-## 🏗️ 21: Environment & Architecture Overhaul
-**Goal:** Decouple services and optimize the local development workflow for maximum velocity.
-- [x] **Modularization**: Moved `pyproject.toml`, `uv.lock`, and Dockerfiles into service directories.
-- [x] **Hot-Reload**: Enabled full stack hot-reloading with anonymous volume shielding.
-- [x] **Import Refactor**: Performed a global search-and-replace to migrate 20+ files to localized `src.` imports.
-- [x] **Documentation Sync**: Synchronized all design docs and knowledge base entries.
+## 💬 22: Persistent Real-Time Communication
+**Goal:** Enable instant, persistent collaboration between developers and clients via WebSockets.
+- [x] **Backend: WebSocket Infrastructure**
+    - [x] Implemented `ConnectionManager` for project-based chat rooms.
+    - [x] Created `backend/src/routers/chat.py` with secure token validation via query strings.
+    - [x] Integrated real-time broadcasting with automatic database persistence using the `communications` table.
+- [x] **Frontend: Live Chat Component**
+    - [x] Developed `CommonChatBox.vue` with glassmorphic design and auto-scrolling logic.
+    - [x] Implemented WebSocket connection management with automatic reconnection and history hydration.
+- [x] **Integration: Unified Dashboards**
+    - [x] Replaced legacy static messaging in Admin and Client dashboards with the live ChatBox.
+    - [x] Synchronized message ownership styling (Me vs. Other) across all views.
+    - [x] Fixed routing boundary mismatch where clicking a project inside the admin dashboard incorrectly routed admins to client-faced URLs, causing layout degradation to client mode.
 
 ---
-*Last Technical Audit: 2026-04-16 (Environment & Architecture Overhaul)*
+*Last Technical Audit: 2026-05-18 (Persistent Real-Time Communication & Layout Boundary Fix)*

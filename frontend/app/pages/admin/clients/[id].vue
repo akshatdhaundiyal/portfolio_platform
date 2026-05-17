@@ -150,7 +150,7 @@ function formatDate(dateString: string) {
             <div class="flex gap-2">
               <UButton v-if="project.github_url" :to="project.github_url" target="_blank" color="gray" variant="ghost" icon="i-simple-icons-github" size="xs" />
               <UButton v-if="project.trello_url" :to="project.trello_url" target="_blank" color="gray" variant="ghost" icon="i-simple-icons-trello" size="xs" />
-              <UButton color="gray" variant="solid" size="sm" icon="i-heroicons-arrow-top-right-on-square" :to="`/client/${project.id}`">View Dashboard</UButton>
+              <UButton color="gray" variant="solid" size="sm" icon="i-heroicons-arrow-top-right-on-square" :to="`/admin/projects/${project.id}`">View Dashboard</UButton>
             </div>
           </div>
         </div>

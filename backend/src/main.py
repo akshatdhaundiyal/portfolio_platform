@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI
 from src.db.database import engine,get_db
-from src.routers import projects, communications, invoices, invites
+from src.routers import projects, communications, invoices, invites, chat
 from src.routers.users import user
 from src.db import models
 from src.utils.auth_service import authentication
@@ -70,6 +70,8 @@ app.include_router(communications.router)
 app.include_router(user.router)
 app.include_router(authentication.router)
 app.include_router(invites.router)
+app.include_router(invoices.router)
+app.include_router(chat.router)
 
 @app.get("/")
 def root():

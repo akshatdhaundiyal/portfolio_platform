@@ -56,23 +56,7 @@ watchEffect(() => {
   }
 })
 
-// Messaging Logic
-const newMessage = ref('')
-const messages = ref([
-  { id: 1, text: 'Hello! I have started working on the main layout.', sender: 'admin', time: '10:00 AM' },
-  { id: 2, text: 'Awesome, can you make sure it matches the figma?', sender: 'client', time: '10:35 AM' },
-])
 
-function sendMessage() {
-  if(!newMessage.value) return
-  messages.value.push({
-    id: Date.now(),
-    text: newMessage.value,
-    sender: 'client',
-    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-  })
-  newMessage.value = ''
-}
 
 const formatDate = (dateStr: string) => {
   if (!dateStr) return 'Not set'
@@ -198,28 +182,7 @@ const formatDate = (dateStr: string) => {
         </UCard>
 
         <!-- Communications -->
-        <UCard class="bg-white/80 dark:bg-gray-800/80 shadow-xl flex flex-col h-[500px]">
-          <template #header>
-            <div class="flex items-center gap-2 text-gray-900 dark:text-white font-bold">
-              <UIcon name="i-heroicons-chat-bubble-left-right" class="w-5 h-5 text-primary-500" />
-              Private Channel
-            </div>
-          </template>
-          
-          <div class="flex-1 overflow-auto space-y-4 pr-2 mb-4 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800">
-            <div v-for="msg in messages" :key="msg.id" :class="['p-3 rounded-2xl text-sm max-w-[90%] shadow-sm transition-all hover:shadow-md', msg.sender === 'client' ? 'bg-primary-500 text-white ml-auto rounded-tr-none' : 'bg-gray-100 dark:bg-gray-700/50 dark:text-gray-100 rounded-tl-none']">
-              {{ msg.text }}
-              <span class="text-[10px] block mt-1 opacity-70" :class="msg.sender === 'client' ? 'text-right' : 'text-left'">{{ msg.time }}</span>
-            </div>
-          </div>
-
-          <template #footer>
-            <div class="flex gap-2">
-              <UInput v-model="newMessage" placeholder="Type a message..." class="flex-1" @keyup.enter="sendMessage" />
-              <UButton color="primary" icon="i-heroicons-paper-airplane" @click="sendMessage" />
-            </div>
-          </template>
-        </UCard>
+        <CommonChatBox :project-id="Number(id)" />
       </div>
     </main>
   </div>

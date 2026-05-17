@@ -354,7 +354,7 @@ const tabs = [
                   <UBadge :color="project.status === 'completed' ? 'emerald' : 'primary'" variant="soft" size="xs">{{ project.status }}</UBadge>
                   <UButton color="gray" variant="ghost" icon="i-heroicons-pencil-square" size="sm" @click="openEditModal(project)" />
                   <UButton color="red" variant="ghost" icon="i-heroicons-trash" size="sm" class="opacity-0 group-hover:opacity-100 transition-opacity" @click="handleDeleteProject(project.id)" />
-                  <UButton color="gray" variant="ghost" icon="i-heroicons-chevron-right" size="sm" :to="`/client/${project.id}`" />
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-chevron-right" size="sm" :to="`/admin/projects/${project.id}`" />
                 </div>
               </div>
             </div>
