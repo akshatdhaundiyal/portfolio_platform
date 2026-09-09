@@ -329,20 +329,20 @@ export default function AdminBlogStudio() {
   if (isAuthenticated === false) {
     return (
       <div className="max-w-md mx-auto px-4 py-24 space-y-6">
-        <div className="artifact-card rounded-2xl p-8 space-y-6 border border-white/[0.1]">
+        <div className="artifact-card rounded-2xl p-8 space-y-6 border border-black/10 dark:border-white/[0.1]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Super Admin Studio</h2>
-              <p className="text-xs font-mono text-neutral-400">Master Secret Passcode Required</p>
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Super Admin Studio</h2>
+              <p className="text-xs font-mono text-neutral-500 dark:text-neutral-400">Master Secret Passcode Required</p>
             </div>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block font-mono text-xs text-neutral-400 mb-1.5">
+              <label className="block font-mono text-xs text-neutral-600 dark:text-neutral-400 mb-1.5">
                 ADMIN_PASSWORD
               </label>
               <div className="relative">
@@ -352,9 +352,9 @@ export default function AdminBlogStudio() {
                   onChange={(e) => setPasscode(e.target.value)}
                   placeholder="Enter secret passcode..."
                   required
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.1] text-sm text-white font-mono placeholder-neutral-500 focus:outline-none focus:border-indigo-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/[0.1] text-sm text-neutral-900 dark:text-white font-mono placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:border-indigo-500 transition-all"
                 />
-                <KeyRound className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                <KeyRound className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
               </div>
             </div>
 
@@ -391,16 +391,16 @@ export default function AdminBlogStudio() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       
       {/* Studio Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-black/10 dark:border-white/[0.08] pb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-mono text-xs mb-2">
             <Sparkles className="w-3 h-3" />
             <span>SUPER ADMIN // DYNAMIC BLOG & MEDIUM STUDIO</span>
           </div>
-          <h1 className="text-3xl font-semibold text-white tracking-tight">
+          <h1 className="text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight">
             Article Management & Syndication
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
             Create rich articles with responsive media embeds and cross-publish to Medium with canonical SEO protection.
           </p>
         </div>
@@ -408,7 +408,7 @@ export default function AdminBlogStudio() {
         <div className="flex items-center gap-3">
           <button
             onClick={handleOpenNew}
-            className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/25 flex items-center gap-2 transition-all"
+            className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/25 flex items-center gap-2 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Write New Paper</span>
@@ -416,7 +416,7 @@ export default function AdminBlogStudio() {
 
           <button
             onClick={handleLogout}
-            className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-neutral-400 hover:text-rose-400 hover:border-rose-500/30 transition-all"
+            className="p-2.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.03] border border-black/10 dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400 hover:text-rose-500 hover:border-rose-500/30 transition-all cursor-pointer"
             title="Lock Studio"
           >
             <LogOut className="w-4 h-4" />
@@ -435,7 +435,7 @@ export default function AdminBlogStudio() {
 
         <Link
           href="/admin/projects"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-neutral-400 hover:text-white font-mono text-xs transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white font-mono text-xs transition-colors"
         >
           <Layers className="w-3.5 h-3.5" />
           <span>Projects & Content Order</span>

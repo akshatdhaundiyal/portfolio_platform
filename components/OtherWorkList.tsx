@@ -68,11 +68,11 @@ export default function OtherWorkList({ projects }: OtherWorkListProps) {
                 <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 shrink-0">
                   {item.metricValue && (
                     <div className="sm:text-right">
-                      <span className="font-mono text-xs font-bold text-emerald-400 block">
+                      <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400 block">
                         {item.metricValue}
                       </span>
                       {item.metricLabel && (
-                        <span className="text-[10px] font-mono text-neutral-400 block">
+                        <span className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 block">
                           {item.metricLabel}
                         </span>
                       )}
@@ -84,7 +84,7 @@ export default function OtherWorkList({ projects }: OtherWorkListProps) {
                       href={item.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-[#d94e34] hover:text-white text-neutral-300 font-mono text-xs border border-white/[0.08] transition-all"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] hover:bg-[#d94e34] dark:hover:bg-[#d94e34] text-neutral-700 dark:text-neutral-300 hover:text-white dark:hover:text-white font-mono text-xs border border-black/10 dark:border-white/[0.08] transition-all"
                     >
                       <Github className="w-3.5 h-3.5" />
                       <span>Code</span>

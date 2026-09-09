@@ -15,10 +15,10 @@ export default function BlogCard({ blog }: Props) {
       <div className="space-y-3">
         {/* Top Metadata */}
         <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
-          <span className="px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-indigo-300">
+          <span className="px-2.5 py-0.5 rounded bg-indigo-500/10 dark:bg-white/[0.04] border border-indigo-500/20 dark:border-white/[0.08] text-indigo-600 dark:text-indigo-300 font-medium">
             {blog.category}
           </span>
-          <div className="flex items-center gap-2 text-neutral-500">
+          <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
             <Clock className="w-3.5 h-3.5" />
             <span>{blog.readTime}</span>
           </div>
@@ -26,20 +26,20 @@ export default function BlogCard({ blog }: Props) {
 
         {/* Title */}
         <Link href={`/blog/${blog.slug}`} className="block">
-          <h3 className="text-xl font-semibold text-white tracking-tight group-hover:text-cyan-300 transition-colors leading-snug">
+          <h3 className="text-xl font-semibold text-neutral-900 dark:text-white tracking-tight group-hover:text-[#d94e34] dark:group-hover:text-cyan-300 transition-colors leading-snug">
             {blog.title}
           </h3>
         </Link>
 
         {/* Subtitle / Summary */}
-        <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-3">
+        <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed line-clamp-3">
           {blog.summary}
         </p>
       </div>
 
       {/* Footer: Tags & Read Link */}
-      <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between gap-3 text-xs">
-        <div className="flex flex-wrap gap-1.5 font-mono text-[11px] text-neutral-400">
+      <div className="pt-3 border-t border-black/10 dark:border-white/[0.06] flex items-center justify-between gap-3 text-xs">
+        <div className="flex flex-wrap gap-1.5 font-mono text-[11px] text-neutral-600 dark:text-neutral-400">
           {blog.tags.slice(0, 3).map((tag) => (
             <span key={tag} className="tech-tag text-[10px]">
               #{tag}
@@ -49,7 +49,7 @@ export default function BlogCard({ blog }: Props) {
 
         <Link
           href={`/blog/${blog.slug}`}
-          className="inline-flex items-center gap-1 font-mono text-xs text-neutral-400 group-hover:text-white transition-colors"
+          className="inline-flex items-center gap-1 font-mono text-xs text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors"
         >
           <span>Read Paper</span>
           <ArrowUpRight className="w-3.5 h-3.5" />

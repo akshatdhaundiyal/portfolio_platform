@@ -36,10 +36,10 @@ export default function Navbar() {
 
   return (
     <header
-      className="relative w-full flex justify-center pt-24 sm:pt-28 pb-6 select-none z-50 pointer-events-auto"
+      className="relative w-full flex justify-center pt-8 sm:pt-12 pb-32 sm:pb-40 select-none z-50 pointer-events-auto"
       onMouseLeave={handleMouseLeave}
     >
-      {/* Hand-Drawn Navigation Cluster matching Screen Recording 2026-09-09 210518.mp4 */}
+      {/* Hand-Drawn Navigation Cluster with Downward Dropping Doodles */}
       <nav className="flex items-center gap-7 sm:gap-11 font-chalk text-2xl sm:text-3xl text-neutral-800 dark:text-[#ece5d8] transition-colors">
         
         {/* =========================================================================
@@ -64,7 +64,7 @@ export default function Navbar() {
             {activeItem === "home" && (
               <svg
                 viewBox="0 0 54 50"
-                className="absolute -top-7 -left-3 w-16 h-16 text-[#d94e34] pointer-events-none overflow-visible animate-doodle-float-up"
+                className="absolute -top-7 -left-3 w-16 h-16 text-[#d94e34] pointer-events-none overflow-visible animate-doodle-drop-spring"
               >
                 {/* Top-left angled ray */}
                 <path d="M 14,14 L 4,3" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
@@ -80,7 +80,7 @@ export default function Navbar() {
         </div>
 
         {/* =========================================================================
-            ITEM 1: about (with Spiky Avatar, Sparkle, Squiggle & in-progress - Frame 00:01)
+            ITEM 1: about (with Downward Dropping Avatar, Sparkle, Squiggle & in-progress)
             ========================================================================= */}
         <div
           className="relative flex flex-col items-center"
@@ -97,38 +97,21 @@ export default function Navbar() {
             {activeItem === "about" && <HandDrawnOvalSvg />}
           </Link>
 
-          {/* BELOW: Red Handwritten "in-progress" & 3 eyelashes (Frame 00:01) */}
+          {/* DOWNWARD: Spiky Avatar + in-progress Doodle Drawer */}
           {activeItem === "about" && (
-            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 pointer-events-none whitespace-nowrap animate-doodle-float-up flex flex-col items-center z-40">
-              <span className="font-handwritten text-base sm:text-lg font-bold text-[#d94e34] -rotate-2">
-                in-progress
-              </span>
-
-              {/* 3 tiny radiating eyelashes on the bottom-left curve */}
-              <svg viewBox="0 0 32 18" className="absolute -top-2 -left-3 w-8 h-5 text-[#d94e34] overflow-visible">
-                <path d="M 6,2 L 2,8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                <path d="M 12,4 L 10,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                <path d="M 18,5 L 18,14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </div>
-          )}
-
-          {/* ABOVE: Floating Spiky-Hair Avatar with Sparkle & Squiggle (Frame 00:01) */}
-          {activeItem === "about" && (
-            <div className="absolute -top-16 sm:-top-18 left-1/2 -translate-x-1/2 pointer-events-none z-40 animate-doodle-float-up flex items-center justify-center">
+            <div className="absolute top-11 sm:top-12 left-1/2 -translate-x-1/2 pointer-events-none z-40 animate-doodle-drop-spring flex flex-col items-center gap-1.5 pt-1">
+              {/* Spiky-Hair Avatar Doodle with Sparkle & Squiggle */}
               <div className="relative flex items-center justify-center">
-                
-                {/* Left 4-Point Sparkle ✦ */}
-                <svg viewBox="0 0 20 20" className="w-4 h-4 text-neutral-800 dark:text-[#ece5d8] absolute -left-6 top-2">
+                {/* Left Sparkle ✦ */}
+                <svg viewBox="0 0 20 20" className="w-3.5 h-3.5 text-neutral-800 dark:text-[#ece5d8] absolute -left-5 top-1">
                   <path d="M 10,0 Q 10,10 20,10 Q 10,10 10,20 Q 10,10 0,10 Q 10,10 10,0 Z" fill="currentColor" />
                 </svg>
 
                 {/* Hand-Drawn Boy Avatar Doodle */}
                 <svg
                   viewBox="0 0 54 50"
-                  className="w-12 h-11 text-neutral-800 dark:text-[#ece5d8] overflow-visible"
+                  className="w-11 h-10 text-neutral-800 dark:text-[#ece5d8] overflow-visible"
                 >
-                  {/* Spiky Hair */}
                   <path
                     d="M 12,18 L 15,8 L 20,15 L 27,6 L 34,15 L 39,8 L 42,18"
                     fill="none"
@@ -137,7 +120,6 @@ export default function Navbar() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                  {/* Face Outline */}
                   <path
                     d="M 12,18 C 11,32 14,40 27,40 C 40,40 43,32 42,18"
                     fill="none"
@@ -145,20 +127,28 @@ export default function Navbar() {
                     strokeWidth="2.2"
                     strokeLinecap="round"
                   />
-                  {/* Left Ear */}
                   <path d="M 12,23 C 7,23 7,30 12,30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  {/* Right Ear */}
                   <path d="M 42,23 C 47,23 47,30 42,30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  {/* Eyes */}
                   <circle cx="21" cy="24" r="2" fill="currentColor" />
                   <circle cx="33" cy="24" r="2" fill="currentColor" />
-                  {/* Gentle Smile */}
                   <path d="M 22,31 Q 27,36 32,31" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
                 </svg>
 
-                {/* Right Whimsical Squiggly Loop 〰 */}
-                <svg viewBox="0 0 26 20" className="w-6 h-5 text-neutral-800 dark:text-[#ece5d8] absolute -right-7 top-2">
+                {/* Right Squiggly Loop 〰 */}
+                <svg viewBox="0 0 26 20" className="w-5 h-4 text-neutral-800 dark:text-[#ece5d8] absolute -right-6 top-1">
                   <path d="M 2,12 C 5,6 8,6 10,12 C 12,18 15,18 17,12 C 19,6 22,6 24,12" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                </svg>
+              </div>
+
+              {/* Red Handwritten "in-progress" & 3 eyelashes */}
+              <div className="relative flex flex-col items-center">
+                <span className="font-handwritten text-base sm:text-lg font-bold text-[#d94e34] -rotate-2">
+                  in-progress
+                </span>
+                <svg viewBox="0 0 32 14" className="w-7 h-3.5 text-[#d94e34] overflow-visible -mt-1">
+                  <path d="M 6,2 L 2,8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <path d="M 14,3 L 12,11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <path d="M 22,4 L 22,12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
               </div>
             </div>
@@ -166,7 +156,7 @@ export default function Navbar() {
         </div>
 
         {/* =========================================================================
-            ITEM 2: Work (with Hanging Lanyard Badge & Mouse Cursor - Frame 00:02)
+            ITEM 2: Work (with Downward Dropping Hanging Lanyard Badge & Mouse Cursor)
             ========================================================================= */}
         <div
           className="relative flex flex-col items-center"
@@ -183,33 +173,26 @@ export default function Navbar() {
             {activeItem === "work" && <HandDrawnOvalSvg />}
           </Link>
 
-          {/* ABOVE: Hanging Lanyard ID Badge Card (Frame 00:02) */}
+          {/* DOWNWARD: Hanging Lanyard ID Badge Card */}
           {activeItem === "work" && (
-            <div className="absolute -top-24 sm:-top-28 left-1/2 -translate-x-1/2 pointer-events-none z-40 animate-doodle-float-up flex flex-col items-center">
+            <div className="absolute top-11 sm:top-12 left-1/2 -translate-x-1/2 pointer-events-none z-40 animate-doodle-drop-spring flex flex-col items-center">
               
-              {/* Upward Radiating Speed / Energy Tick Marks */}
-              <svg viewBox="0 0 40 16" className="w-9 h-4 text-neutral-800 dark:text-[#ece5d8] -mb-1 overflow-visible">
-                <path d="M 10,12 L 4,2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                <path d="M 20,10 L 20,0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                <path d="M 30,12 L 36,2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-
-              {/* Lanyard Badge Card */}
+              {/* Lanyard Strap Cords hanging down */}
               <div className="relative">
                 <svg
                   viewBox="0 0 60 74"
-                  className="w-13 h-17 sm:w-14 sm:h-18 text-neutral-800 dark:text-[#ece5d8] overflow-visible"
+                  className="w-12 h-16 sm:w-13 sm:h-17 text-neutral-800 dark:text-[#ece5d8] overflow-visible"
                 >
                   {/* Two Vertical Lanyard Cords */}
-                  <path d="M 26,0 L 26,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M 34,0 L 34,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M 26,0 L 26,10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M 34,0 L 34,10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   {/* Clip Slot */}
-                  <rect x="23" y="10" width="14" height="4" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                  <rect x="23" y="9" width="14" height="4" rx="2" fill="none" stroke="currentColor" strokeWidth="1.8" />
                   {/* Badge Card Body with Rounded Corners */}
-                  <rect x="7" y="15" width="46" height="56" rx="4" fill="none" stroke="currentColor" strokeWidth="2.2" />
+                  <rect x="7" y="14" width="46" height="54" rx="4" fill="none" stroke="currentColor" strokeWidth="2.2" />
                   {/* Spiky-Hair Avatar Face inside Badge */}
                   <path
-                    d="M 18,32 L 20,24 L 24,30 L 30,22 L 36,30 L 40,24 L 42,32"
+                    d="M 18,30 L 20,23 L 24,28 L 30,21 L 36,28 L 40,23 L 42,30"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.8"
@@ -217,23 +200,21 @@ export default function Navbar() {
                     strokeLinejoin="round"
                   />
                   <path
-                    d="M 18,32 C 17,44 20,50 30,50 C 40,50 43,44 42,32"
+                    d="M 18,30 C 17,42 20,48 30,48 C 40,48 43,42 42,30"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.8"
                     strokeLinecap="round"
                   />
-                  {/* Eyes */}
-                  <circle cx="25" cy="37" r="1.6" fill="currentColor" />
-                  <circle cx="35" cy="37" r="1.6" fill="currentColor" />
-                  {/* Smile */}
-                  <path d="M 26,42 Q 30,46 34,42" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="25" cy="35" r="1.6" fill="currentColor" />
+                  <circle cx="35" cy="35" r="1.6" fill="currentColor" />
+                  <path d="M 26,40 Q 30,44 34,40" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
 
-                {/* Hand-Drawn Retro Mouse Cursor Arrow ↖ (Frame 00:02) */}
+                {/* Hand-Drawn Retro Mouse Cursor Arrow ↖ */}
                 <svg
                   viewBox="0 0 20 20"
-                  className="w-4 h-4 text-neutral-800 dark:text-[#ece5d8] absolute -right-4 top-8 overflow-visible select-none"
+                  className="w-4 h-4 text-neutral-800 dark:text-[#ece5d8] absolute -right-3.5 top-7 overflow-visible select-none"
                 >
                   <path d="M 2,2 L 7,17 L 10,11 L 16,8 Z" fill="currentColor" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
                 </svg>
@@ -243,7 +224,7 @@ export default function Navbar() {
         </div>
 
         {/* =========================================================================
-            ITEM 3: Connect (with Vertical Column Doodle Stack - Frame 00:04)
+            ITEM 3: Connect (with Downward Dropping Column Doodle Stack)
             ========================================================================= */}
         <div
           className="relative flex flex-col items-center"
@@ -264,55 +245,13 @@ export default function Navbar() {
             {activeItem === "connect" && <HandDrawnOvalSvg />}
           </button>
 
-          {/* ABOVE: Vertical Climbing Stack of Doodle Icons (Frame 00:04) */}
+          {/* DOWNWARD: Vertical Climbing Stack of Doodle Icons */}
           {activeItem === "connect" && (
             <div
-              className="absolute -top-24 sm:-top-28 left-1/2 -translate-x-1/2 pointer-events-auto z-40 animate-doodle-float-up flex flex-col items-center gap-1.5 pb-2"
+              className="absolute top-11 sm:top-12 left-1/2 -translate-x-1/2 pointer-events-auto z-40 animate-doodle-drop-spring flex flex-col items-center gap-2 pt-1 pb-3"
               onMouseEnter={() => handleMouseEnter("connect")}
             >
-              {/* Row 3 (Top): LinkedIn "in" & Email Envelope */}
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://linkedin.com/in/akshatdhaundiyal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-7 h-7 flex items-center justify-center hover:scale-125 hover:rotate-6 transition-transform text-neutral-800 dark:text-[#ece5d8] hover:text-[#d94e34] dark:hover:text-[#d94e34]"
-                  title="LinkedIn Profile"
-                >
-                  <svg viewBox="0 0 32 32" className="w-6 h-6 overflow-visible">
-                    <rect x="3" y="3" width="26" height="26" rx="5" fill="none" stroke="currentColor" strokeWidth="2.2" />
-                    <text x="16" y="22" textAnchor="middle" fontSize="15" fontFamily="var(--font-serif)" fontWeight="bold" fill="currentColor">
-                      in
-                    </text>
-                  </svg>
-                </a>
-
-                <a
-                  href="mailto:akshatdhaundiyal@gmail.com"
-                  className="w-7 h-7 flex items-center justify-center hover:scale-125 hover:-rotate-6 transition-transform text-neutral-800 dark:text-[#ece5d8] hover:text-[#d94e34] dark:hover:text-[#d94e34]"
-                  title="Email: akshatdhaundiyal@gmail.com"
-                >
-                  <svg viewBox="0 0 32 26" className="w-6 h-5 overflow-visible">
-                    <rect x="2" y="2" width="28" height="22" rx="2" fill="none" stroke="currentColor" strokeWidth="2.2" />
-                    <path d="M 2,4 L 16,15 L 30,4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              </div>
-
-              {/* Row 2 (Middle): Twitter / 𝕏 Doodle */}
-              <a
-                href="https://twitter.com/akshatdhaundiyal"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 flex items-center justify-center hover:scale-125 hover:-rotate-6 transition-transform text-neutral-800 dark:text-[#ece5d8] hover:text-[#d94e34] dark:hover:text-[#d94e34]"
-                title="Twitter / 𝕏"
-              >
-                <svg viewBox="0 0 28 28" className="w-5 h-5 overflow-visible">
-                  <path d="M 5,5 L 23,23 M 23,5 L 5,23" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
-                </svg>
-              </a>
-
-              {/* Row 1 (Bottom directly above Connect): Boy Face on Left + GitHub Cat on Right */}
+              {/* Row 1 (Top of dropdown): Boy Face on Left + GitHub Cat on Right */}
               <div className="flex items-center gap-2.5">
                 {/* Spiky-Hair Boy Face Doodle */}
                 <div className="w-7 h-7 flex items-center justify-center text-neutral-800 dark:text-[#ece5d8]">
@@ -355,6 +294,48 @@ export default function Navbar() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
+                  </svg>
+                </a>
+              </div>
+
+              {/* Row 2 (Middle): Twitter / 𝕏 Doodle */}
+              <a
+                href="https://twitter.com/akshatdhaundiyal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-7 h-7 flex items-center justify-center hover:scale-125 hover:-rotate-6 transition-transform text-neutral-800 dark:text-[#ece5d8] hover:text-[#d94e34] dark:hover:text-[#d94e34]"
+                title="Twitter / 𝕏"
+              >
+                <svg viewBox="0 0 28 28" className="w-5 h-5 overflow-visible">
+                  <path d="M 5,5 L 23,23 M 23,5 L 5,23" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+                </svg>
+              </a>
+
+              {/* Row 3 (Bottom): LinkedIn "in" & Email Envelope */}
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://linkedin.com/in/akshatdhaundiyal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-7 h-7 flex items-center justify-center hover:scale-125 hover:rotate-6 transition-transform text-neutral-800 dark:text-[#ece5d8] hover:text-[#d94e34] dark:hover:text-[#d94e34]"
+                  title="LinkedIn Profile"
+                >
+                  <svg viewBox="0 0 32 32" className="w-6 h-6 overflow-visible">
+                    <rect x="3" y="3" width="26" height="26" rx="5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+                    <text x="16" y="22" textAnchor="middle" fontSize="15" fontFamily="var(--font-serif)" fontWeight="bold" fill="currentColor">
+                      in
+                    </text>
+                  </svg>
+                </a>
+
+                <a
+                  href="mailto:akshatdhaundiyal@gmail.com"
+                  className="w-7 h-7 flex items-center justify-center hover:scale-125 hover:-rotate-6 transition-transform text-neutral-800 dark:text-[#ece5d8] hover:text-[#d94e34] dark:hover:text-[#d94e34]"
+                  title="Email: akshatdhaundiyal@gmail.com"
+                >
+                  <svg viewBox="0 0 32 26" className="w-6 h-5 overflow-visible">
+                    <rect x="2" y="2" width="28" height="22" rx="2" fill="none" stroke="currentColor" strokeWidth="2.2" />
+                    <path d="M 2,4 L 16,15 L 30,4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               </div>
