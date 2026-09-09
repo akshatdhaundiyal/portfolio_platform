@@ -92,12 +92,12 @@ export default function CurrentlyCookingCard({ project }: CurrentlyCookingCardPr
           </div>
 
           {/* Tech Stack Pills & Links */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-white/[0.06]">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-black/10 dark:border-white/[0.06]">
             <div className="flex flex-wrap gap-1.5">
               {project.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2.5 py-1 rounded bg-white/[0.04] border border-white/[0.08] font-mono text-xs text-neutral-300"
+                  className="px-2.5 py-1 rounded bg-black/[0.04] dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] font-mono text-xs text-neutral-700 dark:text-neutral-300"
                 >
                   {tech}
                 </span>
@@ -110,11 +110,11 @@ export default function CurrentlyCookingCard({ project }: CurrentlyCookingCardPr
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-mono font-medium text-white transition-all"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-neutral-900 dark:bg-white/[0.08] hover:bg-neutral-800 dark:hover:bg-white/[0.15] border border-neutral-800 dark:border-white/[0.1] text-xs font-mono font-medium text-white transition-all shadow-sm"
                 >
                   <Github className="w-3.5 h-3.5" />
                   <span>GitHub Alpha</span>
-                  <ArrowUpRight className="w-3 h-3 text-neutral-400" />
+                  <ArrowUpRight className="w-3 h-3 text-neutral-300 dark:text-neutral-400" />
                 </a>
               )}
             </div>

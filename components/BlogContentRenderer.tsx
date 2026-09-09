@@ -95,7 +95,7 @@ function VideoEmbed({ url }: { url: string }) {
 
 export default function BlogContentRenderer({ content }: Props) {
   return (
-    <div className="prose prose-invert max-w-none prose-headings:tracking-tight prose-headings:font-semibold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-neutral-300 prose-p:leading-relaxed prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-amber-500 prose-blockquote:bg-amber-500/[0.03] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:text-neutral-200 prose-blockquote:not-italic prose-li:text-neutral-300">
+    <div className="prose dark:prose-invert max-w-none prose-headings:tracking-tight prose-headings:font-semibold prose-headings:text-neutral-900 dark:prose-headings:text-white prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-neutral-700 dark:prose-p:text-neutral-300 prose-p:leading-relaxed prose-a:text-indigo-600 dark:prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-amber-500 prose-blockquote:bg-amber-500/[0.05] prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:text-neutral-800 dark:prose-blockquote:text-neutral-200 prose-blockquote:not-italic prose-li:text-neutral-700 dark:prose-li:text-neutral-300">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -105,7 +105,7 @@ export default function BlogContentRenderer({ content }: Props) {
             return !isInline ? (
               <CodeBlock className={className}>{children}</CodeBlock>
             ) : (
-              <code className="px-1.5 py-0.5 rounded bg-white/[0.06] font-mono text-xs text-indigo-300 border border-white/[0.08]" {...props}>
+              <code className="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/[0.06] font-mono text-xs text-indigo-700 dark:text-indigo-300 border border-black/10 dark:border-white/[0.08]" {...props}>
                 {children}
               </code>
             );
@@ -114,12 +114,12 @@ export default function BlogContentRenderer({ content }: Props) {
             if (!src) return null;
             return (
               <figure className="my-8 space-y-2">
-                <div className="rounded-xl overflow-hidden border border-white/[0.1] bg-[#07080b]">
+                <div className="rounded-xl overflow-hidden border border-black/10 dark:border-white/[0.1] bg-[#07080b]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={src} alt={alt || "Blog visual asset"} className="w-full h-auto object-cover max-h-[550px]" />
                 </div>
                 {alt && (
-                  <figcaption className="text-center font-mono text-xs text-neutral-400">
+                  <figcaption className="text-center font-mono text-xs text-neutral-500 dark:text-neutral-400">
                     {alt}
                   </figcaption>
                 )}
@@ -133,14 +133,14 @@ export default function BlogContentRenderer({ content }: Props) {
               return <VideoEmbed url={href} />;
             }
             return (
-              <a href={href} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 underline font-medium">
+              <a href={href} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-cyan-400 hover:text-indigo-800 dark:hover:text-cyan-300 underline font-medium">
                 {children}
               </a>
             );
           },
           table({ children }) {
             return (
-              <div className="my-6 overflow-x-auto rounded-xl border border-white/[0.08]">
+              <div className="my-6 overflow-x-auto rounded-xl border border-black/10 dark:border-white/[0.08]">
                 <table className="w-full text-left text-xs sm:text-sm font-mono border-collapse">
                   {children}
                 </table>
@@ -149,14 +149,14 @@ export default function BlogContentRenderer({ content }: Props) {
           },
           th({ children }) {
             return (
-              <th className="bg-white/[0.04] p-3 text-neutral-200 border-b border-white/[0.08] font-semibold">
+              <th className="bg-black/[0.03] dark:bg-white/[0.04] p-3 text-neutral-900 dark:text-neutral-200 border-b border-black/10 dark:border-white/[0.08] font-semibold">
                 {children}
               </th>
             );
           },
           td({ children }) {
             return (
-              <td className="p-3 text-neutral-300 border-b border-white/[0.04]">
+              <td className="p-3 text-neutral-700 dark:text-neutral-300 border-b border-black/5 dark:border-white/[0.04]">
                 {children}
               </td>
             );

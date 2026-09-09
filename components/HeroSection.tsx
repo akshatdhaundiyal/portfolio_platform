@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Globe, Sparkles, CheckSquare, Square } from "lucide-react";
+import { Sparkles, CheckSquare, Square } from "lucide-react";
 
 const rotatingAdjectives = [
   "auditable",
@@ -13,15 +13,32 @@ const rotatingAdjectives = [
   "transparent",
 ];
 
+const dynamicRoles = [
+  "Applied Machine Learning Architecture",
+  "Commercial Product Strategy & Unit Economics",
+  "Auditable Enterprise Systems (+$12M Impact)",
+  "Data Science Rigor & Mathematical Soundness",
+  "MBA Candidate @ High-Leverage AI Systems",
+];
+
 export default function HeroSection() {
   const [adjectiveIndex, setAdjectiveIndex] = useState(0);
+  const [roleIndex, setRoleIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState("");
 
-  // Rotating kinetic headline
+  // Rotating kinetic headline adjective
   useEffect(() => {
     const interval = setInterval(() => {
       setAdjectiveIndex((prev) => (prev + 1) % rotatingAdjectives.length);
     }, 2400);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Rotating dynamic craft / role ticker
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % dynamicRoles.length);
+    }, 3200);
     return () => clearInterval(interval);
   }, []);
 
@@ -57,20 +74,73 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative pt-4 sm:pt-6 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+    <section className="relative pt-6 sm:pt-10 pb-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
       
-      {/* Traditional Red Monogram Seal Stamp */}
-      <div className="flex items-center justify-center mb-6">
-        <div className="traditional-seal animate-stamp-drop">
-          AD
+      {/* =========================================================================
+          1. Prominent Dynamic Greeting: "Hi, I am Akshat Dhaundiyal."
+          ========================================================================= */}
+      <div className="text-center pb-12 sm:pb-18 space-y-4 select-none">
+        
+
+        {/* Main Decent-Sized Animated Greeting */}
+        <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.15]">
+          <span>Hi, I am </span>
+          <span className="relative inline-block group cursor-pointer">
+            <span className="relative z-10 text-neutral-900 dark:text-[#f4ede2] group-hover:text-[#d94e34] dark:group-hover:text-[#d94e34] transition-colors">
+              Akshat Dhaundiyal
+            </span>
+
+            {/* Hand-Drawn Coral Squiggly Underline */}
+            <svg
+              viewBox="0 0 280 20"
+              className="absolute -bottom-2 sm:-bottom-3.5 left-0 w-full h-3 sm:h-4 text-[#d94e34] pointer-events-none overflow-visible"
+            >
+              <path
+                d="M 4,10 Q 35,2 70,11 T 140,8 T 210,12 T 276,7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3.4"
+                strokeLinecap="round"
+                className="animate-squiggle"
+              />
+            </svg>
+
+            {/* Playful Floating Hand-Drawn Annotation on Hover */}
+            <span className="absolute -top-7 sm:-top-8 right-0 font-handwritten text-sm sm:text-base text-[#d94e34] font-bold rotate-6 opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap pointer-events-none">
+              (yes, that&apos;s me! ☻)
+            </span>
+          </span>
+          <span className="text-[#d94e34]">.</span>
+        </h1>
+
+        {/* Dynamic Kinetic Subtitle / Role Ticker */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-sm sm:text-base text-neutral-600 dark:text-neutral-400 font-sans">
+          <span className="font-handwritten text-lg sm:text-xl text-[#d94e34] rotate-[-2deg]">
+            bridging
+          </span>
+          <div className="h-7 sm:h-8 overflow-hidden inline-flex items-center">
+            <span
+              key={roleIndex}
+              className="font-mono text-xs sm:text-sm font-semibold px-3 py-1 rounded bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/[0.08] text-neutral-800 dark:text-neutral-200 animate-doodle-float-up inline-block"
+            >
+              {dynamicRoles[roleIndex]}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Main Intimate Hero Metaphor (Jackie Zhang / Jackie Hu style) */}
+      {/* Elegant Visual Transition to Pushed-Down Section */}
+      <div className="w-full flex items-center justify-center pb-12 sm:pb-16">
+        <div className="w-24 h-px bg-black/10 dark:bg-white/10" />
+      </div>
+
+      {/* =========================================================================
+          2. Pushed-Down Core Hero Metaphor (Jackie Zhang / Jackie Hu style)
+          ========================================================================= */}
       <div className="text-center space-y-6">
         
         {/* Location & Timezone Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-xs font-mono text-neutral-800 dark:text-neutral-300 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-xs font-mono text-neutral-800 dark:text-neutral-300 shadow-sm">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>India (GMT +5:30) {currentTime && `• ${currentTime}`}</span>
           <span className="text-neutral-400 dark:text-neutral-500">•</span>
@@ -78,12 +148,12 @@ export default function HeroSection() {
         </div>
 
         {/* High-Contrast Editorial Sentence-Case Title with Handwritten Marker Keyword */}
-        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-tight text-neutral-900 dark:text-white leading-[1.2]">
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-tight text-neutral-900 dark:text-white leading-[1.2]">
           Software & AI systems should be{" "}
           <span className="font-handwritten text-4xl sm:text-6xl text-[#d94e34] inline-block -rotate-2 min-w-[200px] transition-all">
             {rotatingAdjectives[adjectiveIndex]}.
           </span>
-        </h1>
+        </h2>
 
         {/* Craft Definition (Jackie Hu "Verb & Noun" inspiration) */}
         <div className="max-w-2xl mx-auto text-neutral-700 dark:text-neutral-300 font-sans text-sm sm:text-base leading-relaxed space-y-3">

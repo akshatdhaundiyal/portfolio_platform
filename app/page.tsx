@@ -30,19 +30,19 @@ export default async function HomePage() {
 
       {/* 3. "Recently Made ▶" (Flagship Works in Polymorphic Physical Artifact Skins) */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-8 border-b border-white/[0.08] pb-4">
+        <div className="flex items-center justify-between mb-8 border-b border-black/10 dark:border-white/[0.08] pb-4">
           <div className="flex items-center gap-3">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-neutral-100">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
               Recently Made <span className="text-[#d94e34]">▶</span>
             </h2>
-            <span className="hidden sm:inline-block font-handwritten text-lg text-neutral-400 -rotate-1">
+            <span className="hidden sm:inline-block font-handwritten text-lg text-neutral-600 dark:text-neutral-400 -rotate-1">
               physical artifact records
             </span>
           </div>
 
           <Link
             href="/work"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-neutral-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
           >
             <span>All Works</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -62,16 +62,16 @@ export default async function HomePage() {
 
       {/* 5. Selected Technical Dispatches */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+        <div className="flex items-center justify-between border-b border-black/10 dark:border-white/[0.08] pb-4">
           <div className="flex items-center gap-3">
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-neutral-100">
-              Writing & Papers <span className="text-cyan-400">✎</span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+              Writing & Papers <span className="text-cyan-600 dark:text-cyan-400">✎</span>
             </h2>
           </div>
 
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 font-mono text-xs text-neutral-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
           >
             <span>Read All</span>
             <ArrowRight className="w-3.5 h-3.5" />

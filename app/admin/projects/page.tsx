@@ -349,16 +349,16 @@ export default function AdminProjectsStudio() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       
       {/* Studio Header & Top Navigation Tabs */}
-      <div className="space-y-4 border-b border-white/[0.08] pb-6">
+      <div className="space-y-4 border-b border-black/10 dark:border-white/[0.08] pb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-mono text-xs text-emerald-400 uppercase tracking-wider font-bold">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-mono text-xs text-emerald-700 dark:text-emerald-400 uppercase tracking-wider font-bold">
                 SUPER ADMIN STUDIO
               </span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl text-white font-bold tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl text-neutral-900 dark:text-white font-bold tracking-tight">
               Projects & Physical Artifacts Studio
             </h1>
           </div>
@@ -374,7 +374,7 @@ export default function AdminProjectsStudio() {
 
             <button
               onClick={handleLogout}
-              className="p-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-neutral-400 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
               title="Log Out"
             >
               <LogOut className="w-4 h-4" />
@@ -386,7 +386,7 @@ export default function AdminProjectsStudio() {
         <div className="flex items-center gap-3 pt-2">
           <Link
             href="/admin/blogs"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-neutral-400 hover:text-white font-mono text-xs transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black/[0.04] dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white font-mono text-xs transition-colors"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>Articles Studio (Medium)</span>

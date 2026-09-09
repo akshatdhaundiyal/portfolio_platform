@@ -23,17 +23,17 @@ export default async function WorkPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-20">
       {/* Top Banner */}
-      <div className="space-y-3 border-b border-white/[0.08] pb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono text-xs">
+      <div className="space-y-3 border-b border-black/10 dark:border-white/[0.08] pb-10">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-mono text-xs">
           <Layers className="w-3.5 h-3.5" />
           <span>PORTFOLIO DIRECTORY // CASE STUDY ARTIFACTS</span>
         </div>
 
-        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight">
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-neutral-900 dark:text-white tracking-tight">
           Strategic Works & Systems.
         </h1>
 
-        <p className="font-sans text-sm sm:text-base text-neutral-300 max-w-2xl leading-relaxed">
+        <p className="font-sans text-sm sm:text-base text-neutral-700 dark:text-neutral-300 max-w-2xl leading-relaxed">
           Tactile editorial artifacts documenting production machine learning systems, enterprise unit economics, and computer vision appliances.
         </p>
       </div>
