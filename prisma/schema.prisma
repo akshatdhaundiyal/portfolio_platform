@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Blog {
+  id                 String    @id @default(cuid())
+  slug               String    @unique
+  title              String
+  subtitle           String?
+  category           String    @default("Applied ML")
+  summary            String
+  readTime           String    @default("5 min read")
+  accentColor        String    @default("#6366f1")
+  tags               String[]
+  featured           Boolean   @default(false)
+  content            String    @db.Text
+  coverImage         String?
+  status             String    @default("published") // "published" or "draft"
+  mediumPostId       String?
+  mediumUrl          String?
+  mediumPublishedAt  DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([category])
+}
+
+model Project {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  title            String
+  subtitle         String?
+  category         String    @default("Enterprise AI & Systems")
+  role             String?
+  organization     String?
+  period           String?
+  accentColor      String    @default("#d94e34")
+  metricValue      String?
+  metricLabel      String?
+  summary          String    @db.Text
+  context          String?   @db.Text
+  learntThat       String?   @db.Text
+  architecture     String[]
+  techStack        String[]
+  tradeoffs        Json?
+  artifactSkin     String    @default("boarding-pass") // "boarding-pass", "baggage-tag", "retro-crt", "garment-tag", "spiral-notebook"
+  artifactMetadata Json?
+  section          String    @default("recently-made") // "currently-cooking", "recently-made", "other-work"
+  status           String    @default("Shipped") // "Active", "Shipped", "Open Source", "In Progress"
+  displayOrder     Int       @default(0)
+  featured         Boolean   @default(true)
+  githubUrl        String?
+  liveUrl          String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([section])
+  @@index([displayOrder])
+  @@index([featured])
+}
+

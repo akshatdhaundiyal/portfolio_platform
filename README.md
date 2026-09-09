@@ -1,78 +1,89 @@
-# 🚀 Portfolio Platform
+# 🚀 Executive AI PM & Applied ML Engineering Portfolio
 
-A high-performance, full-stack freelance portfolio platform built with **FastAPI** (Backend), **Nuxt.js** (Frontend), and **PostgreSQL**.
+An executive-grade, full-stack portfolio platform built with **Next.js 15 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS**, and **Prisma ORM (PostgreSQL)**.
 
-This project is fully containerized and optimized for a seamless local development experience with **Live Hot-Reloading** enabled for both frontend and backend.
+Tailored for an experienced Data Scientist pursuing an MBA, positioning for roles at the intersection of **AI Product Management (Technical / AI PM)** and **Senior Applied AI / ML Engineering**.
+
+Synthesizes the design systems of **Marius Ballot** (minimal dark canvas, monospace telemetry metadata), **Jackie Zhang** (editorial case study artifact cards, prominent metric badges, "Learnt that..." retrospectives), and **Eyeballs** (clean problem-solution-impact pacing).
+
+---
+
+## 🌟 Key Capabilities
+
+1. **Executive Strategic Case Studies**:
+   - *Actuarial Pricing & GLM Engine* (+$12M Annual Recovery at EXL Service)
+   - *Claims NLP Triage on Google Vertex AI* (70% Triage Acceleration)
+   - *Media Chronicle* (Sub-100ms On-Device YOLO Face Detection)
+2. **The Builder Arsenal (Marius Ballot Engineering Grid)**:
+   - WashQueue Smart Appliance (FastAPI/WebSockets IoT), Rooftop CV, Decentralized Marketplace, Full-Stack Platform.
+3. **The 3-Stage Evolution Timeline**:
+   - Engineering Core (EXL / MIT DSP) → Strategy & Discovery (MBA) → The Intersection (AI PM & Technical Strategy).
+4. **Super Admin Dynamic Blog Studio (`/admin/blogs`)**:
+   - Passcode-protected studio (`ADMIN_PASSWORD`).
+   - Hybrid rich-markdown editor with instant block insertion toolbar for responsive images, video embeds (YouTube / MP4), syntax-highlighted code blocks, and retrospective callouts.
+   - Live split-view or tabbed preview.
+   - **1-Click Medium Syndication**: Cross-posts to Medium as Draft or Public, automatically setting `canonicalUrl` for 100% SEO credit to your portfolio website.
+5. **Single-Container Deployment**:
+   - Multi-stage standalone `Dockerfile` ready for deployment to **Google Cloud Run** with sub-second cold starts.
 
 ---
 
 ## 🏗️ Project Structure
 
-The project follows a modular service-oriented architecture:
-
-- **`/backend`**: FastAPI application, database models, and migrations.
-- **`/frontend`**: Nuxt.js application (Vue 3, TailwindCSS).
-- **`/db`**: Database initialization scripts and dummy data.
-- **`docker-compose.yml`**: Orchestrates the entire local environment.
+```
+├── app/
+│   ├── layout.tsx             # Root layout (Inter, JetBrains Mono, dark canvas)
+│   ├── page.tsx               # Executive landing narrative
+│   ├── work/page.tsx          # Dedicated Case Studies & Builder Arsenal
+│   ├── about/page.tsx         # 3-Stage Evolution, MIT Manipal DSP background, Skills Matrix
+│   ├── blog/                  # Technical Papers catalog & dynamic reader ([slug])
+│   ├── admin/blogs/page.tsx   # Super Admin Dynamic Studio & Medium Hub
+│   └── api/                   # Route Handlers (auth, blogs, upload, medium)
+├── components/                # Modular React 19 UI components
+├── lib/                       # Prisma client, auth session, Medium client, and data
+├── prisma/                    # PostgreSQL schema & seed script
+├── public/uploads/            # Uploaded media assets
+├── Dockerfile                 # Multi-stage standalone build for Google Cloud Run
+└── docker-compose.yml         # Local orchestration (Next.js app + PostgreSQL)
+```
 
 ---
 
 ## ⚡ Quick Start (Local Development)
 
-### 1. Prerequisites
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
-- A local `.env` file (copied from `.env.example`).
-
-### 2. Launch the Stack
-Run the following command to build and start all services:
+### Option 1: Native Node.js
 ```bash
-docker compose up --build
+# 1. Install dependencies
+npm install
+
+# 2. Run local development server
+npm run dev
+
+# 3. Access the platform
+# Open http://localhost:3000 in your browser
+# Access Super Admin Studio at http://localhost:3000/admin/blogs (Passcode: admin)
 ```
 
-### 3. Access the Apps
-- **Frontend**: [http://localhost:3000](http://localhost:3000)
-- **Backend API**: [http://localhost:8000](http://localhost:8000) (Docs at `/docs`)
-- **Database**: Port `5432`
-
----
-
-## 🔥 Development Features
-
-### 🔄 Instant Hot-Reload
-- **Backend**: Any change to Python files in `/backend/src` will trigger an instant server reload within the container.
-- **Frontend**: Nuxt Hot Module Replacement (HMR) is enabled. Saving a `.vue` or `.ts` file will update the UI immediately.
-
-### 🛡️ Environmental Shielding
-The project uses **Anonymous Docker Volumes** for `node_modules` and `.venv`. This prevents "Operating System Clashes" between your host machine (Windows/Mac) and the Linux containers.
-
-### 🔌 Intelligent Networking
-- **Public API**: `http://localhost:8000` (Used by your browser).
-- **Private API**: `http://backend:8080` (Used internally by Nuxt SSR for faster server-to-server communication).
-
----
-
-## 📦 Adding Dependencies
-
-To keep environments in sync, adding a new package should be done via a rebuild:
-
-**For Backend:**
-1. Add the package to `backend/pyproject.toml`.
-2. Run `docker compose up --build backend`.
-
-**For Frontend:**
-1. Add the package to `frontend/package.json`.
-2. Run `docker compose up --build frontend`.
-
----
-
-## 🛠️ Maintenance
-
-### Wipe Database & Re-seed
-To reset the database and inject fresh dummy data:
+### Option 2: Docker Compose
 ```bash
-docker compose down -v
+# Build and launch Next.js full-stack app + PostgreSQL
 docker compose up --build
 ```
 
 ---
-*Generated with ❤️ by Antigravity*
+
+## 🚢 Google Cloud Run Deployment
+
+The project includes an optimized multi-stage standalone `Dockerfile`:
+```bash
+# Build the container image
+docker build -t gcr.io/[PROJECT-ID]/portfolio-platform .
+
+# Deploy to Google Cloud Run
+gcloud run deploy portfolio-platform \
+  --image gcr.io/[PROJECT-ID]/portfolio-platform \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars DATABASE_URL=[YOUR_POSTGRES_URL],ADMIN_PASSWORD=[YOUR_SECRET]
+```

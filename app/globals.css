@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Patrick+Hand&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-desk: #121316;
+    --paper-bg: #f4ede2;
+    --paper-ink: #18181b;
+  }
+
+  body {
+    background-color: var(--bg-desk);
+    color: #f3f4f6;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
+  }
+}
+
+/* Textured Desk Background (Light & Dark) */
+.bg-desk-pattern {
+  background-size: 28px 28px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+.dark .bg-desk-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Warm Ivory Graph Paper Background */
+.bg-graph-paper {
+  background-color: #f4ede2;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 16px 16px;
+  color: #18181b;
+}
+
+/* Washi Tape Strip Metaphor */
+.washi-tape {
+  position: absolute;
+  height: 22px;
+  width: 90px;
+  background: rgba(245, 240, 230, 0.7);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(1px);
+  border-left: 2px dashed rgba(200, 190, 175, 0.6);
+  border-right: 2px dashed rgba(200, 190, 175, 0.6);
+  z-index: 20;
+}
+
+/* Rubber Ink Stamp Metaphor */
+.rubber-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  mask-image: radial-gradient(circle, black 65%, rgba(0, 0, 0, 0.7) 100%);
+  transform: rotate(-1.5deg);
+}
+
+/* Perforated Ticket Notches & Tear Line */
+.ticket-notch-left {
+  position: absolute;
+  left: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f6f4ee;
+}
+.dark .ticket-notch-left {
+  background-color: #121316;
+}
+
+.ticket-notch-right {
+  position: absolute;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f6f4ee;
+}
+.dark .ticket-notch-right {
+  background-color: #121316;
+}
+
+/* Downward Popdown & Doodle Float Animations (Jackie Zhang Fluid Hover) */
+@keyframes doodleBounceIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.06);
+  }
+  85% {
+    transform: translateY(2px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-doodle-bounce {
+  animation: doodleBounceIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes doodleFloatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-doodle-float-up {
+  animation: doodleFloatUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes ovalDraw {
+  0% {
+    stroke-dashoffset: 400;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-oval-draw {
+  stroke-dasharray: 400;
+  animation: ovalDraw 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.font-chalk {
+  font-family: 'Patrick Hand', var(--font-handwritten), cursive, sans-serif;
+}
+
+@keyframes popdownDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-popdown-drop {
+  animation: popdownDrop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Jackie Zhang Retrospective "Learnt that..." Post-It Note */
+.learnt-sticky-note {
+  position: relative;
+  background: #fff8db;
+  color: #1c1917;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  transform: rotate(-0.75deg);
+  transition: transform 0.2s ease;
+}
+.learnt-sticky-note:hover {
+  transform: rotate(0deg) scale(1.01);
+}
+
+/* Metal Eyelet Ring for Baggage Tag */
+.metal-eyelet {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #121316 45%, #94a3b8 46%, #cbd5e1 70%, #475569 100%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Retro CRT Display Glow & Bezel */
+.crt-bezel {
+  background: #1c1d22;
+  border: 2px solid #2e3038;
+  border-radius: 16px;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.05), 0 12px 30px rgba(0, 0, 0, 0.7);
+}
+
+.crt-screen {
+  background: #0d1117;
+  border: 2px solid #161b22;
+  border-radius: 10px;
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121316;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Handwritten Font Utility */
+.font-handwritten {
+  font-family: var(--font-handwritten), cursive;
+}
+
+/* SVG Hand-Drawn Stroke Animations (Jackie Zhang Header Clicks) */
+@keyframes drawStroke {
+  0% {
+    stroke-dashoffset: 300;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-stroke {
+  stroke-dasharray: 300;
+  animation: drawStroke 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* Gliding Hand-Drawn Squiggly Underline */
+@keyframes squiggleWave {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-squiggle {
+  stroke-dasharray: 100;
+  animation: squiggleWave 0.35s ease-out forwards;
+}
+
+/* Traditional Red Wax / Monogram Seal Stamp Drop Animation */
+@keyframes stampDrop {
+  0% {
+    opacity: 0;
+    transform: scale(1.6) rotate(-8deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.92) rotate(2deg);
+  }
+  80% {
+    transform: scale(1.04) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-stamp-drop {
+  animation: stampDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Traditional Red Seal Stamp Visual */
+.traditional-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #d94e34;
+  color: #d94e34;
+  border-radius: 4px;
+  font-family: var(--font-serif, serif);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.05em;
+  background: rgba(217, 78, 52, 0.08);
+  box-shadow: 0 0 12px rgba(217, 78, 52, 0.2);
+}
+

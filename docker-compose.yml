@@ -11,65 +11,35 @@ services:
     volumes:
       - ./db/edw_platform.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
-
-
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d edw_platform"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  backend:
+  # Unified Full-Stack Next.js Application (Executive Portfolio & Dynamic Blog Studio)
+  app:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: portfolio-backend
-
+    container_name: portfolio-app
     ports:
-      - "8000:8080"
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - PORT=8080
       - DATABASE_URL=postgresql://postgres:admin@db:5432/edw_platform
-    env_file:
-      - .env
+      - ADMIN_PASSWORD=admin
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+      - MEDIUM_INTEGRATION_TOKEN=
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
     volumes:
-      - ./backend:/app # Map localized backend folder
-      - ./.env:/app/.env
-      - /app/.venv # Protect container from host-side Windows venv
-    # Enable hot-reload by overriding the default Dockerfile CMD
-    command: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
-
-
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      target: development
-    container_name: portfolio-frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    environment:
-      # The browser needs to reach the backend via localhost:8000
-      - NUXT_PUBLIC_API_BASE=http://localhost:8000
-      # Internal SSR requests need to reach the backend via the Docker service name
-      - NUXT_API_BASE=http://backend:8080
-
-
-    # Hot-reload configuration for Frontend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules # Anonymous volume to protect container-built packages
-    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
-
-
-
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: ["npm", "run", "dev"]
 
 volumes:
   postgres_data:

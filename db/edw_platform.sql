@@ -71,6 +71,7 @@ CREATE TABLE public.invite_codes (
     id integer NOT NULL,
     code character varying NOT NULL,
     is_used boolean,
+    role character varying DEFAULT 'client'::character varying,
     created_by integer,
     used_by integer,
     created_at timestamp without time zone DEFAULT now()
@@ -253,6 +254,46 @@ CREATE TABLE public.projects (
 
 
 ALTER TABLE public.projects OWNER TO postgres;
+
+CREATE TABLE public.project_developers (
+    project_id integer NOT NULL,
+    developer_id integer NOT NULL,
+    PRIMARY KEY (project_id, developer_id)
+);
+ALTER TABLE public.project_developers OWNER TO postgres;
+
+CREATE TABLE public.teams (
+    id integer NOT NULL,
+    name character varying NOT NULL UNIQUE,
+    description character varying,
+    PRIMARY KEY (id)
+);
+ALTER TABLE public.teams OWNER TO postgres;
+
+CREATE SEQUENCE public.teams_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE public.teams_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.teams_id_seq OWNED BY public.teams.id;
+ALTER TABLE ONLY public.teams ALTER COLUMN id SET DEFAULT nextval('public.teams_id_seq'::regclass);
+
+CREATE TABLE public.team_members (
+    team_id integer NOT NULL,
+    developer_id integer NOT NULL,
+    PRIMARY KEY (team_id, developer_id)
+);
+ALTER TABLE public.team_members OWNER TO postgres;
+
+CREATE TABLE public.project_teams (
+    project_id integer NOT NULL,
+    team_id integer NOT NULL,
+    PRIMARY KEY (project_id, team_id)
+);
+ALTER TABLE public.project_teams OWNER TO postgres;
 
 --
 -- TOC entry 221 (class 1259 OID 16907)
@@ -449,21 +490,21 @@ COPY public.project_files (id, file_name, file_path, project_id, uploaded_at) FR
 --
 
 INSERT INTO public.projects (id, title, description, status, client_id, trello_url, github_url, github_token, wip_url, start_date, acceptance_criteria, created_at, updated_at) VALUES
-(1, 'E-commerce Redesign', 'Complete overhaul of the online store UI/UX.', 'active', 2, 'https://trello.com/b/123', 'https://github.com/client1/shop', 'ghp_dummy1', 'https://wip.client1.com', now(), 'Modern UI, Fast load times', now(), now()),
+(1, 'E-commerce Redesign', 'Complete overhaul of the online store UI/UX.', 'in_progress', 2, 'https://trello.com/b/123', 'https://github.com/client1/shop', 'ghp_dummy1', 'https://wip.client1.com', now(), 'Modern UI, Fast load times', now(), now()),
 (2, 'Mobile App MVP', 'Initial version of the customer loyalty app.', 'pending', 2, 'https://trello.com/b/456', 'https://github.com/client1/app', 'ghp_dummy2', 'https://wip.app.com', now(), 'Auth, Profile, Rewards list', now(), now()),
-(3, 'CRM Integration', 'Linking Salesforce with internal lead manager.', 'active', 3, 'https://trello.com/b/789', 'https://github.com/client2/crm', 'ghp_dummy3', 'https://wip.crm.com', now(), 'Real-time sync', now(), now()),
-(4, 'Legacy Migration', 'Porting COBOL data to PostgreSQL.', 'active', 3, 'https://trello.com/b/abc', 'https://github.com/client2/legacy', 'ghp_dummy4', 'https://wip.mig.com', now(), 'Zero data loss', now(), now()),
-(5, 'AI Chatbot', 'Natural language customer support agent.', 'active', 4, 'https://trello.com/b/def', 'https://github.com/client3/ai', 'ghp_dummy5', 'https://wip.ai.com', now(), '90% intent recognition', now(), now()),
+(3, 'CRM Integration', 'Linking Salesforce with internal lead manager.', 'in_progress', 3, 'https://trello.com/b/789', 'https://github.com/client2/crm', 'ghp_dummy3', 'https://wip.crm.com', now(), 'Real-time sync', now(), now()),
+(4, 'Legacy Migration', 'Porting COBOL data to PostgreSQL.', 'in_progress', 3, 'https://trello.com/b/abc', 'https://github.com/client2/legacy', 'ghp_dummy4', 'https://wip.mig.com', now(), 'Zero data loss', now(), now()),
+(5, 'AI Chatbot', 'Natural language customer support agent.', 'in_progress', 4, 'https://trello.com/b/def', 'https://github.com/client3/ai', 'ghp_dummy5', 'https://wip.ai.com', now(), '90% intent recognition', now(), now()),
 (6, 'SEO Audit', 'Optimization of the main marketing site.', 'completed', 4, NULL, NULL, NULL, NULL, now(), 'Top 3 ranking for key terms', now(), now()),
-(7, 'Blockchain Prototype', 'Smart contract for decentralized supply chain.', 'active', 5, 'https://trello.com/b/ghi', 'https://github.com/client4/chain', 'ghp_dummy6', 'https://wip.chain.com', now(), 'Gas efficiency', now(), now()),
+(7, 'Blockchain Prototype', 'Smart contract for decentralized supply chain.', 'in_progress', 5, 'https://trello.com/b/ghi', 'https://github.com/client4/chain', 'ghp_dummy6', 'https://wip.chain.com', now(), 'Gas efficiency', now(), now()),
 (8, 'NFT Gallery', 'Frontend for displaying digital collectibles.', 'pending', 5, 'https://trello.com/b/jkl', 'https://github.com/client4/nft', 'ghp_dummy7', 'https://wip.nft.com', now(), 'Fast image loading', now(), now()),
-(9, 'Data Warehouse', 'Snowflake implementation for BI.', 'active', 6, 'https://trello.com/b/mno', 'https://github.com/client5/data', 'ghp_dummy8', 'https://wip.data.com', now(), 'Sub-second queries', now(), now()),
+(9, 'Data Warehouse', 'Snowflake implementation for BI.', 'in_progress', 6, 'https://trello.com/b/mno', 'https://github.com/client5/data', 'ghp_dummy8', 'https://wip.data.com', now(), 'Sub-second queries', now(), now()),
 (10, 'Tableau Dashboarding', 'Visualizations for executive reporting.', 'completed', 6, NULL, NULL, NULL, NULL, now(), 'Interactive filter support', now(), now()),
-(11, 'Cybersecurity Audit', 'Pentesting of the main web application.', 'active', 7, 'https://trello.com/b/pqr', 'https://github.com/client6/sec', 'ghp_dummy9', 'https://wip.sec.com', now(), 'No Critical vulns found', now(), now()),
+(11, 'Cybersecurity Audit', 'Pentesting of the main web application.', 'in_progress', 7, 'https://trello.com/b/pqr', 'https://github.com/client6/sec', 'ghp_dummy9', 'https://wip.sec.com', now(), 'No Critical vulns found', now(), now()),
 (12, 'Firewall Setup', 'Hardening the local network infra.', 'pending', 7, NULL, NULL, NULL, NULL, now(), 'Zero open ports', now(), now()),
-(13, 'Cloud Migration', 'Moving workloads to Google Cloud Platform.', 'active', 8, 'https://trello.com/b/stu', 'https://github.com/client7/cloud', 'ghp_dummy10', 'https://wip.cloud.com', now(), 'Cost reduction of 20%', now(), now()),
+(13, 'Cloud Migration', 'Moving workloads to Google Cloud Platform.', 'in_progress', 8, 'https://trello.com/b/stu', 'https://github.com/client7/cloud', 'ghp_dummy10', 'https://wip.cloud.com', now(), 'Cost reduction of 20%', now(), now()),
 (14, 'K8s Cluster Setup', 'Orchestration for microservices.', 'pending', 8, 'https://trello.com/b/vwx', 'https://github.com/client7/k8s', 'ghp_dummy11', 'https://wip.k8s.com', now(), 'Autoscaling working', now(), now()),
-(15, 'SaaS Dashboard', 'Management console for enterprise users.', 'active', 9, 'https://trello.com/b/yz1', 'https://github.com/client8/saas', 'ghp_dummy12', 'https://wip.saas.com', now(), 'RBAC support', now(), now()),
+(15, 'SaaS Dashboard', 'Management console for enterprise users.', 'in_progress', 9, 'https://trello.com/b/yz1', 'https://github.com/client8/saas', 'ghp_dummy12', 'https://wip.saas.com', now(), 'RBAC support', now(), now()),
 (16, 'Subscription Logic', 'Billing system with Stripe integration.', 'completed', 9, 'https://trello.com/b/234', 'https://github.com/client8/stripe', 'ghp_dummy13', 'https://wip.stripe.com', now(), 'Recurring billing active', now(), now());
 
 
@@ -726,6 +767,23 @@ ALTER TABLE ONLY public.project_files
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY public.project_developers
+    ADD CONSTRAINT project_developers_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.project_developers
+    ADD CONSTRAINT project_developers_developer_id_fkey FOREIGN KEY (developer_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT team_members_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.team_members
+    ADD CONSTRAINT team_members_developer_id_fkey FOREIGN KEY (developer_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.project_teams
+    ADD CONSTRAINT project_teams_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.project_teams
+    ADD CONSTRAINT project_teams_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(id) ON DELETE CASCADE;
 
 -- Completed on 2026-04-17 00:44:10
 
