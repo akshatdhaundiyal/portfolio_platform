@@ -1,24 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validatePassword, generateToken, AUTH_COOKIE_NAME, isAuthenticated } from "@/lib/auth";
+import {
+  validateCredentials,
+  registerUser,
+  generateToken,
+  AUTH_COOKIE_NAME,
+  getCurrentUser,
+  getRedirectPathForRole,
+} from "@/lib/auth";
 
 export async function GET() {
-  const authed = await isAuthenticated();
-  return NextResponse.json({ authenticated: authed });
+  const user = await getCurrentUser();
+  return NextResponse.json({
+    authenticated: !!user,
+    user,
+  });
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { password } = await req.json();
+    const body = await req.json();
+    const action = body.action as "login" | "signup" | undefined;
+    const username = body.username as string | undefined;
+    const password = (body.password || body.passcode) as string | undefined;
+    const displayName = body.displayName as string | undefined;
 
-    if (!password || !validatePassword(password)) {
-      return NextResponse.json(
-        { error: "Invalid master secret passcode." },
-        { status: 401 }
-      );
+    let user = null;
+
+    if (action === "signup") {
+      if (!username?.trim() || !password?.trim()) {
+        return NextResponse.json(
+          { error: "Username and password are required for sign up." },
+          { status: 400 }
+        );
+      }
+      user = registerUser(username, displayName || username, password, "user");
+    } else {
+      user = validateCredentials(username, password);
+      if (!user) {
+        return NextResponse.json(
+          { error: "Invalid credentials. Please verify your role passcode." },
+          { status: 401 }
+        );
+      }
     }
 
-    const token = generateToken();
-    const response = NextResponse.json({ success: true, message: "Authenticated successfully." });
+    const token = generateToken(user);
+    const redirectUrl = getRedirectPathForRole(user.role);
+
+    const response = NextResponse.json({
+      success: true,
+      user,
+      redirectUrl,
+      message: action === "signup" ? `Account created for ${user.displayName}!` : `Welcome, ${user.displayName}!`,
+    });
 
     response.cookies.set({
       name: AUTH_COOKIE_NAME,
@@ -37,7 +71,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ success: true, message: "Signed out." });
+  const response = NextResponse.json({ success: true, message: "Signed out successfully." });
   response.cookies.set({
     name: AUTH_COOKIE_NAME,
     value: "",

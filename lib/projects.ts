@@ -3,30 +3,35 @@ import { initialProjects, type ProjectItem, type ProjectSection } from "./data/p
 
 // In-memory runtime cache for development/offline fallback if DB is not connected
 let memoryProjects: ProjectItem[] = [...initialProjects];
+let isDbAvailable: boolean | null = null;
 
 export async function getAllProjects(options?: {
   section?: ProjectSection;
   featuredOnly?: boolean;
 }): Promise<ProjectItem[]> {
-  try {
-    const where: any = {};
-    if (options?.section) {
-      where.section = options.section;
-    }
-    if (options?.featuredOnly) {
-      where.featured = true;
-    }
+  if (isDbAvailable !== false) {
+    try {
+      const where: any = {};
+      if (options?.section) {
+        where.section = options.section;
+      }
+      if (options?.featuredOnly) {
+        where.featured = true;
+      }
 
-    const dbProjects = await prisma.project.findMany({
-      where,
-      orderBy: { displayOrder: "asc" },
-    });
+      const dbProjects = await prisma.project.findMany({
+        where,
+        orderBy: { displayOrder: "asc" },
+      });
 
-    if (dbProjects.length > 0) {
-      return dbProjects as unknown as ProjectItem[];
+      if (dbProjects.length > 0) {
+        isDbAvailable = true;
+        return dbProjects as unknown as ProjectItem[];
+      }
+    } catch (error) {
+      isDbAvailable = false;
+      console.warn("Database query failed or not initialized, using optimized in-memory cache");
     }
-  } catch (error) {
-    console.warn("Database query failed or not initialized, falling back to local dataset:", error);
   }
 
   // Fallback to local memory / static seed
