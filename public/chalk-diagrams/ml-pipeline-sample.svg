@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" width="760" height="260">
+  <!-- Box 1: Ingestion -->
+  <path d="M 24,60 C 50,58 130,59 170,60 C 172,80 171,140 170,160 C 130,162 60,161 24,160 C 22,140 23,80 24,60 Z" stroke="#38bdf8" stroke-width="2.6" fill="none" />
+  <path d="M 28,64 C 60,62 140,63 166,64 C 168,84 167,136 166,156 C 126,158 56,157 28,156 C 26,136 27,84 28,64 Z" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5" fill="none" />
+  <text x="97" y="105" text-anchor="middle" fill="#38bdf8" font-size="16">Feature Stream</text>
+  <text x="97" y="128" text-anchor="middle" fill="#94a3b8" font-size="12">Raw Ingestion</text>
+
+  <!-- Arrow 1 -->
+  <path d="M 175,110 C 195,108 215,112 235,110" stroke="#f3ede2" stroke-width="2.5" fill="none" />
+  <path d="M 223,103 C 228,107 232,109 236,110" stroke="#f3ede2" stroke-width="2.5" fill="none" />
+  <path d="M 223,117 C 228,113 232,111 236,110" stroke="#f3ede2" stroke-width="2.5" fill="none" />
+
+  <!-- Box 2: Transformer -->
+  <path d="M 245,55 C 280,53 375,54 410,55 C 412,85 411,145 410,165 C 375,167 280,166 245,165 C 243,135 244,85 245,55 Z" stroke="#fbbf24" stroke-width="2.6" fill="none" />
+  <path d="M 249,59 C 285,57 370,58 406,59 C 408,89 407,141 406,161 C 371,163 285,162 249,161 C 247,131 248,89 249,59 Z" stroke="#fbbf24" stroke-width="1.2" stroke-opacity="0.5" fill="none" />
+  <text x="327" y="105" text-anchor="middle" fill="#fbbf24" font-size="16">spaCy &amp; Embeddings</text>
+  <text x="327" y="128" text-anchor="middle" fill="#94a3b8" font-size="12">PII Scrub &amp; Vectors</text>
+
+  <!-- Arrow 2 -->
+  <path d="M 415,110 C 435,108 455,112 475,110" stroke="#f3ede2" stroke-width="2.5" fill="none" />
+  <path d="M 463,103 C 468,107 472,109 476,110" stroke="#f3ede2" stroke-width="2.5" fill="none" />
+  <path d="M 463,117 C 468,113 472,111 476,110" stroke="#f3ede2" stroke-width="2.5" fill="none" />
+
+  <!-- Box 3: Model Engine -->
+  <path d="M 485,50 C 530,48 650,49 695,50 C 698,85 697,150 695,170 C 650,172 530,171 485,170 C 483,135 484,85 485,50 Z" stroke="#34d399" stroke-width="2.6" fill="none" />
+  <path d="M 489,54 C 535,52 645,53 691,54 C 694,89 693,146 691,166 C 646,168 535,167 489,166 C 487,131 488,89 489,54 Z" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.5" fill="none" />
+  <text x="590" y="102" text-anchor="middle" fill="#34d399" font-size="16">Actuarial GLM Engine</text>
+  <text x="590" y="125" text-anchor="middle" fill="#94a3b8" font-size="12">Poisson / Gamma Loss</text>
+
+  <!-- Star doodle in corner -->
+  <path d="M 725,40 L 730,52 L 742,53 L 733,61 L 736,73 L 725,66 L 714,73 L 717,61 L 708,53 L 720,52 Z" stroke="#f59e0b" stroke-width="1.8" fill="none" />
+
+  <!-- Chalk annotation circle around latency -->
+  <path d="M 540,215 C 530,200 580,195 640,198 C 670,200 680,218 660,228 C 630,238 560,235 540,225 C 530,218 550,205 600,202" stroke="#f87171" stroke-width="2" fill="none" />
+  <text x="600" y="222" text-anchor="middle" fill="#f87171" font-size="13">&lt;12ms latency</text>
+
+  <!-- Connecting curved chalk arrow from model to latency -->
+  <path d="M 600,172 C 602,182 601,188 600,196" stroke="#f87171" stroke-width="2" fill="none" />
+  <path d="M 596,190 C 598,193 600,196 600,196" stroke="#f87171" stroke-width="2" fill="none" />
+  <path d="M 604,190 C 602,193 600,196 600,196" stroke="#f87171" stroke-width="2" fill="none" />
+</svg>

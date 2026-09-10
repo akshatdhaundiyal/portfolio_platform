@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, CheckSquare, Square } from "lucide-react";
+import ChalkAnnotation from "@/components/chalk/ChalkAnnotation";
+import ChalkArrow from "@/components/chalk/ChalkArrow";
+import ChalkBadge from "@/components/chalk/ChalkBadge";
 
 const rotatingAdjectives = [
   "auditable",
@@ -79,31 +82,23 @@ export default function HeroSection() {
       {/* =========================================================================
           1. Prominent Dynamic Greeting: "Hi, I am Akshat Dhaundiyal."
           ========================================================================= */}
-      <div className="text-center pb-12 sm:pb-18 space-y-4 select-none">
-        
-
-        {/* Main Decent-Sized Animated Greeting */}
+      <div className="text-center pb-10 sm:pb-14 space-y-4 select-none">
+        {/* Main Animated Greeting */}
         <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.15]">
           <span>Hi, I am </span>
           <span className="relative inline-block group cursor-pointer">
-            <span className="relative z-10 text-neutral-900 dark:text-[#f4ede2] group-hover:text-[#d94e34] dark:group-hover:text-[#d94e34] transition-colors">
-              Akshat Dhaundiyal
-            </span>
-
-            {/* Hand-Drawn Coral Squiggly Underline */}
-            <svg
-              viewBox="0 0 280 20"
-              className="absolute -bottom-2 sm:-bottom-3.5 left-0 w-full h-3 sm:h-4 text-[#d94e34] pointer-events-none overflow-visible"
+            <ChalkAnnotation
+              type="underline"
+              color="#d94e34"
+              trigger="inView"
+              strokeWidth={3.2}
+              duration={0.65}
+              padding={6}
             >
-              <path
-                d="M 4,10 Q 35,2 70,11 T 140,8 T 210,12 T 276,7"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3.4"
-                strokeLinecap="round"
-                className="animate-squiggle"
-              />
-            </svg>
+              <span className="relative z-10 text-neutral-900 dark:text-[#f4ede2] group-hover:text-[#d94e34] dark:group-hover:text-[#d94e34] transition-colors">
+                Akshat Dhaundiyal
+              </span>
+            </ChalkAnnotation>
 
             {/* Playful Floating Hand-Drawn Annotation on Hover */}
             <span className="absolute -top-7 sm:-top-8 right-0 font-handwritten text-sm sm:text-base text-[#d94e34] font-bold rotate-6 opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap pointer-events-none">
@@ -118,19 +113,26 @@ export default function HeroSection() {
           <span className="font-handwritten text-lg sm:text-xl text-[#d94e34] rotate-[-2deg]">
             bridging
           </span>
-          <div className="h-7 sm:h-8 overflow-hidden inline-flex items-center">
-            <span
+          <div className="h-8 sm:h-9 overflow-visible inline-flex items-center">
+            <ChalkAnnotation
               key={roleIndex}
-              className="font-mono text-xs sm:text-sm font-semibold px-3 py-1 rounded bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/[0.08] text-neutral-800 dark:text-neutral-200 animate-doodle-float-up inline-block"
+              type="box"
+              color="#f59e0b"
+              trigger="mount"
+              strokeWidth={1.8}
+              duration={0.35}
+              padding={4}
             >
-              {dynamicRoles[roleIndex]}
-            </span>
+              <span className="font-mono text-xs sm:text-sm font-semibold px-2.5 py-1 rounded bg-black/5 dark:bg-white/[0.06] border border-black/10 dark:border-white/[0.08] text-neutral-800 dark:text-neutral-200 inline-block">
+                {dynamicRoles[roleIndex]}
+              </span>
+            </ChalkAnnotation>
           </div>
         </div>
       </div>
 
       {/* Elegant Visual Transition to Pushed-Down Section */}
-      <div className="w-full flex items-center justify-center pb-12 sm:pb-16">
+      <div className="w-full flex items-center justify-center pb-10 sm:pb-12">
         <div className="w-24 h-px bg-black/10 dark:bg-white/10" />
       </div>
 
@@ -138,35 +140,70 @@ export default function HeroSection() {
           2. Pushed-Down Core Hero Metaphor (Jackie Zhang / Jackie Hu style)
           ========================================================================= */}
       <div className="text-center space-y-6">
-        
-        {/* Location & Timezone Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-xs font-mono text-neutral-800 dark:text-neutral-300 shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>India (GMT +5:30) {currentTime && `• ${currentTime}`}</span>
-          <span className="text-neutral-400 dark:text-neutral-500">•</span>
-          <span className="text-amber-700 dark:text-amber-300 font-medium">MBA Candidate</span>
+        {/* Location, Timezone & Chalk Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/[0.04] border border-black/10 dark:border-white/[0.08] text-xs font-mono text-neutral-800 dark:text-neutral-300 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>India (GMT +5:30) {currentTime && `• ${currentTime}`}</span>
+          </div>
+
+          <ChalkBadge color="#10b981" trigger="mount" rotation={-1.5}>
+            ● LIVE SYSTEMS
+          </ChalkBadge>
+
+          <ChalkBadge color="#d94e34" trigger="mount" rotation={1.5}>
+            MBA CANDIDATE
+          </ChalkBadge>
         </div>
 
-        {/* High-Contrast Editorial Sentence-Case Title with Handwritten Marker Keyword */}
-        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-tight text-neutral-900 dark:text-white leading-[1.2]">
-          Software & AI systems should be{" "}
-          <span className="font-handwritten text-4xl sm:text-6xl text-[#d94e34] inline-block -rotate-2 min-w-[200px] transition-all">
-            {rotatingAdjectives[adjectiveIndex]}.
+        {/* High-Contrast Editorial Sentence-Case Title with Animated Chalk Circle on Rotating Adjective */}
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-tight text-neutral-900 dark:text-white leading-[1.25]">
+          Software &amp; AI systems should be{" "}
+          <span className="inline-block min-w-[210px] sm:min-w-[280px]">
+            <ChalkAnnotation
+              key={adjectiveIndex}
+              type="circle"
+              color="#d94e34"
+              trigger="mount"
+              strokeWidth={2.6}
+              duration={0.4}
+              padding={10}
+            >
+              <span className="font-handwritten text-4xl sm:text-6xl text-[#d94e34] inline-block -rotate-1">
+                {rotatingAdjectives[adjectiveIndex]}.
+              </span>
+            </ChalkAnnotation>
           </span>
         </h2>
 
         {/* Craft Definition (Jackie Hu "Verb & Noun" inspiration) */}
         <div className="max-w-2xl mx-auto text-neutral-700 dark:text-neutral-300 font-sans text-sm sm:text-base leading-relaxed space-y-3">
           <p className="italic font-serif text-neutral-600 dark:text-neutral-400 text-base sm:text-lg">
-            &ldquo;AI Systems & Product Strategy (Verb & Noun): a disciplined craft where mathematical rigor meets unit economics, operational adoption, and auditable business outcomes.&rdquo;
+            &ldquo;AI Systems &amp; Product Strategy (Verb &amp; Noun): a disciplined craft where mathematical rigor meets unit economics, operational adoption, and auditable business outcomes.&rdquo;
           </p>
           <p className="text-neutral-600 dark:text-neutral-300 text-xs sm:text-sm">
-            I bridge machine learning engineering with commercial product leadership. Former Lead Analytics Architect at EXL Service (recovered <strong>+$12M</strong> in commercial insurance audit exposure) currently pursuing an MBA to lead high-leverage AI products.
+            I bridge machine learning engineering with commercial product leadership. Former Lead Analytics Architect at EXL Service (recovered{" "}
+            <ChalkAnnotation type="circle" color="#10b981" trigger="inView" strokeWidth={2.2} padding={5}>
+              <strong className="text-emerald-700 dark:text-emerald-400 font-mono font-bold">+$12M</strong>
+            </ChalkAnnotation>{" "}
+            in commercial insurance audit exposure) currently pursuing an MBA to lead high-leverage AI products.
           </p>
         </div>
 
+        {/* Hand-Drawn Chalk Arrow pointing to Principles */}
+        <div className="flex justify-center pt-2 -mb-4">
+          <ChalkArrow
+            direction="curve-right-down"
+            color="#f59e0b"
+            label="test operating principles"
+            trigger="inView"
+            width={72}
+            height={36}
+          />
+        </div>
+
         {/* Interactive Operating Checklist on Taped Index Card */}
-        <div className="relative mt-8 text-left bg-graph-paper rounded-xl p-5 sm:p-6 border border-[#e2d9cc] text-neutral-900 shadow-xl max-w-2xl mx-auto">
+        <div className="relative mt-6 text-left bg-graph-paper rounded-xl p-5 sm:p-6 border border-[#e2d9cc] text-neutral-900 shadow-xl max-w-2xl mx-auto">
           <div className="washi-tape -top-2.5 left-8 rotate-[-2deg]" />
 
           <div className="flex items-center justify-between border-b border-neutral-300 pb-2.5 mb-3">
@@ -188,7 +225,7 @@ export default function HeroSection() {
                 className={`w-full text-left p-2 rounded text-xs font-mono flex items-start gap-2.5 transition-all cursor-pointer ${
                   item.checked
                     ? "bg-white/80 border border-neutral-200 text-neutral-900"
-                    : "bg-black/5 text-neutral-400 line-through"
+                    : "bg-black/5 text-neutral-400"
                 }`}
               >
                 {item.checked ? (
@@ -196,7 +233,15 @@ export default function HeroSection() {
                 ) : (
                   <Square className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
                 )}
-                <span className="leading-snug">{item.text}</span>
+                <span className="leading-snug">
+                  {item.checked ? (
+                    item.text
+                  ) : (
+                    <ChalkAnnotation type="strike" color="#ef4444" trigger="mount" strokeWidth={2.4}>
+                      {item.text}
+                    </ChalkAnnotation>
+                  )}
+                </span>
               </button>
             ))}
           </div>

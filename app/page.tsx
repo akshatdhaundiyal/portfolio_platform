@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
+import Hero3DBackground from "@/components/background/Hero3DBackground";
 import CurrentlyCookingCard from "@/components/CurrentlyCookingCard";
 import ArtifactFrame from "@/components/artifacts/ArtifactFrame";
 import OtherWorkList from "@/components/OtherWorkList";
@@ -21,9 +22,14 @@ export default async function HomePage() {
   const otherWorkProjects = allProjects.filter((p) => p.section === "other-work");
 
   return (
-    <div className="space-y-20 sm:space-y-28 pb-24">
+    <div className="relative space-y-20 sm:space-y-28 pb-24">
+      {/* 3D Neural-Terrain & Chalk Dust Background */}
+      <Hero3DBackground />
+
       {/* 1. Hero & Craft Definition (Jackie Zhang & Jackie Hu style) */}
-      <HeroSection />
+      <div className="relative z-10">
+        <HeroSection />
+      </div>
 
       {/* 2. "Currently cooking ☺︎" (Work in Progress feature from jackiehu.design) */}
       {cookingProject && <CurrentlyCookingCard project={cookingProject} />}
