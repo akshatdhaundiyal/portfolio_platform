@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Newsreader, Caveat } from "next/font/google";
+import { Inter, JetBrains_Mono, Newsreader, Caveat, Patrick_Hand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,6 +27,12 @@ const caveat = Caveat({
   weight: ["400", "700"],
 });
 
+const patrickHand = Patrick_Hand({
+  subsets: ["latin"],
+  variable: "--font-chalk",
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "Akshat Dhaundiyal | AI Product Strategy & Applied ML Systems",
   description:
@@ -49,7 +55,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} ${newsreader.variable} ${caveat.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${newsreader.variable} ${caveat.variable} ${patrickHand.variable}`}
     >
       <head>
         <script

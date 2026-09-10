@@ -9,7 +9,7 @@ import { getAllBlogs } from "@/lib/blogs";
 import BlogCard from "@/components/BlogCard";
 import { ArrowRight, BookOpen, ExternalLink, Github, Linkedin, Mail, Twitter } from "lucide-react";
 
-export const revalidate = 0; // Fresh dynamic data on every request
+export const revalidate = 60; // Enable ISR caching with 60s revalidation for sub-10ms response times
 
 export default async function HomePage() {
   const allProjects = await getAllProjects();

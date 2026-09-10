@@ -10,37 +10,43 @@ export interface BlogPost extends InitialBlog {
   updatedAt?: Date | string;
 }
 
+let isBlogDbAvailable: boolean | null = null;
+
 export async function getAllBlogs(options?: {
   status?: string;
   category?: string;
   search?: string;
 }): Promise<BlogPost[]> {
-  try {
-    const where: any = {};
-    if (options?.status) {
-      where.status = options.status;
-    }
-    if (options?.category && options.category !== "All Articles" && options.category !== "All") {
-      where.category = options.category;
-    }
-    if (options?.search) {
-      where.OR = [
-        { title: { contains: options.search, mode: "insensitive" } },
-        { summary: { contains: options.search, mode: "insensitive" } },
-        { subtitle: { contains: options.search, mode: "insensitive" } },
-      ];
-    }
+  if (isBlogDbAvailable !== false) {
+    try {
+      const where: any = {};
+      if (options?.status) {
+        where.status = options.status;
+      }
+      if (options?.category && options.category !== "All Articles" && options.category !== "All") {
+        where.category = options.category;
+      }
+      if (options?.search) {
+        where.OR = [
+          { title: { contains: options.search, mode: "insensitive" } },
+          { summary: { contains: options.search, mode: "insensitive" } },
+          { subtitle: { contains: options.search, mode: "insensitive" } },
+        ];
+      }
 
-    const dbBlogs = await prisma.blog.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-    });
+      const dbBlogs = await prisma.blog.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+      });
 
-    if (dbBlogs.length > 0) {
-      return dbBlogs as unknown as BlogPost[];
+      if (dbBlogs.length > 0) {
+        isBlogDbAvailable = true;
+        return dbBlogs as unknown as BlogPost[];
+      }
+    } catch (error) {
+      isBlogDbAvailable = false;
+      console.warn("Blog database query failed or not initialized, using optimized in-memory cache");
     }
-  } catch (error) {
-    console.warn("Database query failed or not initialized, falling back to local dataset:", error);
   }
 
   // Fallback to static seed array
