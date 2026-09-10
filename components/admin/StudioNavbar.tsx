@@ -114,6 +114,13 @@ export default function StudioNavbar({
       match: currentPath.startsWith("/admin/dev"),
       badge: "Live",
     },
+    {
+      label: "Chalk Lab",
+      href: "/admin/chalk-lab",
+      icon: Sparkles,
+      match: currentPath.startsWith("/admin/chalk-lab"),
+      badge: "Graphics",
+    },
   ];
 
   return (

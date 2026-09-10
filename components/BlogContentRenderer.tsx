@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Check, Copy, Play, Terminal } from "lucide-react";
+import ChalkAnnotation, { ChalkAnnotationType } from "@/components/chalk/ChalkAnnotation";
+import ChalkSvgDiagram from "@/components/chalk/ChalkSvgDiagram";
 
 interface Props {
   content: string;
@@ -101,7 +103,19 @@ export default function BlogContentRenderer({ content }: Props) {
         components={{
           code({ node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
+            const language = match ? match[1] : "";
             const isInline = !match && !String(children).includes("\n");
+
+            // Chalk diagram code block support: ```chalk-diagram
+            if (language === "chalk-diagram") {
+              const src = String(children).trim();
+              return (
+                <div className="my-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 bg-[#121318] p-4">
+                  <ChalkSvgDiagram src={src} trigger="inView" showControls />
+                </div>
+              );
+            }
+
             return !isInline ? (
               <CodeBlock className={className}>{children}</CodeBlock>
             ) : (
@@ -112,6 +126,17 @@ export default function BlogContentRenderer({ content }: Props) {
           },
           img({ src, alt }) {
             if (!src) return null;
+            const srcStr = typeof src === "string" ? src : "";
+
+            // Chalk diagram image shorthand: ![chalk:diagram](/chalk-diagrams/my-file.svg)
+            if (alt?.startsWith("chalk:diagram") || srcStr.includes("/chalk-diagrams/")) {
+              return (
+                <div className="my-8 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 bg-[#121318] p-4">
+                  <ChalkSvgDiagram src={srcStr} trigger="inView" showControls />
+                </div>
+              );
+            }
+
             return (
               <figure className="my-8 space-y-2">
                 <div className="rounded-xl overflow-hidden border border-black/10 dark:border-white/[0.1] bg-[#07080b]">
@@ -128,6 +153,30 @@ export default function BlogContentRenderer({ content }: Props) {
           },
           a({ href, children }) {
             if (!href) return null;
+
+            // Chalk annotation link shorthand: [text](chalk:circle), [text](chalk:underline), etc.
+            if (href.startsWith("chalk:")) {
+              const type = href.replace("chalk:", "") as ChalkAnnotationType;
+              const colorMap: Record<string, string> = {
+                circle: "#d94e34",
+                underline: "#f59e0b",
+                box: "#38bdf8",
+                strike: "#ef4444",
+                highlight: "rgba(245, 158, 11, 0.25)",
+                bracket: "#10b981",
+              };
+              return (
+                <ChalkAnnotation
+                  type={type || "underline"}
+                  color={colorMap[type] || "#d94e34"}
+                  trigger="inView"
+                  className="font-medium inline-block mx-0.5"
+                >
+                  {children}
+                </ChalkAnnotation>
+              );
+            }
+
             // Check if link is a video embed
             if (href.includes("youtube.com") || href.includes("youtu.be") || href.endsWith(".mp4")) {
               return <VideoEmbed url={href} />;
